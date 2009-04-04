@@ -1,0 +1,79 @@
+8
+
+dir
+5
+http://svn.webwideconsulting.com/plugins/acts_as_preferenced/test
+http://svn.webwideconsulting.com/plugins/acts_as_preferenced
+
+
+
+2007-06-01T21:29:42.523058Z
+5
+jmartin
+has-props
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+6dea5b4c-7e55-42c7-ac14-a46a24191cd7
+
+acts_as_preferenced_test.rb
+file
+
+
+
+
+2008-10-18T01:10:04.000000Z
+a39fcbe93011b61eedd0ae674d508a27
+2007-06-01T21:29:42.523058Z
+5
+jmartin
+
+test_helper.rb
+file
+
+
+
+
+2008-10-18T01:10:04.000000Z
+f02a687cfb0f814c4f46f7c107d0685e
+2007-05-31T23:57:32.906358Z
+1
+jmartin
+
+schema.rb
+file
+
+
+
+
+2008-10-18T01:10:04.000000Z
+3050aabcd3ae704fdaa681a3118b1567
+2007-05-31T23:57:32.906358Z
+1
+jmartin
+
+database.yml
+file
+
+
+
+
+2008-10-18T01:10:04.000000Z
+104493c66f0a791a2786448aa40f0ad1
+2007-05-31T23:57:32.906358Z
+1
+jmartin
+
+fixtures
+dir
+

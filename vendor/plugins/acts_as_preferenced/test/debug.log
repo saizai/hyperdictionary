@@ -1,0 +1,198 @@
+# Logfile created on Fri Oct 17 18:18:56 -0700 2008 by /
+  [4;36;1mSQL (0.002257)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000424)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.002631)[0m   [0;1mCREATE TABLE "preferences" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "preferrer_id" integer NOT NULL, "preferrer_type" varchar(128) NOT NULL, "preferred_id" integer, "preferred_type" varchar(255) NOT NULL, "name" varchar(128) NOT NULL, "value" text) [0m
+  [4;35;1mSQL (0.000308)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.002596)[0m   [0;1mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000499)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.002064)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.001887)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000449)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000148)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.001754)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+  [4;35;1mSQL (0.000196)[0m   [0mselect sqlite_version(*)[0m
+  [4;36;1mSQL (0.000534)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.002016)[0m   [0mDROP TABLE "preferences"[0m
+  [4;36;1mSQL (0.002094)[0m   [0;1mCREATE TABLE "preferences" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "preferrer_id" integer NOT NULL, "preferrer_type" varchar(128) NOT NULL, "preferred_id" integer, "preferred_type" varchar(255) NOT NULL, "name" varchar(128) NOT NULL, "value" text) [0m
+  [4;35;1mSQL (0.000461)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.001881)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (0.002075)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255) NOT NULL) [0m
+  [4;36;1mSQL (0.000451)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000269)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mUser Load (0.000283)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."id" = 3) [0m
+  [4;35;1mPreference Load (0.000538)[0m   [0mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;36;1mSQL (0.000143)[0m   [0;1mSELECT "name" FROM "preferences" WHERE ("preferences".name = 'simple' AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id = 3 AND "preferences".preferred_type = 'User') [0m
+  [4;35;1mPreference Create (0.000356)[0m   [0mINSERT INTO "preferences" ("name", "preferred_type", "preferrer_type", "preferred_id", "preferrer_id", "value") VALUES('simple', 'User', 'User', 3, 3, NULL)[0m
+  [4;36;1mPreference Load (0.000463)[0m   [0;1mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;35;1mUser Load (0.000221)[0m   [0mSELECT * FROM "users" WHERE ("users"."id" = 3) [0m
+  [4;36;1mSQL (0.000152)[0m   [0;1mSELECT count(*) AS count_all FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User') [0m
+  [4;35;1mSQL (0.000127)[0m   [0mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;36;1mPreference Load (0.000530)[0m   [0;1mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User') [0m
+  [4;35;1mPreference Destroy (0.000259)[0m   [0m DELETE FROM "preferences"
+ WHERE "id" = 1
+[0m
+  [4;36;1mPreference Destroy (0.000067)[0m   [0;1m DELETE FROM "preferences"
+ WHERE "id" = 2
+[0m
+  [4;35;1mPreference Destroy (0.000064)[0m   [0m DELETE FROM "preferences"
+ WHERE "id" = 3
+[0m
+  [4;36;1mPreference Destroy (0.000065)[0m   [0;1m DELETE FROM "preferences"
+ WHERE "id" = 4
+[0m
+  [4;35;1mUser Destroy (0.000085)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 3
+[0m
+  [4;36;1mSQL (0.000134)[0m   [0;1mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;35;1mUser Load (0.000215)[0m   [0mSELECT * FROM "users" WHERE ("users"."id" = 3) [0m
+  [4;36;1mSQL (0.000130)[0m   [0;1mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;35;1mPreference Load (0.000364)[0m   [0mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;36;1mPreference Update (0.000595)[0m   [0;1mUPDATE "preferences" SET "value" = NULL WHERE "id" = 2[0m
+  [4;35;1mSQL (0.000153)[0m   [0mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;36;1mUser Load (0.000238)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."id" = 3) [0m
+  [4;35;1mPreference Load (0.000363)[0m   [0mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;36;1mSQL (0.000136)[0m   [0;1mSELECT "name" FROM "preferences" WHERE ("preferences".name = 'sym' AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id = 3 AND "preferences".preferred_type = 'User') [0m
+  [4;35;1mPreference Create (0.000356)[0m   [0mINSERT INTO "preferences" ("name", "preferred_type", "preferrer_type", "preferred_id", "preferrer_id", "value") VALUES('sym', 'User', 'User', 3, 3, 'test')[0m
+  [4;36;1mPreference Load (0.000469)[0m   [0;1mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;35;1mPreference Load (0.000463)[0m   [0mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;36;1mPreference Load (0.000475)[0m   [0;1mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;35;1mSQL (0.000113)[0m   [0mSELECT "name" FROM "preferences" WHERE ("preferences".name = 'string' AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id = 3 AND "preferences".preferred_type = 'User') [0m
+  [4;36;1mPreference Create (0.000100)[0m   [0;1mINSERT INTO "preferences" ("name", "preferred_type", "preferrer_type", "preferred_id", "preferrer_id", "value") VALUES('string', 'User', 'User', 3, 3, 'another')[0m
+  [4;35;1mPreference Load (0.000542)[0m   [0mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;36;1mPreference Load (0.000541)[0m   [0;1mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;35;1mUser Load (0.000249)[0m   [0mSELECT * FROM "users" WHERE ("users"."id" = 3) [0m
+  [4;36;1mSQL (0.000135)[0m   [0;1mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;35;1mUser Load (0.000151)[0m   [0mSELECT * FROM "users" WHERE ("users"."id" = 2) [0m
+  [4;36;1mPreference Load (0.000260)[0m   [0;1mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 2)) [0m
+  [4;35;1mSQL (0.000112)[0m   [0mSELECT "name" FROM "preferences" WHERE ("preferences".name = 'best_guess' AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id = 2 AND "preferences".preferred_type = 'User') [0m
+  [4;36;1mPreference Create (0.000322)[0m   [0;1mINSERT INTO "preferences" ("name", "preferred_type", "preferrer_type", "preferred_id", "preferrer_id", "value") VALUES('best_guess', 'User', 'User', 2, 3, 'horse')[0m
+  [4;35;1mSQL (0.000132)[0m   [0mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;36;1mSQL (0.000126)[0m   [0;1mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;35;1mPreference Load (0.000388)[0m   [0mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 2)) [0m
+  [4;36;1mPreference Update (0.000464)[0m   [0;1mUPDATE "preferences" SET "value" = 'unicorn' WHERE "id" = 5[0m
+  [4;35;1mSQL (0.000140)[0m   [0mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;36;1mUser Load (0.000243)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."id" = 3) [0m
+  [4;35;1mSQL (0.000236)[0m   [0mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;36;1mPreference Load (0.000276)[0m   [0;1mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" IS NULL)) [0m
+  [4;35;1mSQL (0.000122)[0m   [0mSELECT "name" FROM "preferences" WHERE ("preferences".name = 'show_stats' AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id IS NULL AND "preferences".preferred_type = 'User') [0m
+  [4;36;1mPreference Create (0.000331)[0m   [0;1mINSERT INTO "preferences" ("name", "preferred_type", "preferrer_type", "preferred_id", "preferrer_id", "value") VALUES('show_stats', 'User', 'User', NULL, 3, 't')[0m
+  [4;35;1mSQL (0.000132)[0m   [0mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;36;1mUser Load (0.000218)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."id" = 3) [0m
+  [4;35;1mSQL (0.000134)[0m   [0mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;36;1mPreference Load (0.000363)[0m   [0;1mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;35;1mSQL (0.000112)[0m   [0mSELECT "name" FROM "preferences" WHERE ("preferences".name = 'send_me_spam' AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id = 3 AND "preferences".preferred_type = 'User') [0m
+  [4;36;1mPreference Create (0.000318)[0m   [0;1mINSERT INTO "preferences" ("name", "preferred_type", "preferrer_type", "preferred_id", "preferrer_id", "value") VALUES('send_me_spam', 'User', 'User', 3, 3, 't')[0m
+  [4;35;1mSQL (0.000131)[0m   [0mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;36;1mUser Load (0.000210)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."id" = 3) [0m
+  [4;35;1mSQL (0.000129)[0m   [0mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;36;1mUser Load (0.000151)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."id" = 2) [0m
+  [4;35;1mPreference Load (0.000258)[0m   [0mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 2)) [0m
+  [4;36;1mSQL (0.000110)[0m   [0;1mSELECT "name" FROM "preferences" WHERE ("preferences".name = 'monitor_profile_changes' AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id = 2 AND "preferences".preferred_type = 'User') [0m
+  [4;35;1mPreference Create (0.000304)[0m   [0mINSERT INTO "preferences" ("name", "preferred_type", "preferrer_type", "preferred_id", "preferrer_id", "value") VALUES('monitor_profile_changes', 'User', 'User', 2, 3, 't')[0m
+  [4;36;1mSQL (0.000129)[0m   [0;1mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;35;1mUser Load (0.000215)[0m   [0mSELECT * FROM "users" WHERE ("users"."id" = 3) [0m
+  [4;36;1mSQL (0.000139)[0m   [0;1mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;35;1mPreference Load (0.000369)[0m   [0mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;36;1mSQL (0.000113)[0m   [0;1mSELECT "name" FROM "preferences" WHERE ("preferences".name = 'better' AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id = 3 AND "preferences".preferred_type = 'User') [0m
+  [4;35;1mPreference Create (0.000335)[0m   [0mINSERT INTO "preferences" ("name", "preferred_type", "preferrer_type", "preferred_id", "preferrer_id", "value") VALUES('better', 'User', 'User', 3, 3, 'than chocolate')[0m
+  [4;36;1mPreference Load (0.000461)[0m   [0;1mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;35;1mSQL (0.000109)[0m   [0mSELECT "name" FROM "preferences" WHERE ("preferences".name = 'you' AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id = 3 AND "preferences".preferred_type = 'User') [0m
+  [4;36;1mPreference Create (0.000100)[0m   [0;1mINSERT INTO "preferences" ("name", "preferred_type", "preferrer_type", "preferred_id", "preferrer_id", "value") VALUES('you', 'User', 'User', 3, 3, 'like')[0m
+  [4;35;1mPreference Load (0.000544)[0m   [0mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;36;1mSQL (0.000110)[0m   [0;1mSELECT "name" FROM "preferences" WHERE ("preferences".name = 'simple' AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id = 3 AND "preferences".preferred_type = 'User') [0m
+  [4;35;1mPreference Create (0.000121)[0m   [0mINSERT INTO "preferences" ("name", "preferred_type", "preferrer_type", "preferred_id", "preferrer_id", "value") VALUES('simple', 'User', 'User', 3, 3, 'damn right')[0m
+  [4;36;1mPreference Load (0.000653)[0m   [0;1mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;35;1mSQL (0.000138)[0m   [0mSELECT "name" FROM "preferences" WHERE ("preferences".name = 'easy' AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id = 3 AND "preferences".preferred_type = 'User') [0m
+  [4;36;1mPreference Create (0.000105)[0m   [0;1mINSERT INTO "preferences" ("name", "preferred_type", "preferrer_type", "preferred_id", "preferrer_id", "value") VALUES('easy', 'User', 'User', 3, 3, 'as pie')[0m
+  [4;35;1mSQL (0.000141)[0m   [0mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;36;1mUser Load (0.000252)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."id" = 3) [0m
+  [4;35;1mSQL (0.000131)[0m   [0mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;36;1mPreference Load (0.000375)[0m   [0;1mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;35;1mSQL (0.000117)[0m   [0mSELECT "name" FROM "preferences" WHERE ("preferences".name = 'simple' AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id = 3 AND "preferences".preferred_type = 'User') [0m
+  [4;36;1mPreference Create (0.000319)[0m   [0;1mINSERT INTO "preferences" ("name", "preferred_type", "preferrer_type", "preferred_id", "preferrer_id", "value") VALUES('simple', 'User', 'User', 3, 3, 'damn right')[0m
+  [4;35;1mSQL (0.000140)[0m   [0mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;36;1mUser Load (0.000238)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."id" = 3) [0m
+  [4;35;1mPreference Load (0.000371)[0m   [0mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;36;1mUser Load (0.000186)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."id" = 3) [0m
+  [4;35;1mPreference Load (0.000253)[0m   [0mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" IS NULL)) [0m
+  [4;36;1mUser Load (0.000302)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."id" = 3) [0m
+  [4;35;1mUser Load (0.000158)[0m   [0mSELECT * FROM "users" WHERE ("users"."id" = 2) [0m
+  [4;36;1mPreference Load (0.000261)[0m   [0;1mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 2)) [0m
+  [4;35;1mUser Load (0.000183)[0m   [0mSELECT * FROM "users" WHERE ("users"."id" = 3) [0m
+  [4;36;1mSQL (0.000130)[0m   [0;1mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;35;1mSQL (0.000127)[0m   [0mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;36;1mUser Load (0.000180)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."id" = 3) [0m
+  [4;35;1mSQL (0.000128)[0m   [0mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;36;1mSQL (0.000114)[0m   [0;1mSELECT "name" FROM "preferences" WHERE ("preferences".name = 'dupe' AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id = 3 AND "preferences".preferred_type = 'User') [0m
+  [4;35;1mPreference Create (0.000349)[0m   [0mINSERT INTO "preferences" ("name", "preferred_type", "preferrer_type", "preferred_id", "preferrer_id", "value") VALUES('dupe', 'User', 'User', 3, 3, 't')[0m
+  [4;36;1mSQL (0.000133)[0m   [0;1mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;35;1mSQL (0.000126)[0m   [0mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;36;1mSQL (0.000176)[0m   [0;1mSELECT "name" FROM "preferences" WHERE ("preferences".name = 'dupe' AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id = 3 AND "preferences".preferred_type = 'User') [0m
+  [4;35;1mSQL (0.000132)[0m   [0mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;36;1mUser Load (0.000260)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."id" = 3) [0m
+  [4;35;1mSQL (0.000205)[0m   [0mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;36;1mPreference Load (0.000496)[0m   [0;1mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;35;1mSQL (0.000134)[0m   [0mSELECT "name" FROM "preferences" WHERE ("preferences".name = 'scope test' AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id = 3 AND "preferences".preferred_type = 'User') [0m
+  [4;36;1mPreference Create (0.000368)[0m   [0;1mINSERT INTO "preferences" ("name", "preferred_type", "preferrer_type", "preferred_id", "preferrer_id", "value") VALUES('scope test', 'User', 'User', 3, 3, 'one')[0m
+  [4;35;1mSQL (0.000147)[0m   [0mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;36;1mSQL (0.000130)[0m   [0;1mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;35;1mPreference Load (0.000268)[0m   [0mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" IS NULL)) [0m
+  [4;36;1mSQL (0.000138)[0m   [0;1mSELECT "name" FROM "preferences" WHERE ("preferences".name = 'scope test' AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id IS NULL AND "preferences".preferred_type = 'User') [0m
+  [4;35;1mPreference Create (0.000105)[0m   [0mINSERT INTO "preferences" ("name", "preferred_type", "preferrer_type", "preferred_id", "preferrer_id", "value") VALUES('scope test', 'User', 'User', NULL, 3, 'two')[0m
+  [4;36;1mSQL (0.000139)[0m   [0;1mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;35;1mSQL (0.000130)[0m   [0mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;36;1mUser Load (0.000157)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."id" = 2) [0m
+  [4;35;1mPreference Load (0.000261)[0m   [0mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 2)) [0m
+  [4;36;1mSQL (0.000113)[0m   [0;1mSELECT "name" FROM "preferences" WHERE ("preferences".name = 'scope test' AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id = 2 AND "preferences".preferred_type = 'User') [0m
+  [4;35;1mPreference Create (0.000102)[0m   [0mINSERT INTO "preferences" ("name", "preferred_type", "preferrer_type", "preferred_id", "preferrer_id", "value") VALUES('scope test', 'User', 'User', 2, 3, 'three')[0m
+  [4;36;1mSQL (0.000129)[0m   [0;1mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;35;1mPreference Load (0.000567)[0m   [0mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;36;1mPreference Load (0.000380)[0m   [0;1mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" IS NULL)) [0m
+  [4;35;1mPreference Load (0.000364)[0m   [0mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 2)) [0m
+  [4;36;1mUser Load (0.000245)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."id" = 3) [0m
+  [4;35;1mSQL (0.000136)[0m   [0mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;36;1mPreference Load (0.000399)[0m   [0;1mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;35;1mSQL (0.000121)[0m   [0mSELECT "name" FROM "preferences" WHERE ("preferences".name = 'simple' AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id = 3 AND "preferences".preferred_type = 'User') [0m
+  [4;36;1mPreference Create (0.000387)[0m   [0;1mINSERT INTO "preferences" ("name", "preferred_type", "preferrer_type", "preferred_id", "preferrer_id", "value") VALUES('simple', 'User', 'User', 3, 3, 'test')[0m
+  [4;35;1mPreference Load (0.039329)[0m   [0mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;36;1mSQL (0.000128)[0m   [0;1mSELECT "name" FROM "preferences" WHERE ("preferences".name = 'complex' AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id = 3 AND "preferences".preferred_type = 'User') [0m
+  [4;35;1mPreference Create (0.000116)[0m   [0mINSERT INTO "preferences" ("name", "preferred_type", "preferrer_type", "preferred_id", "preferrer_id", "value") VALUES('complex', 'User', 'User', 3, 3, '--- 
+:something: 
+ :crazy: nested
+')[0m
+  [4;36;1mSQL (0.000141)[0m   [0;1mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;35;1mUser Load (0.000412)[0m   [0mSELECT * FROM "users" WHERE ("users"."id" = 3) [0m
+  [4;36;1mPreference Load (0.000575)[0m   [0;1mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;35;1mUser Load (0.000263)[0m   [0mSELECT * FROM "users" WHERE ("users"."id" = 3) [0m
+  [4;36;1mSQL (0.000196)[0m   [0;1mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;35;1mPreference Load (0.000472)[0m   [0mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 3)) [0m
+  [4;36;1mSQL (0.000150)[0m   [0;1mSELECT "name" FROM "preferences" WHERE ("preferences".name = 'email_notification' AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id = 3 AND "preferences".preferred_type = 'User') [0m
+  [4;35;1mPreference Create (0.000436)[0m   [0mINSERT INTO "preferences" ("name", "preferred_type", "preferrer_type", "preferred_id", "preferrer_id", "value") VALUES('email_notification', 'User', 'User', 3, 3, 't')[0m
+  [4;36;1mSQL (0.000176)[0m   [0;1mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;35;1mUser Load (0.000273)[0m   [0mSELECT * FROM "users" WHERE ("users"."id" = 3) [0m
+  [4;36;1mSQL (0.000164)[0m   [0;1mSELECT count(*) AS count_all FROM "preferences" [0m
+  [4;35;1mUser Load (0.000194)[0m   [0mSELECT * FROM "users" WHERE ("users"."id" = 2) [0m
+  [4;36;1mPreference Load (0.000331)[0m   [0;1mSELECT * FROM "preferences" WHERE ("preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND ("preferences"."preferred_type" = 'User' AND "preferences"."preferred_id" = 2)) [0m
+  [4;35;1mSQL (0.000142)[0m   [0mSELECT "name" FROM "preferences" WHERE ("preferences".name IS NULL AND "preferences".preferrer_id = 3 AND "preferences".preferrer_type = 'User' AND "preferences".preferred_id = 2 AND "preferences".preferred_type = 'User') [0m
+  [4;36;1mSQL (0.000161)[0m   [0;1mSELECT count(*) AS count_all FROM "preferences" [0m

@@ -1,0 +1,50 @@
+GracefulMailtoObfuscator
+========================
+
+gracefully obfuscates emails as described in a list apart: http://www.alistapart.com/articles/gracefulemailobfuscation
+
+Requirements
+============
+
+Lowpro and Prototype. Lowpro enhances Prototype with some nifty unobtrusive shit. Download from dan's svn repository. Currently that's 0.5:
+
+http://svn.danwebb.net/external/lowpro/tags/rel_0.5/dist/lowpro.js
+
+put that in /public/javascripts then include it in your application layout:
+
+<%= javascript_include_tag "lowpro" %>
+
+Example
+=======
+
+calling mail_to("me@mail.com", "mail me") will generate the following link:
+
+<a class="obfuscated" href="/contactto/new/zr+znvy+pbz">mail me</a>
+
+for users who do not have javascript turned on, /contactto/new collects a message which can be submitted to an action which sends the email, without it ever being divulged.
+
+when javascript is turned on, a behaviour converts the obfuscated anchor into a normal mailto: link with the orignal email address. spam bots will now bounce off your site like frustrated popcorn. 
+
+Installation
+============
+
+Add the following lines to your application.js: 
+
+Event.addBehavior({
+  "a.obfuscated": EmailDecoder
+});
+
+Include lowpro and the EmailDecoder behaviour in your layout: 
+
+<%= javascript_include_tag "email_decoder" %>
+
+Graceful Degradation
+====================
+
+now you'll need something to handle /contactto/new for those people who are not using javascript. the easiest thing is to have a textarea here for the message. when submitted, the server sends the email ob behalf of the user, without ever divulging the email address. here's how to do this: 
+
+* create a form that takes a message and passes param[:email] along to the create action after a submit. 
+* inside create, decode the email like this: email = Loopy::EmailObfuscator.decode_email(CGI.escape(params[:email]))
+* send an email to this address from the server.
+
+done!

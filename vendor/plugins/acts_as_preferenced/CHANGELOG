@@ -1,0 +1,8 @@
+
+* (1 June 2007)
+  Added support for creating several preferences with a hash.
+  Added support for the use of both symbols and strings as key identifers
+  
+* (31 May 2007)
+
+  Initial Release

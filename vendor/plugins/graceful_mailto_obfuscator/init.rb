@@ -1,0 +1,1 @@
+require 'graceful_mailto_obfuscator'

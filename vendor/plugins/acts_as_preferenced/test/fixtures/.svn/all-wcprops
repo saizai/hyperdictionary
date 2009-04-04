@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/plugins/acts_as_preferenced/!svn/ver/1/test/fixtures
+END
+preference.rb
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/plugins/acts_as_preferenced/!svn/ver/1/test/fixtures/preference.rb
+END
+user.rb
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/plugins/acts_as_preferenced/!svn/ver/1/test/fixtures/user.rb
+END
+preferences.yml
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/plugins/acts_as_preferenced/!svn/ver/1/test/fixtures/preferences.yml
+END
+users.yml
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/plugins/acts_as_preferenced/!svn/ver/1/test/fixtures/users.yml
+END

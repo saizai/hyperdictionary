@@ -1,0 +1,40 @@
+8
+
+dir
+5
+http://svn.webwideconsulting.com/plugins/acts_as_preferenced/lib
+http://svn.webwideconsulting.com/plugins/acts_as_preferenced
+
+
+
+2007-06-01T21:29:42.523058Z
+5
+jmartin
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+6dea5b4c-7e55-42c7-ac14-a46a24191cd7
+
+acts_as_preferenced.rb
+file
+
+
+
+
+2008-10-18T01:10:04.000000Z
+e20720efafdd08e303a7806dfb2b03c5
+2007-06-01T21:29:42.523058Z
+5
+jmartin
+

@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/plugins/acts_as_preferenced/!svn/ver/1/generators/preferenced/templates
+END
+model.rb
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/plugins/acts_as_preferenced/!svn/ver/1/generators/preferenced/templates/model.rb
+END
+migration.rb
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/plugins/acts_as_preferenced/!svn/ver/1/generators/preferenced/templates/migration.rb
+END

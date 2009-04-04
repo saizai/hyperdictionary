@@ -1,0 +1,11 @@
+quentin:
+  id: 1
+  login: quentin
+
+aaron:
+  id: 2
+  login: aaron
+
+josh:
+  id: 3
+  login: josh

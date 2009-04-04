@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/plugins/acts_as_preferenced/!svn/ver/5/test
+END
+acts_as_preferenced_test.rb
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/plugins/acts_as_preferenced/!svn/ver/5/test/acts_as_preferenced_test.rb
+END
+test_helper.rb
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/plugins/acts_as_preferenced/!svn/ver/1/test/test_helper.rb
+END
+schema.rb
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/plugins/acts_as_preferenced/!svn/ver/1/test/schema.rb
+END
+database.yml
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/plugins/acts_as_preferenced/!svn/ver/1/test/database.yml
+END

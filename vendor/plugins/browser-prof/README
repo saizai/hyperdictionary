@@ -1,0 +1,36 @@
+BrowserProfiler
+===================================
+http://rubyforge.org/projects/browser-prof/
+===================================
+
+
+BrowserProfiler a quick way to do performance testing from within your application. While its often easy to write 
+automated tests that are wrapped with performance profiling, The test implementation of some of rails it totally 
+different in test mode. Also, you might only do certain things in production mode (like caching!)... so 
+performance testing in production is really nice.
+
+Simple usage: http://localhost:3000/some/action?browser_profile!
+
+If you add the browser_profile! param to any URL, it will append the profiling output to the bottom of the html file.
+
+What profiling you ask? Well, it needs ruby-prof, which is an awesome library here: http://ruby-prof.rubyforge.org/
+
+We used the ruby convention of bang (!) parameter to imply its modifies itself, the html body.
+Walk through your own app while profiling to find issues locally, or even after deployment to your production machines. 
+Dont leave this stuff on in real production, obviously. :)
+
+Advanced Usage:
+Often in Rails on post operations, you redirect after. So how do you see the profiling output of a post-redirect operation?
+
+http://localhost:3000/some/post_redirect?file_profile!
+
+Add the file_profile!, and it will output the results to file specified in RAILS_ROOT/log/profile_out.html .
+
+Hint: If you are testing against a site you've deployed somewhere, use FireBug to modify the dom before the post, and 
+you can add params at will.
+The functionality appears to work fine in Rails 1.1, and 1.2, but the tests fail.. Needs more investigation.
+
+License: Released under the MIT license.
+
+Dependencies: ruby-prof (Last tested with ruby-prof 0.4.1)
+> gem install ruby-prof

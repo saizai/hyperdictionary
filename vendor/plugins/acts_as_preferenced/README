@@ -1,0 +1,98 @@
+ActsAsPreferenced
+=================
+
+== Overview
+In short, acts_as_preferenced is a dynamic preference system that will easily extend alternate preferences tailored for your systems needs. It allows you to only need to add any preference to a single table and have as many class/models with preferences as you wish. 
+
+This plugin provides a solid preference system which can be used to store user marshaled data about a specific object such as a string, another ActiveRecord object, or even a class itself. The only information stored is the association information about what object the preference is for, the key/value pair, and optionally another association if the preference is specifically for another ActiveRecord object.
+
+This plugin is not specific to just users, it can be used for any model you wish.
+
+== Installation
+
+1) Install the plugin within your rails application.
+
+  ./script/plugin install acts_as_preferenced
+
+2) This will create a model and a migration for the preferences table.
+
+  ./script/generate preferenced Preference
+  rake db:migrate
+
+3) Add the following to any models which should be creating preferences (ex. your User or Account models)
+
+  acts_as_preferenced
+  
+  example:
+  class User < ActiveRecord::Base
+    acts_as_preferenced
+    ...
+  end
+  
+4) Read the documentation and enjoy!
+
+
+== Example Core Usage
+
+Creating a personal preference...
+  
+  current_user.set_preference('spam_me', false)
+
+Retrieving that preference...
+
+  current_user.get_preference('spam_me')   =>  false
+  
+Lets create an array preference...
+
+  current_user.set_preference('favorite_colors', ['red','green','yellow'])
+  
+Create several preferences from a hash...
+
+  current_user.set_preference( {:tall => true, :big => 'smile', :even => {:nested => 'works'}} )
+  
+Creating a relational preference...
+
+  current_user.set_preference('ignore', true, lame_user)
+  
+Retrieving all preferences for a specific object...
+
+  current_user.preferences.for(lame_user)
+  
+Setting a class based preference...
+
+  current_user.has_preference('skip', true, UserNotifier)
+  
+Getting a specific preference for a specific class
+
+  current_user.get_preference('skip', UserNotifer)
+  
+Getting all preferences for a specific class
+
+  current_user.preferences.for(UserNotifier)
+
+
+== Extended DSL
+
+I have added some sexy dynamic methods which will allow you to create key pair preferences on the fly.
+This does not currently support class or association based preferences, but being the most commonly used,
+I decided to go with key pairs for the DSL.
+
+This will create a preference for the current_user with a name of 'email_notification' and true as a value...
+
+  current_user.email_notification_preference = true
+
+This will return true from the previous example, or will return nil if the preference is not set...
+
+  current_user.email_notification_preference    => true
+  
+== TODO
+
+  * Add the whole side to preferenced objects to access the preferrers indirectly
+     
+== License
+
+MIT License Applies
+
+== Author
+
+Josh Martin jmartin@webwideconsulting.com

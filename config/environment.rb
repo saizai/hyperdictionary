@@ -12,12 +12,20 @@ Rails::Initializer.run do |config|
   config.gem 'piston'
   config.gem 'capistrano'
   config.gem 'mperham-memcache-client', :lib => 'memcache', :source => 'http://gems.github.com'
-  config.gem 'SystemTimer', :lib => 'system_timer', :source => 'http://gems.github.com'
+  config.gem 'SystemTimer', :lib => 'system_timer'
   config.gem 'RedCloth', :lib => 'redcloth'
   config.gem 'utf8proc'
   config.gem 'ar-extensions'
   config.gem 'markcatley-google_analytics', :lib => 'rubaidh/google_analytics', :source => 'http://gems.github.com'
   config.gem 'mislav-will_paginate', :lib => 'will_paginate'
+  config.gem 'uuidtools'
+  config.gem "grosser-rpx_now", :lib => "rpx_now", :source => "http://gems.github.com"
+#  config.gem 'tmtm-ruby-mysql', :lib => 'Mysql', :source => 'http://gems.github.com'
+#  config.gem 'rack'
+#  config.gem 'test-spec', :version => '~> 0.9.0' # required for rack-rack-contrib (note: 0.10.0 is current)
+#  config.gem 'rack-rack-contrib', :lib => 'rack/contrib',  :source => 'http://gems.github.com'
+
+
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
   # -- all .rb files in that directory are automatically loaded.
@@ -50,3 +58,6 @@ Rails::Initializer.run do |config|
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
   # config.i18n.default_locale = :de
 end
+
+ require 'ar-extensions/adapters/mysql'
+ require 'ar-extensions/import/mysql'

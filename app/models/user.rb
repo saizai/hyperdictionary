@@ -4,7 +4,10 @@ class User < ActiveRecord::Base
   include Authentication
   include Authentication::ByPassword
   include Authentication::ByCookieToken
-  include Authorization::AasmRoles
+  include Authorization::AasmRolesWithOpenId
+  
+  acts_as_authorized_user
+  acts_as_authorizable
 
   validates_presence_of     :login
   validates_length_of       :login,    :within => 3..40
@@ -19,14 +22,44 @@ class User < ActiveRecord::Base
   validates_uniqueness_of   :email
   validates_format_of       :email,    :with => Authentication.email_regex, :message => Authentication.bad_email_message
 
-  
+  named_scope :active, :conditions => ['activated_at IS NOT NULL AND state = "active"']
+  default_scope :order => 'login'
 
   # HACK HACK HACK -- how to do attr_accessible from here?
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
   attr_accessible :login, :email, :name, :password, :password_confirmation
+  attr_accessor :verified_email # temporary attribute
 
+  # for use with RPX Now gem
+  def self.find_or_initialize_with_rpx(token)
+    data = {}
+    RPXNow.user_data(token, :extended => true) { |raw| data = raw }
+    profile = data['profile']
+    
+    return nil if data.blank? or profile["identifier"].blank?
 
+    u = self.find(profile['primaryKey'].to_i) if profile['primaryKey'] # Get it from the mapping if we have that
+    u ||= self.find_by_identity_url(profile["identifier"]) # Or not...
+    
+    if u.nil?
+      u = self.new
+      u.identity_url = profile["identifier"]
+      u.name = profile['displayName'] || "#{profile['name']['givenName']} #{profile['name']['familyName']}"
+      u.name = nil if u.name.blank?
+      u.login = profile['preferredUsername']
+      u.email = profile['verifiedEmail'] || profile['email']
+      u.verified_email = profile['verifiedEmail'] # bypasses activation
+  #    u.gender = profile['gender']
+  #    u.birth_date = profile['birthday']
+  #    u.first_name = profile['givenName'] || profile['displayName']
+  #    u.last_name = profile['familyName']
+  #    u.country = profile['address']['country'] unless profile['address'].nil?
+  #   profile['photo'] # url
+    end
+
+    return u
+  end
 
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   #
@@ -36,24 +69,25 @@ class User < ActiveRecord::Base
   #
   def self.authenticate(login, password)
     return nil if login.blank? || password.blank?
-    u = find_in_state :first, :active, :conditions => {:login => login.downcase} # need to get the salt
+    u = find :first, :conditions => {:login => login.downcase} # need to get the salt
     u && u.authenticated?(password) ? u : nil
   end
-
+  
   def login=(value)
-    write_attribute :login, (value ? value.downcase : nil)
+    write_attribute :login, (!value.blank? ? value.downcase : nil)
   end
-
+  
   def email=(value)
-    write_attribute :email, (value ? value.downcase : nil)
+    write_attribute :email, (!value.blank? ? value.downcase : nil)
   end
-
+    
   protected
+    def password_required?
+      identity_url.blank? and (crypted_password.blank? or !password.blank?)
+    end
     
     def make_activation_code
         self.deleted_at = nil
         self.activation_code = self.class.make_token
     end
-
-
 end

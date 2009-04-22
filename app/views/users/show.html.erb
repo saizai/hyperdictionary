@@ -1,0 +1,54 @@
+<h1><%= link_to_user @user %> <%= link_to '(edit)', edit_user_path(@user) if @user == current_user %></h1>
+<table style="float: left;">
+	<tr>
+		<td>Joined on</td>
+		<td><%=h @user.created_at.to_s(:long) %></td>
+	</tr>
+	<tr>
+		<td>Name</td>
+		<td><%=h @user.name %></td>
+	</tr>
+	<tr>
+		<td>Username</td>
+		<td><%=h @user.login %></td>
+	</tr>
+	<tr>
+		<td>Email</td>
+		<td><%=h @user.email %></td>
+	</tr>
+	<% if !(urls = RPXNow.mappings(@user.id)).empty? %>
+		<tr>
+			<td>Identities</td>
+			<td><%= urls.map{|u| "<a href='#{u}'>#{u}</a>"}.join('<br/>') %></td>
+		</tr>
+	<% end %>
+	<% if current_user == @user and @user.crypted_password? %>
+		<tr>
+			<td>Password</td>
+			<td><%= link_to_function("(Change)") {|page| page[:password_change_form].visual_effect :appear, :duration => 0.2}	%></td>
+		</tr>
+	<% end %>
+</table>
+
+<% if current_user == @user and @user.crypted_password? %>
+	<% form_for @user, :url => change_password_user_path(@user), 
+		:html => {:id=>"password_change_form", :style=> "display: #{@user.errors.empty? ? 'none' : 'block'}; float: left; margin: 10px;" }  do |f| %>
+		<%= error_messages_for :user %>
+		<table >
+				<tr>
+					<td><%= label_tag "old_password" %></td>
+					<td><%= password_field_tag :old_password, @old_password, :size => 20 %></td>
+				</tr>
+			  	<tr>
+			  		<td><%= f.label "password", 'New password' %></td>
+			  		<td><%= f.password_field :password, :size => 20 %></td>
+				</tr>
+			  	<tr>
+			  		<td><%= f.label 'password_confirmation', 'Confirm new' %></td>
+			  		<td><%= f.password_field :password_confirmation, :size => 20 %></td>
+				</tr>
+				
+				<tr><td><%= submit_tag 'Change Password', :disable_with => "Changing..." %></td></tr>
+		</table>
+	<% end %>
+<% end %>

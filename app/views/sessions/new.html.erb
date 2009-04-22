@@ -1,16 +1,39 @@
 <h1>Log In</h1>
 
+<div style="float: left; margin: 10px;">
+	<p>Use your account with us...</p>
 <% form_tag session_path do -%>
-<p><%= label_tag 'login' %><br />
-<%= text_field_tag 'login', @login %></p>
-
-<p><%= label_tag 'password' %><br/>
-<%= password_field_tag 'password', nil %></p>
-
-<!-- Uncomment this if you want this functionality
-<p><%= label_tag 'remember_me', 'Remember me' %>
-<%= check_box_tag 'remember_me', '1', @remember_me %></p>
--->
-
-<p><%= submit_tag 'Log in' %></p>
+	<table>
+		<tr>
+			<td><%= label_tag 'login' %></td>
+			<td><%= text_field_tag 'login', @login %></td>
+		</tr>
+		<tr>	
+			<td><%= label_tag 'password' %></td>
+			<td><%= password_field_tag 'password', nil %></td>
+			<td>(<%= link_to 'forgot it?', forgot_password_path %>)</td>
+		</tr>
+	
+		<% if @recaptcha %>
+			<tr>
+				<td><label for="recaptcha">Are you human?</label></td>
+				<td><%= recaptcha_tags %></td>
+			</tr>
+		<% end %>
+		<tr>
+			<td><%= label_tag 'remember_me', 'Remember me' %></td>
+			<td><%= check_box_tag 'remember_me', '1', @remember_me %></td>
+		</tr>
+		<tr>
+			<td/><td><%= submit_tag 'Log in', :disable_with => "Signing in&hellip;" %></td>
+		</tr>
+			
+	</table>
 <% end -%>
+</div>
+
+<div style="float: left; margin: 10px;">
+	<p>... or use an existing account</p>
+	<%= RPXNow.embed_code(RPX_SUBDOMAIN, rpx_login_url )%>
+</div>
+

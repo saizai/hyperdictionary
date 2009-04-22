@@ -1,0 +1,16 @@
+<h1>All Users</h1>
+  <table>
+    <tr>
+    	<th>ID</th>
+      <th>Login</th>
+      <th>Email</th>
+		<th>Activated?</th>
+		<th>Has p/w?</th>
+		<th>ID URLs</th>
+      <th>State</th>
+      <th>Roles</th>
+    </tr>
+      <%= render @users %>
+  </table>
+
+	<%= will_paginate @users %>

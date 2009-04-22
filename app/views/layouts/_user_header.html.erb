@@ -1,0 +1,9 @@
+<div id='header'>
+	<% if logged_in? %>
+		Welcome back, <%= link_to_current_user :title_method => :name %>! 
+		<%= link_to 'Admin', admin_root_path if logged_in_as_admin? %>
+		<%= link_to 'Log out', logout_path %>?
+	<% else %>
+		Would you like to <%= link_to 'log in', login_path %> or <%= link_to 'sign up', signup_path %>?
+	<% end %>
+</div>

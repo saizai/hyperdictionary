@@ -1,0 +1,63 @@
+<tr class="<%= cycle('odd', 'even') %>" id="user_<%= user.id %>">
+  <td><%= user.id %></td>
+  <td><%= link_to_user user %></td>
+  <td><%=h user.email %></td>
+	<td><%= user.activated_at.blank? ? 'no' : 'yes' %>
+		<% if user.activated_at.blank? %>
+			<%= link_to_remote 'activate', :url => admin_user_path(user), :method => :put %>
+		<% end %>
+	</td> 
+	<td>
+		<%= user.crypted_password? ? 'yes' : 'no' %>
+		<%= '(reset sent)' if user.password_reset_code? %>
+		<%= link_to_remote 'reset', :url => reset_admin_user_path(user), :method => :put %>
+	</td>
+	<td style="max-width: 400px; overflow-x: hidden;">
+		<span style="margin-right: 5px; float: left;"><%= link_to_function("add", :id => "add_url_link_#{user.id}") do |page|
+				page["add_url_link_#{user.id}"].hide
+				page["add_url_#{user.id}"].visual_effect :appear, :duration => 0.2
+			end %>
+		</span>
+		<% RPXNow.mappings(user.id).each do |url| %>
+			<span style="float:left;">
+		        <%= link_to_remote 'x', :url => unmap_admin_user_path(user, :url => url), :method => :delete, :confirm => "Are you sure? This will probably prevent them from logging in again."  %>
+				<a href="<%= url%>"><%= url %></a>
+			</span>
+		<% end %>
+		<% form_remote_tag :url => map_admin_user_path(user), :method => :put do  %>
+			<span id="add_url_<%= user.id %>" style="display: none;"><br/>
+				<%= text_field_tag :url, nil, :size => 40 %>
+				<%= submit_tag 'Add' %>
+			</span>
+		<% end %>
+	</td>
+  <td><%= user.state %>
+    <% unless user == current_user %>
+      <% if user.active? %>
+        <%= link_to_remote 'disable', :url => suspend_admin_user_path(user), :method => :put  %>
+      <% else %>
+        <%= link_to_remote 'enable', :url => unsuspend_admin_user_path(user), :method => :put  %>
+      <% end %>
+    <% end %>
+  </td>
+	<td>
+		<% user.roles.each do |r| %>
+	  		<%= "#{r.name} #{r.authorizable_type} #{r.authorizable_id}".strip %>
+			<%= link_to_remote 'x', :url => remove_role_admin_user_path(user, :role_id => r.id), :method => :delete %>	
+		<% end %>
+	</td>
+	<td>
+		<%= link_to_function("add", :id => "add_link_#{user.id}") do |page|
+				page["add_link_#{user.id}"].hide
+				page["add_#{user.id}"].visual_effect :appear, :duration => 0.2
+			end %>
+		<% form_remote_tag :url => add_role_admin_user_path(user), :method => :put do  %>
+			<span id="add_<%= user.id %>" style="display: none;">
+				Role <%= text_field_tag :name, nil, :size => 10 %>
+				Class <%= select_tag 'class', options_for_select([nil] + @models, nil), :include_blank => true  %>
+				ID <%= text_field_tag :class_id, nil, :size => 3 %>
+				<%= submit_tag 'Add' %>
+			</span>
+		<% end %>
+	</td>
+</tr>

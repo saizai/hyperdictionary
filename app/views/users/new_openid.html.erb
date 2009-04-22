@@ -1,0 +1,32 @@
+<h1>Finish external ID signup</h1>
+
+<p>With your external ID, you won't need to use a new password to log in.</p>
+
+<p>However, we do need you to fill in & confirm a couple things:</p>
+
+<%= error_messages_for :user %>
+<% form_for @user do |f| -%>
+	<table>
+		<tr>
+			<td><%= label_tag 'identity_url', 'Identity URL' %></td>
+			<td><%= f.text_field :identity_url %></td>
+		</tr>
+		<tr>
+			<td><%= label_tag 'login' %></td>
+			<td><%= f.text_field :login %></td>
+		</tr>
+		<tr>
+			<td><%= label_tag 'email' %></td>
+			<td><%= f.text_field :email %>
+			(will be verified<%= " unless you use #{@user.email}" if @email_verified %>)</td>
+		</tr>
+		<tr>
+			<td><%= label_tag 'name', 'Real name' %></td>
+			<td><%= f.text_field :name %></td>
+		</tr>
+		
+		<%= hidden_field_tag :rpx_token, params[:token] %>
+		
+		<tr><td></td><td><%= submit_tag 'Sign up', :disable_with => "Signing up&hellip;" %></td></tr>
+	</table>
+<% end -%>

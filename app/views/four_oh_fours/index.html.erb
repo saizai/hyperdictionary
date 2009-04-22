@@ -1,0 +1,15 @@
+<table>
+	<tr><th>URL</th><th>Referer</th><th>First</th><th>Last</th><th>Count</th></tr>
+	<% for four in @fours -%>
+		<tr>
+			<td><%= h four.url %></td>
+			<td><%= h four.referer %></td>
+			<td><%= h four.created_at %></td>
+			<td><%= h four.updated_at %></td>
+			<td><%= h four.count %></td>
+		</tr>
+	<% end -%>
+</table>
+
+<%= will_paginate @fours %>
+

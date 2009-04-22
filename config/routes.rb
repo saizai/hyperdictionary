@@ -1,18 +1,14 @@
 ActionController::Routing::Routes.draw do |map|
   map.rpx_login '/rpx_login', :controller => 'users', :action => 'rpx_login'
   map.resources :users, :member => { :forgot_password => :get, :change_password => :put }
-  map.activate '/activate/:activation_code', :controller => 'users', :action => 'activate', :activation_code => nil
   map.logout '/logout', :controller => 'sessions', :action => 'destroy'
   map.login  '/login',  :controller => 'sessions', :action => 'new'
   map.signup  '/signup', :controller => 'users',   :action => 'new'
-  map.logout '/logout', :controller => 'sessions', :action => 'destroy'
-  map.login '/login', :controller => 'sessions', :action => 'new'
   map.register '/register', :controller => 'users', :action => 'create'
-  map.signup '/signup', :controller => 'users', :action => 'new'
   map.forgot_password '/forgot_password', :controller => 'users', :action => 'forgot_password'
+  map.activate '/activate/:activation_code', :controller => 'users', :action => 'activate', :activation_code => nil
   map.reset_password '/reset_password/:password_reset_code', :controller => 'users', :action => 'reset_password', :password_reset_code => nil
   map.resource :session
-  map.resource  :openid_session
 
   map.namespace :admin do |admin|
     admin.root :controller => 'main'
@@ -58,6 +54,8 @@ ActionController::Routing::Routes.draw do |map|
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
   # map.root :controller => "welcome"
+  map.home '/home', :controller => 'main', :action => 'home'
+  map.about '/about', :controller => 'main', :action => 'about'
   map.root :controller => "main"
 
   # See how all your routes lay out with "rake routes"

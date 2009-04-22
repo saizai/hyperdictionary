@@ -8,3 +8,4 @@ db/*.db
 db/schema.rb
 vendor/rails
 config/initializers/*_keys.rb
+*_keys.*

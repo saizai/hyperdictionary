@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  commit: aa8819630419758a6627450038649401630217c0
+  branch: master
+repository_url: git://github.com/dan-manges/query_stats.git
+lock: false
+repository_class: Piston::Git::Repository

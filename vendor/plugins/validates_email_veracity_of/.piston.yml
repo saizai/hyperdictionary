@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  commit: b43de6eb07f53f2fe467f2b4e3c030281eadba23
+  branch: master
+repository_url: git://github.com/Empact/validates_email_veracity_of.git
+lock: false
+repository_class: Piston::Git::Repository

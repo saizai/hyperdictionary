@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  commit: a27cee476d1775c13bc910d9cff902d1c4bd38a1
+  branch: master
+repository_url: git://github.com/thoughtbot/squirrel.git
+lock: false
+repository_class: Piston::Git::Repository

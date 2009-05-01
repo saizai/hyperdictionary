@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  piston:remote-revision: 3183
+  piston:uuid: 567b1171-46fb-0310-a4c9-b4bef9110e78
+repository_url: http://svn.techno-weenie.net/projects/plugins/white_list/
+lock: false
+repository_class: Piston::Svn::Repository

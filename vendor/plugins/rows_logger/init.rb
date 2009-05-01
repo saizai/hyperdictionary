@@ -9,6 +9,10 @@ Dir["#{ File.dirname(__FILE__) }/adapters/*.rb"].each do |path|
 end
 
 
+ActiveRecord::Base.class_eval do
+  cattr_accessor :disable_cache_logging
+end
+
 ActiveRecord::ConnectionAdapters::AbstractAdapter.class_eval do
       protected
         def log(sql, name)
@@ -38,6 +42,7 @@ ActiveRecord::ConnectionAdapters::AbstractAdapter.class_eval do
 
         def log_info(sql, name, runtime, result = nil)
           return unless @logger
+          return if name == "CACHE" and ActiveRecord::Base.disable_cache_logging
 
           @logger.debug(
             format_log_entry(

@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  commit: 6a71f147658b12883e18736c744b70db82c482d2
+  branch: master
+repository_url: git://github.com/DocSavage/rails-authorization-plugin.git
+lock: false
+repository_class: Piston::Git::Repository

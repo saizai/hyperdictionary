@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  commit: 44bad82bc1f7c883b75a1a38d2e3ed34eb4883c9
+  branch: master
+repository_url: git://github.com/josevalim/rails-footnotes.git
+lock: false
+repository_class: Piston::Git::Repository

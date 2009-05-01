@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  commit: 35203149b7d2e9866eb65e98b74ac9fc5cd3c559
+  branch: master
+repository_url: git://github.com/maiha/rows_logger.git
+lock: false
+repository_class: Piston::Git::Repository

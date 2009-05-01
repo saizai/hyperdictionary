@@ -100,6 +100,5 @@ Put a new adapter file that contains 'count_result' method for
 your database adapter into adatpers directory.
 
 
-Author
-======
-Maiha <maiha@wota.jp>
+Copyright (c) 2008 maiha@wota.jp, released under the MIT license
+

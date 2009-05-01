@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  commit: e8b603e523c14f145da7b3a1729f5cc06eba2dd1
+  branch: master
+repository_url: git://github.com/rails/exception_notification.git
+lock: false
+repository_class: Piston::Git::Repository

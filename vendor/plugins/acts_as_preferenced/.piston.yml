@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  commit: 1c939738319d5509475fab6b2d9624d37e0e38a7
+  branch: master
+repository_url: git://github.com/Skiz/acts_as_preferenced.git
+lock: false
+repository_class: Piston::Git::Repository

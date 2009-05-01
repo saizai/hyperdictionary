@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  commit: a65c036f338a8089c5414b845e04c1124b4ac520
+  branch: master
+repository_url: git://github.com/defunkt/exception_logger.git
+lock: false
+repository_class: Piston::Git::Repository

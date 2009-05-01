@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  commit: d8e102e152c4c96f7ad57f07452c8b43c0805971
+  branch: master
+repository_url: git://github.com/thoughtbot/limerick_rake.git
+lock: false
+repository_class: Piston::Git::Repository

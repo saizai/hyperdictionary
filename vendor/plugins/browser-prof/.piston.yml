@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  piston:remote-revision: 24
+  piston:uuid: a1d0ff58-5de0-4918-bfbc-c5cba143baad
+repository_url: svn://rubyforge.org/var/svn/browser-prof
+lock: false
+repository_class: Piston::Svn::Repository

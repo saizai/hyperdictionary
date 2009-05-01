@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  commit: b0a5d2b8ba89eae03f673e4af2e52619260fcc30
+  branch: master
+repository_url: git://github.com/technoweenie/acts_as_paranoid.git
+lock: false
+repository_class: Piston::Git::Repository

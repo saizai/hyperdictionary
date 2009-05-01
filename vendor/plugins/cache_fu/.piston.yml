@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  commit: 9dc19a3a593f4ce1b4e221889091cebd773ea5c4
+  branch: master
+repository_url: git://github.com/defunkt/cache_fu.git
+lock: false
+repository_class: Piston::Git::Repository

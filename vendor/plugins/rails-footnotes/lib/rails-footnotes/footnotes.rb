@@ -5,12 +5,17 @@ module Footnotes
     @@klasses = []
 
     # Default link prefix is textmate
-    @@prefix = 'txmt://open?url=file://%s&line=%d&column=%d'
+    @@prefix = 'txmt://open?url=file://%s&amp;line=%d&amp;column=%d'
 
     # Edit notes
     @@notes = [ :controller, :view, :layout, :stylesheets, :javascripts ]
     # Show notes
-    @@notes += [ :session, :cookies, :params, :filters, :routes, :env, :queries, :log, :general ]
+    @@notes += [ :session, :cookies, :params, :filters, :routes, :env, :log, :general ]
+    if defined?(NewRelic)
+      @@notes << :rpm
+    else
+      @@notes << :queries
+    end
 
     # :no_style       => If you don't want the style to be appended to your pages
     # :notes          => Class variable that holds the notes to be processed

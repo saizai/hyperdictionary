@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  commit: 28a5f37f8a876e9e7222de09008193f3a6f683a7
+  branch: master
+repository_url: git://github.com/ambethia/recaptcha.git
+lock: false
+repository_class: Piston::Git::Repository

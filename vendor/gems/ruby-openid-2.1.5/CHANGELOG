@@ -1,0 +1,18 @@
+Fri Apr 17 11:05:55 PDT 2009  cygnus@janrain.com
+  tagged 2.1.5
+  Ignore-this: 5f2efd8e91589c54cb0833b6379b9cfa
+
+Fri Apr 17 11:05:49 PDT 2009  cygnus@janrain.com
+  * Up version to 2.1.5
+  Ignore-this: 9f500a47200c6e2edb54057ebe9b19a0
+
+Fri Apr 17 11:03:31 PDT 2009  cygnus@janrain.com
+  * SECURITY FIX: Claimed identifier verification was inadvertently comparing values that would always return true (thanks to jbradley@mac.com)
+  Ignore-this: f69797d1383b08b6e58da70f183edb39
+
+Fri Apr 17 11:01:45 PDT 2009  cygnus@janrain.com
+  * Remove redundant test code
+  Ignore-this: 78592d7f2d00ff25e4ab07a90df84477
+
+Fri Dec 19 11:50:10 PST 2008  cygnus@janrain.com
+  tagged 2.1.4

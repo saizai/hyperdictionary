@@ -1,0 +1,24 @@
+== 2.0.1 2009-04-01
+
+* Finished testing on Ruby 1.9.1.
+* Released new website.
+
+== 1.9.5 2008-11-12
+
+* Merged everything that was relevant from the community.
+* Thanks to scambra for fixing many problems with piston update.
+
+== 1.9.4
+
+* Thanks to scambra for fixing lock/unlock errors.
+* Thanks to Geoffrey Grosenbach (topfunky), piston has a gemspec for use on GitHub.
+* Thanks to Brian Takita (btakita), piston update with a Git repository works!
+* Thanks to mattknox and scambra for manifest updates.
+* Thanks to Marcos Tapajós (tapajos) for many small improvements.
+
+== 1.9.3 2008-06-03
+
+* Import git branches using --revision origin/BRANCH_NAME, or a tag
+  using --revision TAG_NAME, or even a specific commit using
+  --revision COMMIT_ID.  In fact, use a committish and you'll be fine,
+  even HEAD^3.

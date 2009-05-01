@@ -1,16 +1,17 @@
 --- !ruby/object:Gem::Specification 
 name: ar-extensions
 version: !ruby/object:Gem::Version 
-  version: 0.8.2
+  version: 0.9.1
 platform: ruby
 authors: 
 - Zach Dennis
 - Mark Van Holstyn
+- Blythe Dunham
 autorequire: 
 bindir: bin
 cert_chain: []
 
-date: 2009-02-08 00:00:00 -08:00
+date: 2009-04-19 00:00:00 -07:00
 default_executable: 
 dependencies: 
 - !ruby/object:Gem::Dependency 
@@ -50,8 +51,14 @@ files:
 - lib/ar-extensions/adapters/oracle.rb
 - lib/ar-extensions/adapters/postgresql.rb
 - lib/ar-extensions/adapters/sqlite.rb
+- lib/ar-extensions/create_and_update/mysql.rb
+- lib/ar-extensions/create_and_update.rb
 - lib/ar-extensions/csv.rb
+- lib/ar-extensions/delete/mysql.rb
+- lib/ar-extensions/delete.rb
 - lib/ar-extensions/extensions.rb
+- lib/ar-extensions/finder_options/mysql.rb
+- lib/ar-extensions/finder_options.rb
 - lib/ar-extensions/finders.rb
 - lib/ar-extensions/foreign_keys.rb
 - lib/ar-extensions/fulltext/mysql.rb
@@ -60,9 +67,15 @@ files:
 - lib/ar-extensions/import/postgresql.rb
 - lib/ar-extensions/import/sqlite.rb
 - lib/ar-extensions/import.rb
+- lib/ar-extensions/insert_select/mysql.rb
+- lib/ar-extensions/insert_select.rb
 - lib/ar-extensions/synchronize.rb
 - lib/ar-extensions/temporary_table/mysql.rb
 - lib/ar-extensions/temporary_table.rb
+- lib/ar-extensions/union/mysql.rb
+- lib/ar-extensions/union.rb
+- lib/ar-extensions/util/sql_generation.rb
+- lib/ar-extensions/util/support_methods.rb
 - lib/ar-extensions/version.rb
 - lib/ar-extensions.rb
 has_rdoc: true

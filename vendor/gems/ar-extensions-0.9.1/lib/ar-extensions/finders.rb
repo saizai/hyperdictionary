@@ -1,3 +1,8 @@
+require 'active_record/version'
+
+
+
+
 module ActiveRecord::ConnectionAdapters::Quoting
 
   alias :quote_before_arext :quote
@@ -10,6 +15,7 @@ module ActiveRecord::ConnectionAdapters::Quoting
   end
 end
 
+unless  ActiveRecord::VERSION::STRING < '2.0.2'
 class ActiveRecord::Base
 
   class << self
@@ -71,7 +77,6 @@ class ActiveRecord::Base
             else
               table_name = quoted_table_name
             end
-
             # ActiveRecord in 2.3.1 changed the method signature for
             # the method attribute_condition
             if ActiveRecord::VERSION::STRING < '2.3.1'
@@ -91,4 +96,5 @@ class ActiveRecord::Base
        
   end
   
+end
 end

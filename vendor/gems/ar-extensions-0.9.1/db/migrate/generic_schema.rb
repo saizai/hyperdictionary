@@ -53,7 +53,7 @@ ActiveRecord::Schema.define do
   
   create_table :books, :force=>true do |t|
     t.column :title, :string, :null=>false
-    t.column :publisher, :string, :null=>false
+    t.column :publisher, :string, :null=>false, :default => 'Default Publisher'
     t.column :author_name, :string, :null=>false
     t.column :created_at, :datetime
     t.column :created_on, :datetime
@@ -67,5 +67,30 @@ ActiveRecord::Schema.define do
     t.column :name, :string
     t.column :developer_id, :integer
   end
+
+  create_table :shopping_carts, :force=>true do |t|
+    t.column :name, :string, :null => true
+    t.column :created_at, :datetime
+    t.column :updated_at, :datetime
+  end
+
+  create_table :cart_items, :force => true do |t|
+    t.column :shopping_cart_id, :string, :null => false
+    t.column :book_id, :string, :null => false
+    t.column :copies, :integer, :default => 1
+    t.column :created_at, :datetime
+    t.column :updated_at, :datetime
+  end
+
+  add_index :cart_items, [:shopping_cart_id, :book_id], :unique => true, :name => 'uk_shopping_cart_books'
+
+  create_table :animals, :force => true do |t|
+    t.column :name, :string, :null => false
+    t.column :size, :string, :default => nil
+    t.column :created_at, :datetime
+    t.column :updated_at, :datetime
+  end
+  
+  add_index :animals, [:name], :unique => true, :name => 'uk_animals'
 
 end

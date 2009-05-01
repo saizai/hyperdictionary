@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <loadpath>
 	<pathentry path="" type="src"/>
-	<pathentry path="org.rubypeople.rdt.launching.RUBY_CONTAINER" type="con"/>
-	<pathentry path="GEM_LIB/activerecord-2.3.2/lib" type="var"/>
-	<pathentry path="GEM_LIB/rake-0.8.4/lib" type="var"/>
-	<pathentry path="GEM_LIB/activeresource-2.3.2/lib" type="var"/>
-	<pathentry path="GEM_LIB/rails-2.3.2/lib" type="var"/>
-	<pathentry path="GEM_LIB/actionmailer-2.3.2/lib" type="var"/>
+	<pathentry path="GEM_LIB/sqlite3-ruby-1.2.4/lib" type="var"/>
+	<pathentry path="GEM_LIB/ruby-prof-0.7.3/lib" type="var"/>
+	<pathentry path="GEM_LIB/tmail-1.2.3.1/lib" type="var"/>
 	<pathentry path="GEM_LIB/actionpack-2.3.2/lib" type="var"/>
-	<pathentry path="GEM_LIB/activesupport-2.3.2/lib" type="var"/>
+	<pathentry path="GEM_LIB/activerecord-2.3.2/lib" type="var"/>
+	<pathentry path="GEM_LIB/net-ssh-2.0.11/lib" type="var"/>
+	<pathentry path="GEM_LIB/ruby-openid-2.1.5/lib" type="var"/>
+	<pathentry path="GEM_LIB/actionmailer-2.3.2/lib" type="var"/>
 </loadpath>

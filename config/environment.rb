@@ -6,7 +6,13 @@ RAILS_GEM_VERSION = '2.3.2' unless defined? RAILS_GEM_VERSION
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
 
+if ENV['RAILS_ENV'] == 'production'  # don't bother on dev
+  ENV['GEM_PATH'] = '/home/kura2/.gem/ruby/1.8' #+ ':/usr/lib/ruby/gems/1.8'  # Need this or Passenger fails to start
+#  require '/home/kura2/.gem/ruby/1.8/gems/RedCloth-4.1.9/lib/redcloth.rb'  # Need this for EACH LOCAL gem you want to use, otherwise it uses the ones in /usr/lib
+end
+
 Rails::Initializer.run do |config|
+  config.gem 'rake'
   config.gem 'ruby-openid', :lib => 'openid'
   config.gem 'ruby-debug'
   config.gem 'piston'

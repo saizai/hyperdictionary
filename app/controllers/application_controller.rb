@@ -10,7 +10,15 @@ class ApplicationController < ActionController::Base
 
   # Scrub sensitive parameters from your log
   filter_parameter_logging :password, :password_confirmation, :old_password
-
-
   
+  # Hack to show what requests a process is handling in top (if it's in short mode)
+  before_filter :set_process_name_from_request
+  def set_process_name_from_request
+    $0 = request.path[0,16] 
+  end   
+  
+  after_filter :unset_process_name_from_request
+  def unset_process_name_from_request
+    $0 = request.path[0,15] + "*"
+  end
 end

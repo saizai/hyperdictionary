@@ -106,16 +106,23 @@ class UsersController < ApplicationController
     else
       @user = User.new(params[:user])
     end
-    success = if @user && @user.valid?
+    
+    success = if @user and @user.valid?
       if @user.verified_email == @user.email and !@user.email.blank?
         @user.activate!
       else
         @user.register!
       end
       
-      RPXNow.map @user.identity_url, @user.id if @user.identity_url
+      # NOTE: Because this is effectively a single external db, we don't want to tie it to bad IDs.
+      # Therefore you need a separate RPX API key for each separate database, or at least promise not to map.
+      if Rails.env.production? or Rails.env.development?
+        RPXNow.map @user.identity_url, @user.id if @user.identity_url
+      end
+      true
     end
-    if success && @user.errors.empty?
+    
+    if success and @user.errors.empty?
       flash[:notice] = "Thanks for signing up!"
       flash[:notice] += " We're sending you an email with your activation code." if @user.pending?
       redirect_back_or_default('/')

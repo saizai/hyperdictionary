@@ -1,3 +1,3 @@
-APP_NAME = 'Hyperdictionary'
-APP_HOST = 'localhost:3000'
-ADMIN_EMAIL = 'test@saizai.com'
+APP_NAME = 'Kura2'
+APP_HOST = 'dictionary.conlang.org'
+ADMIN_EMAIL = 'kura@saizai.com'

@@ -15,7 +15,7 @@ Rails::Initializer.run do |config|
   config.gem 'rake'
   config.gem 'ruby-openid', :lib => 'openid'
   config.gem 'ruby-debug'
-  config.gem 'piston'
+  config.gem 'francois-piston', :source => 'http://gems.github.com'
   config.gem 'capistrano'
   config.gem 'mperham-memcache-client', :lib => 'memcache', :source => 'http://gems.github.com'
   config.gem 'SystemTimer', :lib => 'system_timer'

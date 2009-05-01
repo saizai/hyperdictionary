@@ -58,23 +58,22 @@ namespace (:deploy) do
 #    end
 #  end
 
-  after "deploy:update_code", "deploy:set_permissions"
+  after "deploy:update_code", "deploy:symlink_configs"
   
-  desc "Ensure app's permissions are set correctly."
-  task :set_permissions, :except => { :no_release => true } do         
-    # For all files in the shared config path
-    Dir[File.join(shared_path, 'config', '**', '*.rb')].each do |c|
-      run "rm #{c}" # Remove the deployed version
-      run "ln -s #{c} #{release_path}/config/#{c[/[^\/]*$/]}" # And symlink in the server's version
+  desc "Override config files w/ whatever's in the shared/config path (e.g. passwords, api keys)"
+  task :symlink_configs, :except => { :no_release => true } do         
+    # For all files in the shared config path, symlink in the shared config
+# For some reason, this Dir actually runs on the *local* system rather than the remote. Lame.
+#    Dir[File.join(shared_path, 'config', '**', '*.rb')].each do |c|
+# So here's a hack w/ find to do it the ugly way :(
+    config_files = ''
+    # Find all regular files (not directories) in the shared config path
+    run("find #{shared_path}/config -type f") do |channel, stream, data| 
+     config_files << data
     end
-
-#    run "cp #{deploy_to}/shared/config/mongrel_cluster.yml #{release_path}/config"
-#    run "chmod 775 #{release_path}/config/mongrel_cluster.yml"
-#    
-#    run "rm -f #{release_path}/config/dblogin.yml"
-#    
-#    run "rm -rf #{release_path}/data"
-#    run "ln -nfs #{shared_path}/data #{release_path}/data"  
+    config_files.strip.split("\n").map{|f| f.sub!("#{shared_path}/config/", '')}.each do |c|
+      run "ln -sf #{shared_path}/config/#{c} #{release_path}/config/#{c}" # And symlink in the server's version, overwriting (-f) whatever was there
+    end
   end
 
 #  task :set_permissions_staging, :except => { :no_release => true } do 

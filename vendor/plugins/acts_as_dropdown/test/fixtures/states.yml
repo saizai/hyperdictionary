@@ -1,0 +1,21 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+alabama:
+  id: 1
+  name: Alabama
+  abbreviation: AL
+alaska:
+  id: 2
+  name: Alaska
+  abbreviation: AK
+arizona:
+  id: 3
+  name: Arizona
+  abbreviation: AZ
+california:
+  id: 4
+  name: California
+  abbreviation: CA
+colorado:
+  id: 5
+  name: Colorado
+  abbreviation: CO

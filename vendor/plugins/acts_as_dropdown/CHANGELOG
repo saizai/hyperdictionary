@@ -1,0 +1,16 @@
+* 2.0 *
+
+* better testing support that now uses a sqlite3 database as the default.
+
+* introduced the :include_blank option that works in a similar fashion to the select helper's, but also allow you to 
+  specify what appears as the text of the blank option.
+
+* allowing customization of all ActiveRecord::Base#find options.
+
+* fix a bug that caused the class attributes to be forgotten, requiring that all options be specified for every to_dropdown call.
+
+* renamed and aliased methods to better match the helper methods that they are supposed to be used with.
+
+* 1.0 * 
+
+* Initial release of the plugin. Includes documentation and tests.

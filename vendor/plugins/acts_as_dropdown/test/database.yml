@@ -1,0 +1,3 @@
+sqlite3:
+  :adapter: sqlite3
+  :dbfile: acts_as_dropdown_plugin_test.sqlite3.db

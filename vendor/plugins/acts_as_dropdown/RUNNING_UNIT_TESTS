@@ -1,0 +1,12 @@
+== Creating the test database
+
+The test suite currently uses sqlite3 out of the box. I highly recommend using this configuration
+for testing Rails plugins. If for some reason you can't install sqlite3 (and the required gem) you
+can get the test suite to run with any other database adapter with a little tweaking of the
+abstract_unit.rb file. 
+
+== Running by hand
+
+Unit tests are located in the test directory. To execute the test do the following:
+
+   ruby dropdown_test.rb

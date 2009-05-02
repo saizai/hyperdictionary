@@ -19,11 +19,13 @@ class User < ActiveRecord::Base
 
   validates_format_of       :name,     :with => Authentication.name_regex,  :message => Authentication.bad_name_message, :allow_nil => true
   validates_length_of       :name,     :maximum => 100
-
+  
   validates_presence_of     :email
-  validates_length_of       :email,    :within => 6..100 #r@a.wk
   validates_uniqueness_of   :email
-  validates_format_of       :email,    :with => Authentication.email_regex, :message => Authentication.bad_email_message
+  validates_email_veracity_of :email # Actually checks if the server exists, the format is correct, etc
+#  validates_length_of       :email,    :within => 6..100 #r@a.wk
+#  validates_format_of       :email,    :with => Authentication.email_regex, :message => Authentication.bad_email_message
+  
   
   named_scope :active, :conditions => ['activated_at IS NOT NULL AND state = "active"']
   default_scope :order => 'login'
@@ -33,7 +35,15 @@ class User < ActiveRecord::Base
   # anything else you want your user to change should be added here.
   attr_accessible :login, :email, :name, :password, :password_confirmation
   attr_accessor :verified_email # temporary attribute
-
+  
+  def before_create
+    self.build_profile :profile_type_id => ProfileType.find_or_create_by_name('person'), :url => self.identity_url, :name => self.name, :body => "I'm a new user. Say hello!"
+  end
+  
+  def before_validate
+    self.identity_url.sub!(/\/$/, '') # remove trailing slashes
+  end
+  
   # for use with RPX Now gem
   def self.find_or_initialize_with_rpx(token)
     data = {}
@@ -43,11 +53,11 @@ class User < ActiveRecord::Base
     return nil if data.blank? or profile["identifier"].blank?
 
     u = self.find(profile['primaryKey'].to_i) if profile['primaryKey'] # Get it from the mapping if we have that
-    u ||= self.find_by_identity_url(profile["identifier"]) # Or not...
+    u ||= self.find_by_identity_url(profile["identifier"].sub(/\/$/, '')) # Or not...
     
     if u.nil?
       u = self.new
-      u.identity_url = profile["identifier"]
+      u.identity_url = profile["identifier"] # Remove trailing slashes
       u.name = profile['displayName'] || "#{profile['name']['givenName']} #{profile['name']['familyName']}"
       u.name = nil if u.name.blank?
       u.login = profile['preferredUsername']

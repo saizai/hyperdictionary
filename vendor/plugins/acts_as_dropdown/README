@@ -1,0 +1,24 @@
+= acts_as_dropdown
+
+This plugin allows any ActiveRecord object to easily be used to create a HTML select option list.
+
+== Resources
+
+Install
+
+* [ruby] script\plugin install http://acts-as-dropdown.googlecode.com/svn/trunk/
+
+  Or even better, use Piston (http://piston.rubyforge.org)
+
+* piston import http://acts-as-dropdown.googlecode.com/svn/trunk/ vendor/plugins/acts_as_dropdown
+
+RDocs
+
+* These can be found in the doc directory at the root of the acts_as_dropdown directory by loading the
+  index.html file into a browser.
+
+Subversion
+
+* http://acts-as-dropdown.googlecode.com/svn/
+
+Special thanks to courtenay of http://habtm.com for giving me the idea for this plugin.

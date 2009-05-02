@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  piston:remote-revision: 17
+  piston:uuid: 62e7121a-a619-0410-af82-33eaa1cdbce6
+lock: false
+repository_class: Piston::Svn::Repository
+repository_url: http://acts-as-dropdown.googlecode.com/svn/trunk/

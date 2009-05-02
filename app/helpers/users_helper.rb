@@ -43,13 +43,15 @@ module UsersHelper
   #   link_to_user @user, :content_text => 'Your user page'
   #   # => <a href="/users/3" title="barmy" class="nickname">Your user page</a>
   #
+  # By default this will link to a user's *profile*, rather than the *user* per se. Pass :user => true to override.
+  
   def link_to_user(user, options={})
     raise "Invalid user" unless user
-    options.reverse_merge! :content_method => :login, :title_method => :login, :class => :nickname
+    options.reverse_merge! :content_method => :login, :title_method => :login, :class => :nickname, :user => false
     content_text      = options.delete(:content_text)
     content_text    ||= user.send(options.delete(:content_method))
     options[:title] ||= user.send(options.delete(:title_method))
-    link_to h(content_text), user_path(user), options
+    link_to h(content_text), options[:user] ? user_path(user) : profile_path(user.profile), options
   end
 
   #

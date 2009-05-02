@@ -1,0 +1,83 @@
+--- !ruby/object:Gem::Specification 
+name: rubaidh-google_analytics
+version: !ruby/object:Gem::Version 
+  version: 1.1.4
+platform: ruby
+authors: 
+- Graeme Mathieson
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2009-04-28 00:00:00 -07:00
+default_executable: 
+dependencies: 
+- !ruby/object:Gem::Dependency 
+  name: actionpack
+  type: :runtime
+  version_requirement: 
+  version_requirements: !ruby/object:Gem::Requirement 
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        version: "0"
+    version: 
+- !ruby/object:Gem::Dependency 
+  name: activesupport
+  type: :runtime
+  version_requirement: 
+  version_requirements: !ruby/object:Gem::Requirement 
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        version: "0"
+    version: 
+description: "By default this gem will output google analytics code forevery page automatically, if it's configured correctly.This is done by adding: Rubaidh::GoogleAnalytics.tracker_id = 'UA-12345-67'"
+email: mathie@rubaidh.com
+executables: []
+
+extensions: []
+
+extra_rdoc_files: []
+
+files: 
+- CREDITS
+- MIT-LICENSE
+- README.rdoc
+- Rakefile
+- rails/init.rb
+- test/google_analytics_test.rb
+- test/test_helper.rb
+- test/view_helpers_test.rb
+- lib/rubaidh.rb
+- lib/rubaidh/google_analytics.rb
+- lib/rubaidh/view_helpers.rb
+- tasks/google_analytics.rake
+has_rdoc: true
+homepage: http://rubaidh.com/portfolio/open-source/google-analytics/
+post_install_message: 
+rdoc_options: []
+
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      version: "0"
+  version: 
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      version: "0"
+  version: 
+requirements: []
+
+rubyforge_project: rubaidh
+rubygems_version: 1.3.1
+signing_key: 
+specification_version: 2
+summary: "[Rails] Easily enable Google Analytics support in your Rails application."
+test_files: []
+

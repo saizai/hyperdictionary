@@ -1,5 +1,0 @@
-#!/usr/bin/env ruby
-require "piston"
-
-# Chain to the real command-line client
-require "piston/cli"

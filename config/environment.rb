@@ -14,15 +14,10 @@ end
 Rails::Initializer.run do |config|
   config.gem 'rake'
   config.gem 'ruby-openid', :lib => 'openid'
-  config.gem 'ruby-debug'
-  config.gem 'francois-piston', :source => 'http://gems.github.com'
   config.gem 'capistrano'
   config.gem 'mperham-memcache-client', :lib => 'memcache', :source => 'http://gems.github.com'
-  config.gem 'SystemTimer', :lib => 'system_timer'
-  config.gem 'RedCloth', :lib => 'redcloth'
-  config.gem 'utf8proc'
   config.gem 'ar-extensions'
-  config.gem 'markcatley-google_analytics', :lib => 'rubaidh/google_analytics', :source => 'http://gems.github.com'
+  config.gem 'rubaidh-google_analytics', :lib => 'rubaidh/google_analytics', :source => 'http://gems.github.com'
   config.gem 'mislav-will_paginate', :lib => 'will_paginate'
   config.gem 'uuidtools'
   config.gem "grosser-rpx_now", :lib => "rpx_now", :source => "http://gems.github.com"
@@ -31,6 +26,12 @@ Rails::Initializer.run do |config|
 #  config.gem 'test-spec', :version => '~> 0.9.0' # required for rack-rack-contrib (note: 0.10.0 is current)
 #  config.gem 'rack-rack-contrib', :lib => 'rack/contrib',  :source => 'http://gems.github.com'
 
+  # Not frozen because they cause conflicts and/or require native extensions
+  config.gem 'francois-piston', :lib => 'piston', :source => 'http://gems.github.com'
+  config.gem 'ruby-debug'
+  config.gem 'SystemTimer', :lib => 'system_timer'
+  config.gem 'RedCloth', :lib => 'redcloth'
+  config.gem 'utf8proc'
 
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers

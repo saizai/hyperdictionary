@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  commit: ed083ce50d283d8749ad62b5c1d0e4982a0e2154
+  branch: master
+lock: false
+repository_class: Piston::Git::Repository
+repository_url: git://github.com/zdennis/ar-extensions.git

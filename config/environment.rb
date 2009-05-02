@@ -16,7 +16,6 @@ Rails::Initializer.run do |config|
   config.gem 'ruby-openid', :lib => 'openid'
   config.gem 'capistrano'
   config.gem 'mperham-memcache-client', :lib => 'memcache', :source => 'http://gems.github.com'
-  config.gem 'ar-extensions'
   config.gem 'rubaidh-google_analytics', :lib => 'rubaidh/google_analytics', :source => 'http://gems.github.com'
   config.gem 'mislav-will_paginate', :lib => 'will_paginate'
   config.gem 'uuidtools'

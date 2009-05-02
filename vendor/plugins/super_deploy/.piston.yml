@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  commit: 0fad4c6ad9bba21a3339d877b788b90ac339821a
+  branch: master
+lock: false
+repository_class: Piston::Git::Repository
+repository_url: git://github.com/saizai/superdeploy.git

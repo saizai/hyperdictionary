@@ -1,119 +1,54 @@
 # No need for mongrel cluster if using Phusion Passenger
 # require 'mongrel_cluster/recipes'
-load 'lib/super_deploy.rb'
 
-set :scm, :git
-
-# application name - i.e. /apps/#{application} - required
-set :application, "kura2"  
+# Application
+set :application, "kura2"  # Required
 # deploy_to must be path from root
-set :deploy_to, "/home/kura2/dictionary.conlang.org/" # defaults to "/u/apps/#{application}"
-# set :mongrel_conf, "#{deploy_to}/current/config/mongrel_cluster.yml"
-set :user, "kura2"
-set :runner, "kura2"
-set :use_sudo, false
 
-ssh_options[:keys] = %w(~/.ssh/kura_deploy)
-
-# This is needed on Joyent's Sun OS to ensure that the password prompts work correctly
-# See http://groups.google.com/group/capistrano/browse_thread/thread/13b029f75b61c09d
-# default_run_options[:pty] = true 
-
-# URL of repository required
-#set :ip, '##.##.##.##'
-
+# Repo
+set :scm, :git # :git, :darcs, :subversion, :cvs
+# set :svn, /path/to/svn # or :darcs or :cvs or :git; defaults to checking PATH
 set :repository, "git://github.com/saizai/hyperdictionary.git"
 
-# :no_release => true means that no code will be deployed to that box
+# Server
+# set :gateway, "gate.host.com"  # default to no gateway
+set :user, "kura2"
+set :runner, "#{user}"
+set :deploy_to, "/home/#{user}/dictionary.conlang.org/" # defaults to "/u/apps/#{application}"
+# set :mongrel_conf, "#{deploy_to}/current/config/mongrel_cluster.yml"
+# default_run_options[:pty] = true  # Uncomment if on SunOS (eg Joyent) - http://groups.google.com/group/capistrano/browse_thread/thread/13b029f75b61c09d
+set :use_sudo, false
+ssh_options[:keys] = %w(~/.ssh/kura_deploy)
+# ssh_options[:port] = 25
+
+#set :ip, '##.##.##.##' # IP of repository. Better than using DNS lookups, if it's static
+
+# :no_release => true means that no code will be deployed to that box (but non-code tasks may run on it)
 # :primary => true is currently unused, but could eg be for primary vs slave db servers
 # you can have multiple "role :foo, "serverip", :options=>whatnot" lines, or server "ip", :role, :role2, :role3, :options=>foo
-#server "#{ip}", :app, :db, :web, :primary => true
+#server "#{ip}", :app, :db, :web, :primary => true # Single box that does it all
 #role :app, "your app-server here"
 #role :web, "your web-server here"
 #role :db,  "your db-server here", :primary => true
 
 server 'dictionary.conlang.org', :app, :web, :primary => true # We have no access to DB server directly
 
+# Choose your default deploy methods
 namespace (:deploy) do
-  desc "Restart using Passenger" 
   task :restart, :roles => :app do
-    run "touch #{current_path}/tmp/restart.txt" 
+    # deploy.mongrel.seesaw
+    # deploy.god.restart
+    deploy.passenger.restart
   end
   
-#  after "deploy:setup", "deploy:god:restart" 
-#  namespace :god do
-#    task :restart, :roles=>:app do
-#      sudo "/usr/bin/god restart #{application}"
-#    end
-#    
-#    task :status, :roles => :app do
-#      sudo "/usr/bin/god status"
-#    end
-#  end
-#
-#  [ :stop, :start, :restart ].each do |t|
-#    desc "#{t.to_s.capitalize} app using god"
-#    task t, :roles => :app do
-#      sudo "god #{t.to_s} #{application}"
-#    end
-#  end
-
-  after "deploy:update_code", "deploy:symlink_configs"
+  # Use a shared config directory. Run cap deploy:configs:setup first.
+  after "deploy:update_code", "deploy:configs:symlink"
   
-  desc "Override config files w/ whatever's in the shared/config path (e.g. passwords, api keys)"
-  task :symlink_configs, :except => { :no_release => true } do         
-    # For all files in the shared config path, symlink in the shared config
-# For some reason, this Dir actually runs on the *local* system rather than the remote. Lame.
-#    Dir[File.join(shared_path, 'config', '**', '*.rb')].each do |c|
-# So here's a hack w/ find to do it the ugly way :(
-    config_files = ''
-    # Find all regular files (not directories) in the shared config path
-    run("find #{shared_path}/config -type f") do |channel, stream, data| 
-     config_files << data
-    end
-    config_files.strip.split("\n").map{|f| f.sub!("#{shared_path}/config/", '')}.each do |c|
-      run "ln -sf #{shared_path}/config/#{c} #{release_path}/config/#{c}" # And symlink in the server's version, overwriting (-f) whatever was there
-    end
-  end
-
+  # Set up special permissions
+#  after "deploy:update_code", "deploy:set_permissions_staging"
 #  task :set_permissions_staging, :except => { :no_release => true } do 
 #      run "rm -f #{release_path}/config/database.yml"
 #      run "cp #{deploy_to}/shared/config/database.yml #{release_path}/config"
 #      run "chmod 775 #{release_path}/config/database.yml"
 #  end  
 end
-
-#namespace :starling do
-#  [ :stop, :start, :restart ].each do |t|
-#    desc "#{t.to_s.capitalize} starling using god"
-#    task t, :roles => :app do
-#      sudo "god #{t.to_s} starling"
-#    end
-#  end
-#end
-#
-#namespace :workling do
-#  [ :stop, :start, :restart ].each do |t|
-#    desc "#{t.to_s.capitalize} workling using god"
-#    task t, :roles => :app do
-#      sudo "god #{t.to_s} #{application}-workling"
-#    end
-#  end
-#end
-
-
-# =============================================================================
-# OPTIONAL VARIABLES
-# =============================================================================
-
-# set :scm, :darcs               # defaults to :subversion
-# set :svn, "/path/to/svn"       # defaults to searching the PATH
-# set :darcs, "/path/to/darcs"   # defaults to searching the PATH
-# set :cvs, "/path/to/cvs"       # defaults to searching the PATH
-# set :gateway, "gate.host.com"  # default to no gateway
-
-# =============================================================================
-# SSH OPTIONS
-# =============================================================================
-# ssh_options[:keys] = %w(/path/to/my/key /path/to/another/key)
-# ssh_options[:port] = 25

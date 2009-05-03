@@ -73,7 +73,13 @@ class User < ActiveRecord::Base
 
     return u
   end
-
+  
+  # Note that we also store the primary one as identity_url (no s)
+  def identity_urls
+    ret = ([identity_url] + RPXNow.mappings(self)).uniq
+    ret.empty? ? nil : ret
+  end
+  
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   #
   # uff.  this is really an authorization, not authentication routine.  
@@ -92,6 +98,12 @@ class User < ActiveRecord::Base
   
   def email=(value)
     write_attribute :email, (!value.blank? ? value.downcase : nil)
+  end
+  
+  # Not the same as active? - e.g. someone could be suspended, but still have activated their email
+  # Or someone could be active, change their email, and not have activated it yet
+  def activated?
+    !self.activated_at.blank?
   end
     
   protected

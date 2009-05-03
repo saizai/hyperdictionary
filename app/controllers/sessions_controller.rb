@@ -2,6 +2,7 @@
 class SessionsController < ApplicationController
   # Be sure to include AuthenticationSystem in Application Controller instead
 #  include AuthenticatedSystem
+  permit 'not guest', :only => :destroy
 
   # render new.rhtml
   def new

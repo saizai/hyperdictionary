@@ -72,7 +72,7 @@ module Authorization
 
       def has_permission?( authorization_expression )
         @current_user = get_user
-        if not @options[:allow_guests]
+        unless @options[:allow_guests] or authorization_expression =~ /guest/ or defined? AnonUser
           # We aren't logged in, or an exception has already been raised.
           # Test for both nil and :false symbol as restful_authentication plugin
           # will set current user to ':false' on a failed login (patch by Ho-Sheng Hsiao).

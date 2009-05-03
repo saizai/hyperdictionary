@@ -1,8 +1,8 @@
 --- 
 format: 1
 handler: 
-  commit: 6a71f147658b12883e18736c744b70db82c482d2
+  commit: 0ff72cee3fcd697cff6b4a524ad40084142fa63a
   branch: master
-repository_url: git://github.com/DocSavage/rails-authorization-plugin.git
 lock: false
 repository_class: Piston::Git::Repository
+repository_url: git://github.com/saizai/rails-authorization-plugin.git

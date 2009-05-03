@@ -22,73 +22,53 @@ module Authorization
         # If roles aren't explicitly defined in user class then check roles table
         def has_role?( role_name, authorizable_obj = nil )
           if authorizable_obj.nil?
-            self.roles.find_by_name( role_name ) || self.roles.member?(get_role( role_name, authorizable_obj )) ? true : false    # If we ask a general role question, return true if any role is defined.
+            !! roles_by_name( role_name )
           else
-            role = get_role( role_name, authorizable_obj )
-            role ? self.roles.exists?( role.id ) : false
+            return authorizable_obj == self if role_name == 'self'
+            !! roles_for(authorizable_obj, role_name)
           end
         end
-
+        
         def has_role( role_name, authorizable_obj = nil )
-          role = get_role( role_name, authorizable_obj )
-          if role.nil?
-            if authorizable_obj.is_a? Class
-              role = Role.create( :name => role_name, :authorizable_type => authorizable_obj.to_s )
-            elsif authorizable_obj
-              role = Role.create( :name => role_name, :authorizable => authorizable_obj )
-            else
-              role = Role.create( :name => role_name )
-            end
-          end
-          self.roles << role if role and not self.roles.exists?( role.id )
+          role = get_or_create_role( role_name, authorizable_obj )
+          add_role(role) if role and not has_role? role_name, authorizable_obj
         end
-
+        
         def has_no_role( role_name, authorizable_obj = nil  )
-          role = get_role( role_name, authorizable_obj )
-          self.roles.delete( role ) if role
+          role =  get_role( role_name, authorizable_obj )
+          remove_role role
           delete_role_if_empty( role )
         end
-
+        
         def has_roles_for?( authorizable_obj )
-          if authorizable_obj.is_a? Class
-            !self.roles.detect { |role| role.authorizable_type == authorizable_obj.to_s }.nil?
-          elsif authorizable_obj
-            !self.roles.detect { |role| role.authorizable_type == authorizable_obj.class.base_class.to_s && role.authorizable == authorizable_obj }.nil?
-          else
-            !self.roles.detect { |role| role.authorizable.nil? }.nil?
-          end
+          !! roles_for(authorizable_obj)
         end
         alias :has_role_for? :has_roles_for?
 
-        def roles_for( authorizable_obj )
-          if authorizable_obj.is_a? Class
-            self.roles.select { |role| role.authorizable_type == authorizable_obj.to_s }
-          elsif authorizable_obj
-            self.roles.select { |role| role.authorizable_type == authorizable_obj.class.base_class.to_s && role.authorizable.id == authorizable_obj.id }
-          else
-            self.roles.select { |role| role.authorizable.nil? }
-          end
+        def roles_for( authorizable_obj, role_name = nil )
+          x = roles.find :all, :conditions => roles_for_conditions(authorizable_obj, role_name)          
+          x.empty? ? nil : x
         end
-
-        def has_no_roles_for(authorizable_obj = nil)
+        
+        def has_no_roles_for(authorizable_obj = nil)Z
           old_roles = roles_for(authorizable_obj).dup
-          roles_for(authorizable_obj).destroy_all
+          remove_roles_for authorizable_obj
           old_roles.each { |role| delete_role_if_empty( role ) }
         end
-
+        
         def has_no_roles
-          old_roles = self.roles.dup
-          self.roles.destroy_all
+          old_roles = roles.dup
+          remove_all_roles
           old_roles.each { |role| delete_role_if_empty( role ) }
         end
-
+        
         def authorizables_for( authorizable_class )
           unless authorizable_class.is_a? Class
             raise CannotGetAuthorizables, "Invalid argument: '#{authorizable_class}'. You must provide a class here."
           end
           begin
             authorizable_class.find(
-              self.roles.find_all_by_authorizable_type(authorizable_class.base_class.to_s).map(&:authorizable_id).uniq
+              roles_for(authorizable_class.base_class).map(&:authorizable_id).uniq
             )
           rescue ActiveRecord::RecordNotFound
             []
@@ -96,6 +76,26 @@ module Authorization
         end
 
         private
+        
+        def remove_role role
+          roles.delete role
+        end
+        
+        def remove_all_roles
+          roles.destroy_all
+        end
+        
+        def add_role role
+          roles << role
+        end
+        
+        def remove_roles_for authorizable_obj
+          roles_for(authorizable_obj).destroy_all
+        end
+        
+        def roles_by_name role_name
+          roles.find_by_name( role_name )
+        end
 
         def get_role( role_name, authorizable_obj )
           if authorizable_obj.is_a? Class
@@ -110,14 +110,44 @@ module Authorization
                        :conditions => [ 'name = ? and authorizable_type IS NULL and authorizable_id IS NULL', role_name ] )
           end
         end
-
-        def delete_role_if_empty( role )
-          role.destroy if role && role.users.count == 0
+        
+        def get_or_create_role role_name, authorizable_obj
+          role = get_role( role_name, authorizable_obj )
+          role ||= if authorizable_obj.is_a? Class
+            role = Role.create( :name => role_name, :authorizable_type => authorizable_obj.to_s )
+          elsif authorizable_obj
+            role = Role.create( :name => role_name, :authorizable => authorizable_obj )
+          else
+            role = Role.create( :name => role_name )
+          end
         end
 
-      end
-    end
+        def delete_role_if_empty( role )
+          role.destroy if role && role.roles_users.count == 0
+        end
 
+        def roles_for_conditions authorizable_obj, role_name = nil
+          conditions = ['roles_users.user_id IS NULL']
+          if authorizable_obj.is_a? Class
+            conditions[0] <<  ' and authorizable_type = ?'
+            conditions << authorizable_obj.to_s
+          elsif authorizable_obj
+            conditions[0] << ' and authorizable_type = ? and authorizable_id = ?'
+            conditions += [authorizable_obj.class.base_class.to_s, authorizable_obj.id]
+          else
+            conditions[0] << ' and authorizable_type IS NULL'
+          end
+          
+          if role_name
+            conditions[0] << ' and roles.name = ?'
+            conditions << role_name
+          end
+          conditions
+        end
+        
+      end # InstanceMethods
+    end # UserExtensions
+    
     module ModelExtensions
       def self.included( recipient )
         recipient.extend( ClassMethods )
@@ -132,28 +162,28 @@ module Authorization
           before_destroy :remove_user_roles
 
           def accepts_role?( role_name, user )
-            user.has_role? role_name, self
+            (user || AnonUser).has_role? role_name, self
           end
 
           def accepts_role( role_name, user )
-            user.has_role role_name, self
+            (user || AnonUser).has_role role_name, self
           end
 
           def accepts_no_role( role_name, user )
-            user.has_no_role role_name, self
+            (user || AnonUser).has_no_role role_name, self
           end
 
           def accepts_roles_by?( user )
-            user.has_roles_for? self
+            (user || AnonUser).has_roles_for? self
           end
           alias :accepts_role_by? :accepts_roles_by?
 
           def accepted_roles_by( user )
-            user.roles_for self
+            (user || AnonUser).roles_for self
           end
 
           def authorizables_by( user )
-            user.authorizables_for self
+            (user || AnonUser).authorizables_for self
           end
 
           include Authorization::ObjectRolesTable::ModelExtensions::InstanceMethods
@@ -164,24 +194,24 @@ module Authorization
       module InstanceMethods
         # If roles aren't overriden in model then check roles table
         def accepts_role?( role_name, user )
-          user.has_role? role_name, self
+          (user || AnonUser).has_role? role_name, self
         end
 
         def accepts_role( role_name, user )
-          user.has_role role_name, self
+          (user || AnonUser).has_role role_name, self
         end
 
         def accepts_no_role( role_name, user )
-          user.has_no_role role_name, self
+          (user || AnonUser).has_no_role role_name, self
         end
 
         def accepts_roles_by?( user )
-          user.has_roles_for? self
+          (user || AnonUser).has_roles_for? self
         end
         alias :accepts_role_by? :accepts_roles_by?
 
         def accepted_roles_by( user )
-          user.roles_for self
+          (user || AnonUser).roles_for self
         end
 
         private
@@ -194,8 +224,51 @@ module Authorization
         end
 
       end
+    end # ModelExtensions
+
+  end # ObjectRolesTable
+end # Authorization
+
+# This is a bit of a kludge, but it works.
+class AnonUser
+  # Use the normal stuff an authorized user would have
+  extend Authorization::ObjectRolesTable::UserExtensions::InstanceMethods
+  extend Authorization::Identity::UserExtensions::InstanceMethods
+  
+  class << self 
+    # And override the ones that call self, 'cause getting a fake self.roles that works like a real association is a major pain
+    def roles_for( authorizable_obj, role_name = nil )
+      x = Role.find :all, :conditions => roles_for_conditions(authorizable_obj, role_name), :joins => :roles_users
+      x.empty? ? nil : x
     end
-
-  end
-end
-
+  
+    private 
+    
+    def roles_by_name role_name
+      x = Role.find :all, :conditions => ["roles_users.user_id IS NULL and name = ?", role_name], :joins => :roles_users
+      x.empty? ? nil : x
+    end
+    
+    def roles
+      x = Role.find :all, :conditions => "roles_users.user_id IS NULL", :joins => :roles_users
+      x.empty? ? nil : x
+    end
+    
+    def add_role role
+      RolesUser.create(:user_id => nil, :role_id => role.id) if role
+    end
+    
+    def remove_role role
+      RolesUser.delete_all ['user_id IS NULL and role_id = ?', role.id] if role
+    end
+    
+    def remove_roles_for authorizable_obj
+      role_ids = roles_for(authorizable_obj).map(&:id)
+      RolesUser.delete_all ['user_id IS NULL and role_id IN (?)', role_ids] unless role_ids.empty?
+    end
+    
+    def remove_all_roles
+      RolesUser.delete_all ['user_id IS NULL']
+    end
+  end # << self
+end # AnonUser

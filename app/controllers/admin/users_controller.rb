@@ -7,7 +7,6 @@ class Admin::UsersController < ApplicationController
   
   def index
     @users = User.paginate :all, :per_page => 50, :page => params[:page]
-    @models = ActiveRecord::Base.send(:subclasses).map(&:to_s).reject{|x| x =~ /:/ }.sort
   end
   
   def activate

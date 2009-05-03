@@ -7,4 +7,7 @@ class Role < ActiveRecord::Base
   has_many :users, :through => :roles_users
   belongs_to :authorizable, :polymorphic => true
   
+  def to_s
+    "#{self.name} #{self.authorizable_type} #{self.authorizable_id}".strip
+  end
 end

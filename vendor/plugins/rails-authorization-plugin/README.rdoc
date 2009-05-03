@@ -320,8 +320,7 @@ models unambiguous.
 
   :allow_guests => false.
 
-We can allow permission processing without a
-current user object. The default is false.
+We can allow permission processing without a current user object. The default is false. Only used for hardwired roles; see Special below if using object table.
 
   :user => YourUserObject.
 
@@ -401,6 +400,10 @@ Role queries follow the same pattern as the setting of roles:
   user.has_role? 'moderator', group
   user.has_role? 'member', Group
 
+  user.roles_for Group # all roles on any groups (or Group itself)
+  user.roles_for group # all roles on this group
+  user.roles_for Group, 'moderator' # moderator roles on any Groups
+
   a_model.accepts_role? 'moderator', user
   Model.accepts_role? 'moderator', user
 
@@ -439,6 +442,39 @@ are used to distinguish "role" and "role of :model" and "role of Model".
 
 If you prefer not to pollute your namespace with these dynamic methods, do not
 include the Identity module in <tt>object_roles_table.rb</tt>.
+
+==== Special expressions 
+
+These require the ObjectRolesTable mixin.
+
+  permit 'self of user'
+
+Every user automatically has the 'self' role on themselves, for the purposes of permit expressions only. (has_role? 'self' will fail)
+
+E.g. permit 'admin or (self of user)' for Users#show_private_info
+
+  permit 'guest'
+
+Allows *only* anonymous users (e.g. for the login page). Note that 'guest of foo' is not special, and is treated as a normal role name.
+
+  permit 'not guest'
+
+Equivalent to login_required
+
+  AnonUser.has_role 'editor of public_wiki_post'
+  AnonUser.has_role? 'editor' # true - a foo of a bar is also a foo generically 
+    # Note: If you want to have these be different, make it a different name (e.g. 'uber_editor')
+  @banned_user.has_no_role 'editor of public_wiki_post' # Works, but they could just log out and be anonymous
+  AnonUser.has_no_role 'editor of locked_wiki_post'
+  permit 'editor of public_wiki_post' # Allows anon users, or anyone else explicitly assigned the role
+  permit 'guest or (editor of locked_wiki_post)' # Does the same, but doesn't require assigning AnonUser the role
+  AnonUser.has_role? 'foo'
+  Bar.accepts_role 'foo', AnonUser
+  Bar.accepts_role 'foo', nil # equivalent
+  AnonUser.is_admin?  # hopefully false ;-)
+  
+AnonUser is a special class provided by Authorization. It acts just like the acts_as_authorized_user class, except that it's for anonymous users. It is not an actual User object, so don't try to treat it as one except for roles related stuff.
+
 
 === Pattern of use
 

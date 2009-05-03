@@ -1,17 +1,14 @@
 class UsersController < ApplicationController
-  # Be sure to include AuthenticationSystem in Application Controller instead
-#  include AuthenticatedSystem
-  
-  # Protect these actions behind an admin login
-#  before_filter :admin_required, :only => [:suspend, :unsuspend, :destroy, :purge]
-    permit 'admin', :only => [:suspend, :unsuspend, :destroy, :purge]
+  permit 'admin', :only => :index
+  permit 'guest', :only => [:new, :create, :rpx_login], :permission_denied_message => 'Please log out first.'
   
   def index
     @users = User.active.paginate :all, :per_page => 50, :page => params[:page]
   end
-  
+
   def show
     @user = User.find(params[:id]) # _by_login
+    permit 'admin or (self of user)'
   end
   
   # Technically, this breaks REST and is un-DRY, because it handles both user and session creation. Oh well, APIs.

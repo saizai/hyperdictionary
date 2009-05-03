@@ -1,5 +1,4 @@
 class Admin::MainController < ApplicationController
-  before_filter :login_required
   permit 'admin'
   
   def index

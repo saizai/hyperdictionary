@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  abbreviation: MyString
+  name: MyString
+  parent_id: 1
+
+two:
+  abbreviation: MyString
+  name: MyString
+  parent_id: 1

@@ -11,6 +11,9 @@ class User < ActiveRecord::Base
   
   acts_as_authorized_user
   acts_as_authorizable
+  acts_as_paranoid
+  model_stamper
+  acts_as_versioned :version_column => 'lock_version'
   
   validates_presence_of     :login
   validates_length_of       :login,    :within => 3..40

@@ -1,5 +1,4 @@
 class Admin::UsersController < ApplicationController
-	before_filter :login_required
   permit 'admin'
 
   before_filter :find_user, :except => :index
@@ -7,6 +6,7 @@ class Admin::UsersController < ApplicationController
   
   def index
     @users = User.paginate :all, :per_page => 50, :page => params[:page]
+    @anon_roles = AnonUser.roles
   end
   
   def activate
@@ -25,12 +25,13 @@ class Admin::UsersController < ApplicationController
   end
   
   def destroy
-    @user.delete!
+    @user.delete! # Goes through AASM
     refresh_user
   end
 
   def purge
-    @user.destroy
+    @user.delete!
+    @user.destroy # Goes through acts_as_paranoid (use @user.destroy! to really actually delete the record)
     refresh_user
   end
   
@@ -65,15 +66,22 @@ class Admin::UsersController < ApplicationController
   protected
   
   def find_user
-    @user = User.find(params[:id])
+    @user = (params[:id] == 'AnonUser' ? AnonUser : User.find(params[:id]))
     @models = ActiveRecord::Base.send(:subclasses).map(&:to_s).reject{|x| x =~ /:/}.sort
   end
   
   def refresh_user
-    render :update do |page| # only for this person
-      page.replace "user_#{@user.id}", :partial => '/admin/users/user'
-      page.visual_effect :highlight, "user_#{@user.id}"
-    end 
+    if @user == AnonUser
+      render :update do |page|
+        page.replace_html 'anon_roles', :partial => 'user_roles', :locals => {:user => AnonUser}
+        page.visual_effect :highlight, 'anon_roles'
+      end
+    else
+      render :update do |page| # only for this person
+        page.replace "user_#{@user.id}", :partial => '/admin/users/user'
+        page.visual_effect :highlight, "user_#{@user.id}"
+      end
+    end
   end
 end
 

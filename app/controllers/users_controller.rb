@@ -87,6 +87,7 @@ class UsersController < ApplicationController
   # render new.rhtml
   def new
     @user = User.new
+    @recaptcha = false
   end
  
   def create

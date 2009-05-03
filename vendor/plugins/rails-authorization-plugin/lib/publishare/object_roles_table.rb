@@ -128,6 +128,7 @@ module Authorization
 
         def roles_for_conditions authorizable_obj, role_name = nil
           conditions = ['roles_users.user_id IS NULL']
+                    
           if authorizable_obj.is_a? Class
             conditions[0] <<  ' and authorizable_type = ?'
             conditions << authorizable_obj.to_s
@@ -238,19 +239,20 @@ class AnonUser
   class << self 
     # And override the ones that call self, 'cause getting a fake self.roles that works like a real association is a major pain
     def roles_for( authorizable_obj, role_name = nil )
-      x = Role.find :all, :conditions => roles_for_conditions(authorizable_obj, role_name), :joins => :roles_users
+      # The double find thing is so that acts_as_paranoid (if present) can hook in properly. It's not a significant performance hit, anyway; still better than before. ;-)
+      x = Role.find(RolesUser.find(:all, :conditions => roles_for_conditions(authorizable_obj, role_name), :joins => :role, :select => :id).map(&:id))
       x.empty? ? nil : x
     end
   
-    private 
-    
-    def roles_by_name role_name
-      x = Role.find :all, :conditions => ["roles_users.user_id IS NULL and name = ?", role_name], :joins => :roles_users
+    def roles
+      x = Role.find(RolesUser.find(:all, :conditions =>  "roles_users.user_id IS NULL", :joins => :role, :select => :id).map(&:id))
       x.empty? ? nil : x
     end
     
-    def roles
-      x = Role.find :all, :conditions => "roles_users.user_id IS NULL", :joins => :roles_users
+    private 
+    
+    def roles_by_name role_name
+      x = Role.find(RolesUser.find(:all, :conditions =>  ["roles_users.user_id IS NULL and name = ?", role_name], :joins => :role, :select => :id).map(&:id))
       x.empty? ? nil : x
     end
     

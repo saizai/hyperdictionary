@@ -1,0 +1,20 @@
+<td>
+	<% (user.roles || []).each do |r| %>
+  		<%= r.to_s %>
+		<%= link_to_remote 'x', :url => remove_role_admin_user_path(user, :role_id => r.id), :method => :delete %>	
+	<% end %>
+</td>
+<td>
+	<%= link_to_function("add", :id => "add_link_#{user.id}") do |page|
+			page["add_link_#{user.id}"].hide
+			page["add_#{user.id}"].visual_effect :appear, :duration => 0.2
+		end %>
+	<% form_remote_tag :url => add_role_admin_user_path(user), :method => :put do  %>
+		<span id="add_<%= user.id %>" style="display: none;">
+			Role <%= text_field_tag :name, nil, :size => 10 %>
+			Class <%= select_tag 'class', options_for_select([nil] + model_names, nil), :include_blank => true  %>
+			ID <%= text_field_tag :class_id, nil, :size => 3 %>
+			<%= submit_tag 'Add' %>
+		</span>
+	<% end %>
+</td>

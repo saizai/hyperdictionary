@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  commit: 524fb87b19581d307c3981d3f02f280a5c5b0ad0
+  branch: master
+lock: false
+repository_class: Piston::Git::Repository
+repository_url: git://github.com/delynn/userstamp.git

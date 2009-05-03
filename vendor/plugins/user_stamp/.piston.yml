@@ -1,8 +1,0 @@
---- 
-format: 1
-handler: 
-  commit: 65e27195fd3f73787efd700aae6893889332fb94
-  branch: master
-repository_url: git://github.com/jnunemaker/user_stamp.git
-lock: false
-repository_class: Piston::Git::Repository

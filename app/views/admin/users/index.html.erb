@@ -1,5 +1,13 @@
 <h1>All Users</h1>
   <table>
+  	<tr>
+  		<th>Anonymous user roles</th>
+  	</tr>
+  	<tr id='anon_roles'>
+		<%= render :partial => 'user_roles', :locals => {:user => AnonUser} %>
+	</tr>
+  </table>
+  <table>
     <tr>
     	<th>ID</th>
       <th>Login</th>

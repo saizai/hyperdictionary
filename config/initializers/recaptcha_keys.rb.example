@@ -1,0 +1,6 @@
+logger.warn 'Change your recaptcha keys!'
+
+# Note: these are saizai's keys. They only work for localhost.
+# Go to http://recaptcha.net/whyrecaptcha.html and get your own.
+RECAPTCHA_PUBLIC_KEY = '6Lez2QUAAAAAAFkF4l-2emYQkaAwgm1-IgIBXQos'
+RECAPTCHA_PRIVATE_KEY = '6Lez2QUAAAAAAH8YaKWQQLwoWUWjNwXyuCmVsl-2'

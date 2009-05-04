@@ -1,0 +1,2 @@
+raise 'Set your GoogleAnalytics code'
+Rubaidh::GoogleAnalytics.tracker_id = 'UA-######-#'

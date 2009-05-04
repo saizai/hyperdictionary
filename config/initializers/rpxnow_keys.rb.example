@@ -1,0 +1,4 @@
+raise 'Change your RPXNow keys!'
+
+RPX_SUBDOMAIN = 'app-name-for-rpx'
+RPXNow.api_key = 'lotsofnumbershere'

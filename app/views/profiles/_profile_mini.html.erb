@@ -1,6 +1,6 @@
 <div>
-	(pic) <%= link_to h(profile_mini.name), profile_path(profile_mini) %>
-	(<%= h profile_mini.profile_type.name %> icon)
+	(pic) <%= link_to h(profile.name), profile_path(profile) %>
+	(<%= h profile.profile_type.name %> icon)
 	(friend etc links)
-    <%= link_to 'Destroy', profile_mini, :confirm => 'Are you sure?', :method => :delete if logged_in_as_admin? %>
+    <%= link_to 'Destroy', profile, :confirm => 'Are you sure?', :method => :delete if logged_in_as_admin? %>
 </div>

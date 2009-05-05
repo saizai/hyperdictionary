@@ -1,9 +1,11 @@
-<div>
-	<h2><%=h @profile.name %> 	<small>(<%= h @profile.profile_type.name %>)</small></h2>
-	<% link_to h(@profile.url), @profile.url if @profile.url %>
-</div>
+<%= render @profile %>
 
 <div>
   <span><%= link_to 'Edit', edit_profile_path(@profile) %></span>
   <%=h @profile.body %>
 </div>
+
+<% unless @profile.versions.size < 2 %>
+	<div style="margin: 20px 0px 10px; 1px solid black;">Revision history:</div>
+	<%= render :partial => 'profile_version', :collection => @profile.versions.reverse, :as => :profile %>
+<% end %>

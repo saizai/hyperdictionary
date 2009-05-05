@@ -1,24 +1,25 @@
 <h1>All Users</h1>
-  <table>
-  	<tr>
-  		<th>Anonymous user roles</th>
-  	</tr>
-  	<tr id='anon_roles'>
+
+<table>
+	<tr>
+		<th>Anonymous user roles</th>
+	</tr>
+	<tr id='anon_roles'>
 		<%= render :partial => 'user_roles', :locals => {:user => AnonUser} %>
 	</tr>
-  </table>
-  <table>
-    <tr>
-    	<th>ID</th>
-      <th>Login</th>
-      <th>Email</th>
+</table>
+<table>
+	<tr>
+		<th>ID</th>
+		<th>Login</th>
+		<th>Email</th>
 		<th>Activated?</th>
 		<th>Has p/w?</th>
 		<th>ID URLs</th>
-      <th>State</th>
-      <th>Roles</th>
-    </tr>
-      <%= render @users %>
-  </table>
+		<th>State</th>
+		<th>Roles</th>
+	</tr>
+	<%= render @users %>
+</table>
 
-	<%= will_paginate @users %>
+<%= will_paginate @users %>

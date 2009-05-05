@@ -1,9 +1,9 @@
 <h1>Members</h1>
 
-	<ul>
-  <% for user in @users -%>
+<ul>
+	<% for user in @users -%>
 		<li><%= link_to_user user %></li>
 	<% end -%>
-	</ul>
+</ul>
 
-	<%= will_paginate @users %>
+<%= will_paginate @users %>

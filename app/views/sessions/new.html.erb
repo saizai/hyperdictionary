@@ -1,39 +1,39 @@
 <h1>Log In</h1>
 
-<div style="float: left; margin: 10px;">
-	<p>Use your account with us...</p>
-<% form_tag session_path do -%>
-	<table>
-		<tr>
-			<td><%= label_tag 'login' %></td>
-			<td><%= text_field_tag 'login', @login %></td>
-		</tr>
-		<tr>	
-			<td><%= label_tag 'password' %></td>
-			<td><%= password_field_tag 'password', nil %></td>
-			<td>(<%= link_to 'forgot it?', forgot_password_path %>)</td>
-		</tr>
-	
-		<% if @recaptcha %>
-			<tr>
-				<td><label for="recaptcha">Are you human?</label></td>
-				<td><%= recaptcha_tags %></td>
-			</tr>
-		<% end %>
-		<tr>
-			<td><%= label_tag 'remember_me', 'Remember me' %></td>
-			<td><%= check_box_tag 'remember_me', '1', @remember_me %></td>
-		</tr>
-		<tr>
-			<td/><td><%= submit_tag 'Log in', :disable_with => "Signing in&hellip;" %></td>
-		</tr>
+<div class="yui-g"> 
+	<div class="yui-u first"> 
+		<p>Use your account with us...</p>
+		<% form_tag session_path do -%>
+			<table>
+				<tr>
+					<td><%= label_tag 'login' %></td>
+					<td><%= text_field_tag 'login', @login %></td>
+				</tr>
+				<tr>	
+					<td><%= label_tag 'password' %></td>
+					<td><%= password_field_tag 'password', nil %></td>
+					<td>(<%= link_to 'forgot it?', forgot_password_path %>)</td>
+				</tr>
 			
-	</table>
-<% end -%>
-</div>
-
-<div style="float: left; margin: 10px;">
-	<p>... or use an existing account</p>
-	<%= RPXNow.embed_code(RPX_SUBDOMAIN, rpx_login_url )%>
-</div>
-
+				<% if @recaptcha %>
+					<tr>
+						<td><label for="recaptcha">Are you human?</label></td>
+						<td><%= recaptcha_tags %></td>
+					</tr>
+				<% end %>
+				<tr>
+					<td><%= label_tag 'remember_me', 'Remember me' %></td>
+					<td><%= check_box_tag 'remember_me', '1', @remember_me %></td>
+				</tr>
+				<tr>
+					<td/><td><%= submit_tag 'Log in', :disable_with => "Signing in&hellip;" %></td>
+				</tr>
+					
+			</table>
+		<% end -%>
+	</div> 
+	<div class="yui-u"> 
+		<p>... or use an existing account</p>
+		<%= RPXNow.embed_code(RPX_SUBDOMAIN, rpx_login_url )%>
+	</div> 
+</div> 

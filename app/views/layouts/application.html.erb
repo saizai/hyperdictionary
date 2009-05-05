@@ -1,27 +1,49 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+ 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-  <title><%= APP_NAME.humanize %></title>
+  <title><%= APP_NAME.humanize %><%= ' :' + @title if @title %></title>
+  <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.7.0/build/reset-fonts-grids/reset-fonts-grids.css&2.7.0/build/base/base-min.css">
   <%= stylesheet_link_tag :all, :cache => true %>
   <%= javascript_include_tag :all, :cache => true %>
 </head>
-<body class="<%= body_class %>">
 
-<%= render :partial => 'layouts/user_header' %>
+<body class="<%= body_class %>"> 
+	<div id="doc2" class="yui-t1"><!—-overall document wrapper--> 
+		<div id="hd" role="banner"><!--header / masthead-->
+			<%= render :partial => 'layouts/user_header' %>
+			<%= render :partial => 'layouts/flashes' -%>
+		</div> 
+		<div id="bd"><!--body-->
+			<div id="yui-main"> 
+				<div class="yui-b" id="content"  role="main"><!--primary-->
+					<%= yield %>
+				</div> 
+			</div> 
+			<div class="yui-b"><!--secondary-->
+				<ul class='menu' role="complementary navigation">
+					<li><%= link_to 'Profiles', profiles_path %></li>
+					<li>sidebar</li>
+					<li>menu</li>
+					<li>here</li>
+					<% if logged_in_as_admin? %>
+						<hr>
+						<li><%= link_to 'Admin', admin_root_path %></li>
+					<% end %>
+				</ul>
+			</div> 
+		</div> 
+		<div id="ft" role="contentinfo"><!--footer-->
+			<% if Rails.env.development? or logged_in_as_admin? %>
+			  <div id="footnotes_holder">
+			  </div>
+			<% end %>
+		</div> 
+	</div> 
+</body> 
 
-<%= render :partial => 'layouts/flashes' -%>
-
-<div id='content'>
-	<%= yield %>
-</div>
-
-<% if Rails.env.development? or logged_in_as_admin? %>
-  <div id="footnotes_holder">
-  </div>
-<% end %>
-
-</body>
 </html>
+
+

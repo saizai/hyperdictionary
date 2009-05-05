@@ -1,6 +1,7 @@
 class Profile < ActiveRecord::Base
   acts_as_paranoid
-  acts_as_versioned :version_column => 'lock_version'
+  acts_as_versioned :version_column => 'lock_version', :extend => Ddb::Userstamp::Stampable::ClassMethods
+  stampable
   
   belongs_to :user # This is for *identity* only. Use roles for everything else.
   belongs_to :profile_type

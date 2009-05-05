@@ -1,0 +1,4 @@
+<div>
+	<h2><%=h profile.name %> 	<small>(<%= h profile.profile_type.name %>)</small></h2>
+	<% link_to h(profile.url), profile.url if profile.url %>
+</div>

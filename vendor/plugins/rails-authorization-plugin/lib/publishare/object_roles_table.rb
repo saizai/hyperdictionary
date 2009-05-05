@@ -22,16 +22,17 @@ module Authorization
         # If roles aren't explicitly defined in user class then check roles table
         def has_role?( role_name, authorizable_obj = nil )
           if authorizable_obj.nil?
-            !! roles_by_name( role_name )
+            !roles_by_name( role_name ).empty?
           else
             return authorizable_obj == self if role_name == 'self'
-            !! roles_for(authorizable_obj, role_name)
+            !roles_for(authorizable_obj, role_name).empty?
           end
         end
         
         def has_role( role_name, authorizable_obj = nil )
           role = get_or_create_role( role_name, authorizable_obj )
           add_role(role) if role and not has_role? role_name, authorizable_obj
+          role
         end
         
         def has_no_role( role_name, authorizable_obj = nil  )
@@ -41,16 +42,15 @@ module Authorization
         end
         
         def has_roles_for?( authorizable_obj )
-          !! roles_for(authorizable_obj)
+          !roles_for(authorizable_obj).empty?
         end
         alias :has_role_for? :has_roles_for?
 
         def roles_for( authorizable_obj, role_name = nil )
-          x = roles.find :all, :conditions => roles_for_conditions(authorizable_obj, role_name)          
-          x.empty? ? nil : x
+          roles.find :all, :conditions => roles_for_conditions(authorizable_obj, role_name)          
         end
         
-        def has_no_roles_for(authorizable_obj = nil)Z
+        def has_no_roles_for(authorizable_obj = nil)
           old_roles = roles_for(authorizable_obj).dup
           remove_roles_for authorizable_obj
           old_roles.each { |role| delete_role_if_empty( role ) }
@@ -78,23 +78,25 @@ module Authorization
         private
         
         def remove_role role
-          roles.delete role
+          roles.delete role if role
         end
         
         def remove_all_roles
-          roles.destroy_all
+          roles.clear
         end
         
         def add_role role
-          roles << role
+          roles << role if role
         end
         
         def remove_roles_for authorizable_obj
-          roles_for(authorizable_obj).destroy_all
+          roles.delete(roles_for(authorizable_obj)) # allow nil
         end
         
         def roles_by_name role_name
-          roles.find_by_name( role_name )
+          ret = roles.find_all_by_name( role_name )  if role_name
+          ret += roles if changed?
+          ret
         end
 
         def get_role( role_name, authorizable_obj )
@@ -126,9 +128,8 @@ module Authorization
           role.destroy if role && role.roles_users.count == 0
         end
 
-        def roles_for_conditions authorizable_obj, role_name = nil
-          conditions = ['roles_users.user_id IS NULL']
-                    
+        def roles_for_conditions authorizable_obj, role_name = nil, conditions = ['(1 = 1)']
+          conditions ||= ['(1 = 1)']
           if authorizable_obj.is_a? Class
             conditions[0] <<  ' and authorizable_type = ?'
             conditions << authorizable_obj.to_s
@@ -240,20 +241,17 @@ class AnonUser
     # And override the ones that call self, 'cause getting a fake self.roles that works like a real association is a major pain
     def roles_for( authorizable_obj, role_name = nil )
       # The double find thing is so that acts_as_paranoid (if present) can hook in properly. It's not a significant performance hit, anyway; still better than before. ;-)
-      x = Role.find(RolesUser.find(:all, :conditions => roles_for_conditions(authorizable_obj, role_name), :joins => :role, :select => :id).map(&:id))
-      x.empty? ? nil : x
+      Role.find(RolesUser.find(:all, :conditions =>  roles_for_conditions(authorizable_obj, role_name, ['roles_users.user_id IS NULL']), :joins => :role, :select => :id).map(&:id))
     end
   
     def roles
-      x = Role.find(RolesUser.find(:all, :conditions =>  "roles_users.user_id IS NULL", :joins => :role, :select => :id).map(&:id))
-      x.empty? ? nil : x
+      Role.find(RolesUser.find(:all, :conditions =>  "roles_users.user_id IS NULL", :joins => :role, :select => :id).map(&:id))
     end
     
     private 
     
     def roles_by_name role_name
-      x = Role.find(RolesUser.find(:all, :conditions =>  ["roles_users.user_id IS NULL and name = ?", role_name], :joins => :role, :select => :id).map(&:id))
-      x.empty? ? nil : x
+      Role.find(RolesUser.find(:all, :conditions =>  ["roles_users.user_id IS NULL and name = ?", role_name], :joins => :role, :select => :id).map(&:id))
     end
     
     def add_role role

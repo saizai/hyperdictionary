@@ -15,6 +15,7 @@ This is a full featured yet generic application. It comes with:
 * comments and tagging w/ AJAX
 * fancy file upload (attachment_fu + SWFUpload)
 * fancy namespaced admin views for managing users, seeing debug info inline, etc (some debug info will be visible to all users if in dev mode)
+* WAI ARIA support (for use w/ screen readers, e.g. visually impaired people)
 * admin user-impersonation tool
 * 404 and exception logging (and notification)
 * hack to show current request processing in top

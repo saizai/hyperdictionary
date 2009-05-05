@@ -2,5 +2,4 @@
 
 <%= link_to 'New profile', new_profile_path %>
 
-<%= render :partial => 'profile_mini', :collection => @profiles %>
-
+<%= render :partial => 'profile_mini', :collection => @profiles, :as => :profile %>

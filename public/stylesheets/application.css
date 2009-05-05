@@ -1,3 +1,11 @@
+th, td {
+	border: none;
+}
+
+ul.menu li {
+	list-style: none;
+}
+
 #header {
 	text-align: right;
 	margin: 1em;

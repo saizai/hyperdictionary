@@ -19,7 +19,7 @@
 		<div id="bd"><!--body-->
 			<div id="yui-main"> 
 				<div class="yui-b" id="content"  role="main"><!--primary-->
-					<% unless current_user.get_preference  'skip_n00balert_main' %>
+					<% if current_user and current_user.get_preference  'skip_n00balert_main' %>
 						<div class="flash info" id='n00balert_main'>
 							<span class='close'>
 								<%= link_to_remote 'x', :url => set_preference_user_path(current_user, :preference => 'skip_n00balert_main'), :method => :put,

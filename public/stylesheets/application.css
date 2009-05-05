@@ -6,35 +6,40 @@ ul.menu li {
 	list-style: none;
 }
 
+ul li.first {
+	margin-top:	1em;
+	border-top: thin solid #d3d3d3;
+}
+
 #header {
 	text-align: right;
 	margin: 1em;
-	border-bottom: 1px dotted gray;
+	padding-bottom: 0.5em;
+	border-bottom: thin solid #d3d3d3;
 }
 
 .flash {
 	text-align: center;
-	margin:		auto
+	padding:	.3em .4em;
+	margin:		0 auto .5em;
+	clear:		both;
 	max-width:	46.923em; /* 610/13 */  
-	*width:		45.750em; /* 610/13.3333 - for IE */
+	*max-width:	45.750em; /* 610/13.3333 - for IE */
 }
 
 .flash.error {
-	border: 1px solid darkRed;
-	background: pink;
-	padding: 8px;
+	border: thin solid #8b0000;
+	background: #ffc0cb;
 }
 
 .flash.notice, .flash.info {
-	border: 1px solid yellow;
-	background: lightYellow;
-	padding: 8px;
+	border: thin solid #ff0;
+	background: #ffe;
 }
 
 .flash.warning {
-	border: 1px solid darkGoldenRod;
-	background: yellow;
-	padding: 8px;
+	border: thin solid #b8860b;
+	background: #ff0;
 }
 
 .flash .close {
@@ -42,6 +47,32 @@ ul.menu li {
 }
 
 .flash .close a {
-	color:				red;
+	color:				#f00;
 	text-decoration:	none;
+}
+
+.tooltip {
+    position: relative; /*this is the key*/
+	background-color: #ffa;
+}
+
+.tooltip:hover{
+	background-color: #ff6;
+}
+
+.tooltip span {
+	display: none
+}
+
+.tooltip:hover span { /*the span will display just on :hover state*/
+	z-index:		1; 
+    display:		block;
+    position:		absolute;
+    top:			1.6em; 
+	left:			0;
+	border:			thin solid #ff0;
+	background:		#ffe;
+  	padding:		.3em .6em;
+	text-align:		left;
+	white-space:	nowrap;
 }

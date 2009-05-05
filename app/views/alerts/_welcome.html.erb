@@ -1,0 +1,12 @@
+<% if logged_in? and !current_user.get_preference('Skip new user info') %>
+	<div class="flash info" id='n00balert_main' >
+		<span class='close' title='close'>
+			<%= link_to_remote 'X', :url => set_preference_user_path(current_user, :preference => 'Skip new user info', :value => true), :method => :put,
+				:success => update_page {|page| page.remove 'n00balert_main' }
+			 %>
+		</span>
+		<h4>Welcome, new user!</h4>
+		Eventually we'll have some info here just to introduce you to the app.<br/>
+		In the meantime, you can just click the 'x' to dismiss this.
+	</div>
+<% end %>

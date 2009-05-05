@@ -8,6 +8,14 @@ class Preference < ActiveRecord::Base
   validates_uniqueness_of :name, :on => :create, :scope => [ :preferrer_id, :preferrer_type, 
                                                              :preferred_id, :preferred_type ]
   validates_presence_of :preferrer
+  validates_presence_of :name
   validates_associated :preferred
   
+  def to_s
+    if preferred and (preferred != preferrer)
+      "#{name} #{preferred_type} #{preferred_id and preferred.respond_to? :name ? preferred.name : preferred.id}".strip
+    else
+      name
+    end
+  end  
 end

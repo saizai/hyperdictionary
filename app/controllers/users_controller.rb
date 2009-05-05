@@ -6,15 +6,24 @@ class UsersController < ApplicationController
     @users = User.active.paginate :all, :per_page => 50, :page => params[:page]
   end
 
-  def show
+  def show   
     @user = User.find(params[:id]) # _by_login
     permit 'admin or (self of user)'
   end
   
+  # Note: Users can set any preferences on themselves. Do not use this for anything that needs to be secure; that's what Roles are for.
   def set_preference
     @user = User.find(params[:id])
     permit 'admin or (self of user)'
-    head :ok if @user.set_preference params[:preference], (params[:value] || true)
+    preferred = if params[:preferred_type]
+      preferred_class = params[:preferred_type].classify.constantize
+      params[:preferred_id] ? preferred_class.find(params[:preferred_id]) : preferred_class
+    else
+      nil
+    end
+    @user.set_preference params[:preference], params[:value], preferred || @user
+    
+    render :partial => '/users/preferences', :locals => {:user => @user}
   end
   
   # Technically, this breaks REST and is un-DRY, because it handles both user and session creation. Oh well, APIs.

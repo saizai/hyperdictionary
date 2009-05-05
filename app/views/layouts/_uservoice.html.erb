@@ -1,0 +1,12 @@
+<script type="text/javascript">
+  var uservoiceJsHost = ("https:" == document.location.protocol) ? "https://uservoice.com" : "http://cdn.uservoice.com";
+  document.write(unescape("%3Cscript src='" + uservoiceJsHost + "/javascripts/widgets/tab.js' type='text/javascript'%3E%3C/script%3E"))
+</script>
+<script type="text/javascript">
+UserVoice.Popin.setup({ 
+	key: '<%= USERVOICE_KEY %>',
+	host: '<%= USERVOICE_HOST %>', 
+	forum: 'general', 
+	lang: 'en'
+})
+</script>

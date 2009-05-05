@@ -8,7 +8,7 @@
 				<td><%=h @user.created_at.to_s(:long) %></td>
 			</tr>
 			<tr>
-				<td>Name</td>
+				<td><span class="tooltip">Name <span>Whee you has a name</span></span></td>
 				<td><%=h @user.name %></td>
 			</tr>
 			<tr>
@@ -31,6 +31,14 @@
 					<td><%= link_to_function("(Change)") {|page| page[:password_change_form].visual_effect :appear, :duration => 0.2}	%></td>
 				</tr>
 			<% end %>
+			<tr>
+				<td>
+					Preferences
+				</td>
+				<td id='user_preferences_<%= @user.id %>'>
+					<%= render :partial => 'preferences', :locals => {:user => @user} %>
+				</td>
+			</tr>
 		</table>
 	</div> 
 	<div class="yui-u"> 

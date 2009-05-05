@@ -14,37 +14,27 @@
 	<div id="doc2" class="yui-t1"><!—-overall document wrapper--> 
 		<div id="hd" role="banner"><!--header / masthead-->
 			<%= render :partial => 'layouts/user_header' %>
-			<%= render :partial => 'layouts/flashes' -%>
 		</div> 
 		<div id="bd"><!--body-->
 			<div id="yui-main"> 
 				<div class="yui-b" id="content"  role="main"><!--primary-->
-					<% if current_user and current_user.get_preference  'skip_n00balert_main' %>
-						<div class="flash info" id='n00balert_main'>
-							<span class='close'>
-								<%= link_to_remote 'x', :url => set_preference_user_path(current_user, :preference => 'skip_n00balert_main'), :method => :put,
-									:success => update_page {|page| page.remove 'n00balert_main' }
-								 %>
-							</span>
-							Welcome, new user!
-							
-							Eventually we'll have some info here just to introduce you to the app.
-							
-							In the meantime, you can just click the 'x' to dismiss this.
-						</div>
-					<% end %>
+					<%= render :partial => '/layouts/flashes' -%>
+					<%= render :partial => '/alerts/welcome' %>
 					<%= yield %>
 				</div> 
 			</div> 
 			<div class="yui-b"><!--secondary-->
 				<ul class='menu' role="complementary navigation">
+					<li><%= link_to 'Main', root_path %></li>
+					<li><%= link_to 'About', about_path %>
 					<li><%= link_to 'Profiles', profiles_path %></li>
-					<li>sidebar</li>
-					<li>menu</li>
-					<li>here</li>
+					<li><a href="#" onclick="UserVoice.Popin.show(); return false;">Feedback</a></li>
+					<% if logged_in? %>
+						<li class='first'><%= link_to 'Home', home_path %></li>
+						<li><%= link_to 'Preferences', user_path(current_user) %></li>
+					<% end %>
 					<% if logged_in_as_admin? %>
-						<hr>
-						<li><%= link_to 'Admin', admin_root_path %></li>
+						<li class='first'><%= link_to 'Admin', admin_root_path %></li>
 					<% end %>
 				</ul>
 			</div> 
@@ -56,6 +46,7 @@
 			<% end %>
 		</div> 
 	</div> 
+	<%= render :partial => '/layouts/uservoice' %>
 </body> 
 
 </html>

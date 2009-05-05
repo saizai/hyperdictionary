@@ -40,8 +40,11 @@ class User < ActiveRecord::Base
   attr_accessible :login, :email, :name, :password, :password_confirmation
   attr_accessor :verified_email # temporary attribute
   
-  def before_create
-    self.build_profile :profile_type_id => ProfileType.find_or_create_by_name('person'), :url => self.identity_url, :name => self.name, :body => "I'm a new user. Say hello!"
+  def before_save
+    # not before_create; this catches the case of a deleted profile
+    unless self.profile
+      self.build_profile :profile_type_id => ProfileType.find_or_create_by_name('person'), :url => self.identity_url, :name => self.name, :body => "I'm a new user. Say hello!"
+    end
   end
   
   def before_validate

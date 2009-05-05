@@ -31,7 +31,7 @@ ssh_options[:keys] = %w(~/.ssh/kura_deploy)
 #role :web, "your web-server here"
 #role :db,  "your db-server here", :primary => true
 
-server 'dictionary.conlang.org', :app, :web, :primary => true # We have no access to DB server directly
+server 'dictionary.conlang.org', :app, :db, :web, :primary => true # We have no access to DB server directly
 
 # Choose your default deploy methods
 namespace (:deploy) do

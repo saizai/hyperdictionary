@@ -17,11 +17,11 @@ class CreateProfiles < ActiveRecord::Migration
     
     # acts_as_paranoid (introduced in a later migration) breaks this
     # Profile.create :name => 'Kura', :profile_type_id => ProfileType.find_by_name('project').id, :url => 'http://dictionary.conlang.org', :body => "What you're lookin' at, bub."
-    
-    User.all.each do |user|
-      user.before_create # invokes profile creation
-      user.save
-    end
+    #    
+    #    User.all.each do |user|
+    #      user.before_create # invokes profile creation
+    #      user.save
+    #    end
   end
 
   def self.down

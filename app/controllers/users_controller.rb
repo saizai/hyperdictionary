@@ -11,6 +11,12 @@ class UsersController < ApplicationController
     permit 'admin or (self of user)'
   end
   
+  def set_preference
+    @user = User.find(params[:id])
+    permit 'admin or (self of user)'
+    head :ok if @user.set_preference params[:preference], (params[:value] || true)
+  end
+  
   # Technically, this breaks REST and is un-DRY, because it handles both user and session creation. Oh well, APIs.
   def rpx_login
     logout_keeping_session!

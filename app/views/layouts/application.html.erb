@@ -19,6 +19,20 @@
 		<div id="bd"><!--body-->
 			<div id="yui-main"> 
 				<div class="yui-b" id="content"  role="main"><!--primary-->
+					<% unless current_user.get_preference  'skip_n00balert_main' %>
+						<div class="flash info" id='n00balert_main'>
+							<span class='close'>
+								<%= link_to_remote 'x', :url => set_preference_user_path(current_user, :preference => 'skip_n00balert_main'), :method => :put,
+									:success => update_page {|page| page.remove 'n00balert_main' }
+								 %>
+							</span>
+							Welcome, new user!
+							
+							Eventually we'll have some info here just to introduce you to the app.
+							
+							In the meantime, you can just click the 'x' to dismiss this.
+						</div>
+					<% end %>
 					<%= yield %>
 				</div> 
 			</div> 

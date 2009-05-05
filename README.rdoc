@@ -19,7 +19,7 @@ This is a full featured yet generic application. It comes with:
 * admin user-impersonation tool
 * 404 and exception logging (and notification)
 * hack to show current request processing in top
-* userstamping, paranoia and versioning 
+* userstamping, paranoia, versioning, optimistic locking
 * at least some API keys that will work for you on localhost (they're mine)
 * .gitignore'd keyfiles (config/initializers/*_keys* and config/database.yml) so you don't repo your keys
 * SuperDeploy capistrano recipes package (incl. task to symlink shared, protected config files in server-side)

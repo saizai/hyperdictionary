@@ -12,24 +12,36 @@ ul.menu li {
 	border-bottom: 1px dotted gray;
 }
 
-#flash {
+.flash {
 	text-align: center;
+	margin:		auto
+	max-width:	46.923em; /* 610/13 */  
+	*width:		45.750em; /* 610/13.3333 - for IE */
 }
 
-#flash_error {
+.flash.error {
 	border: 1px solid darkRed;
 	background: pink;
 	padding: 8px;
 }
 
-#flash_notice, #flash_info {
+.flash.notice, .flash.info {
 	border: 1px solid yellow;
 	background: lightYellow;
 	padding: 8px;
 }
 
-#flash_warning {
+.flash.warning {
 	border: 1px solid darkGoldenRod;
 	background: yellow;
 	padding: 8px;
+}
+
+.flash .close {
+	float:	right;
+}
+
+.flash .close a {
+	color:				red;
+	text-decoration:	none;
 }

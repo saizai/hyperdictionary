@@ -1,6 +1,7 @@
 class ProfileType < ActiveRecord::Base
   acts_as_paranoid
-
+  has_friendly_id :name
+  
   has_many :profiles
   
   default_scope :order => 'name'

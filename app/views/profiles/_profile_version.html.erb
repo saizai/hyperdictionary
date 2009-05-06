@@ -1,9 +1,5 @@
 <div>
 	<%= link_to "Version #{profile.lock_version}", profile_path(profile.profile_id, :version => profile.lock_version)  %>,
-	<% # NOTE: There's a bug in AaV that prevents versioned classes from having associations work right.
-		# See http://github.com/technoweenie/acts_as_versioned/issues/#issue/2
-		# User.find(profile.updater_id) is a kludge to fix the lack of .updater
-	%>
 	updated by <%= link_to_user profile.updater %>
 	<span class='time'><%= time_ago_in_words profile.updated_at %> ago</span>
 </div>

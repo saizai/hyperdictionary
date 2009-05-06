@@ -1,6 +1,6 @@
 <tr class="<%= cycle('odd', 'even') %>" id="user_<%= user.id %>">
   <td><%= user.id %></td>
-  <td><%= link_to_user user %></td>
+  <td><%= link_to_user user %> (<%= link_to 'prefs', user_path(user) %>)</td>
   <td><%=h user.email %></td>
 	<td><%= user.activated_at.to_s :short %>
 		<% if !user.activated? %>

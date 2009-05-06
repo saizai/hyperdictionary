@@ -8,7 +8,7 @@
   <%=h profile.body %>
 </div>
 
-<% unless @profile.lock_version > 1 %>
+<% if @profile.lock_version > 1 %>
 	<div style="margin: 20px 0px 10px; 1px solid black;">Revision history:</div>
 	<%= render :partial => 'profile_version', :collection => @profile.versions.reverse, :as => :profile %>
 <% end %>

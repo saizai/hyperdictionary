@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
   has_many :comments
   has_one :profile
   
+  has_friendly_id :login
   acts_as_authorized_user
   acts_as_authorizable
   acts_as_paranoid

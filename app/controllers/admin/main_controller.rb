@@ -6,4 +6,8 @@ class Admin::MainController < ApplicationController
     @exceptions = LoggedException.count
     @fours = FourOhFour.count
   end
+  
+  def preferences
+    @preferences = Preference.find(:all, :group => :name, :select => 'name, count(*) as count')
+  end
 end

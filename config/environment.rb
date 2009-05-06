@@ -12,6 +12,10 @@ if ENV['RAILS_ENV'] == 'production'  # don't bother on dev
 end
 
 Rails::Initializer.run do |config|
+  # Settings in config/environments/* take precedence over those specified here.
+  # Application configuration should go into files in config/initializers
+  # -- all .rb files in that directory are automatically loaded.
+  # Specify gems that this application depends on and have them installed with rake gems:install
   config.gem 'rake'
   config.gem 'ruby-openid', :lib => 'openid'
   config.gem 'capistrano'
@@ -21,6 +25,7 @@ Rails::Initializer.run do |config|
   config.gem 'uuidtools'
   config.gem "grosser-rpx_now", :lib => "rpx_now", :source => "http://gems.github.com"
 #  config.gem 'tmtm-ruby-mysql', :lib => 'Mysql', :source => 'http://gems.github.com'
+#  config.gem "sqlite3-ruby", :lib => "sqlite3"
 #  config.gem 'rack'
 #  config.gem 'test-spec', :version => '~> 0.9.0' # required for rack-rack-contrib (note: 0.10.0 is current)
 #  config.gem 'rack-rack-contrib', :lib => 'rack/contrib',  :source => 'http://gems.github.com'
@@ -31,20 +36,11 @@ Rails::Initializer.run do |config|
   config.gem 'SystemTimer', :lib => 'system_timer'
   config.gem 'RedCloth', :lib => 'redcloth'
   config.gem 'utf8proc'
-
-  # Settings in config/environments/* take precedence over those specified here.
-  # Application configuration should go into files in config/initializers
-  # -- all .rb files in that directory are automatically loaded.
-
+  config.gem "friendly_id"
+  
   # Add additional load paths for your own custom dirs
   # config.load_paths += %W( #{RAILS_ROOT}/extras )
-
-  # Specify gems that this application depends on and have them installed with rake gems:install
-  # config.gem "bj"
-  # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
-  # config.gem "sqlite3-ruby", :lib => "sqlite3"
-  # config.gem "aws-s3", :lib => "aws/s3"
-
+  
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named
   # config.plugins = [ :exception_notification, :ssl_requirement, :all ]

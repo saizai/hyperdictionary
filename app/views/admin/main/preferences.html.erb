@@ -1,0 +1,7 @@
+<h1>Preferences (# users)</h1>
+
+<ul>
+	<% @preferences.each do |pref| %>
+		<li><%= "#{pref.name} (#{pref.count})" %></li>
+	<% end %>
+</ul>

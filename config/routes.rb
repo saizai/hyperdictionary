@@ -16,6 +16,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace :admin do |admin|
     admin.root :controller => 'main'
+    admin.preferences 'preferences', :controller => 'main', :action => 'preferences'
     admin.resources :four_oh_fours
     admin.resources :users, :member => {:suspend => :put, :unsuspend => :put, :purge => :delete, :activate => :put, 
                                         :add_role => :put, :remove_role => :delete, :unmap => :delete, :map => :put,

@@ -11,6 +11,8 @@ class Preference < ActiveRecord::Base
   validates_presence_of :name
   validates_associated :preferred
   
+  default_scope :order => 'name'
+  
   def to_s
     if preferred and (preferred != preferrer)
       "#{name} #{preferred_type} #{preferred_id and preferred.respond_to? :name ? preferred.name : preferred.id}".strip

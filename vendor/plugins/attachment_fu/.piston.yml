@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  commit: fa08cb03914b02b66853b4615cd3eca768291ca7
+  branch: master
+lock: false
+repository_class: Piston::Git::Repository
+repository_url: git://github.com/technoweenie/attachment_fu.git

@@ -76,3 +76,129 @@ ul li.first {
 	text-align:		left;
 	white-space:	nowrap;
 }
+
+
+.comments {
+	display: block;
+	padding-top: 10px;
+}
+
+.comments .title {
+	color: #333333;
+	font-size: 13px;
+	margin: 0px;
+	padding: 0px;
+	background-color: #CFD7E4;
+	border-top: 1px solid #3B5998;
+	font-weight: bold;
+}
+
+.comments .subtitle {
+	background-color: #EEEEEE;
+	border-bottom: 1px solid #CCCCCC;
+	border-top: 1px solid #CCCCCC;
+	color: #000000;
+	font-size: 11px;
+	font-weight: normal;
+	padding: 3px 5px 2px;
+}
+
+.comments .post {
+	float: right;
+	width: 100%;
+	margin-bottom: 5px;
+	margin-top: 10px;
+}
+
+.comments .post .pic {
+	float: left;
+	width: 50px;
+}
+
+.comments .post .content {
+	margin-left: 50px;
+	padding-left: 5px;
+}
+
+.comments .post .name {
+	background: #F7F7F7;
+	border-bottom: 1px solid #D8DFEA;
+	border-top: 1px solid #3B5998;
+	padding: 3px 5px;
+	font-size: 11px;
+	display:	block;
+}
+
+.comments .post .name .time {
+	font-size: 9px;
+	padding-top: 2px;
+}
+
+.comments .post .body {
+	padding: 5px;
+}
+
+.comments .post.private {
+	background: #EEEEFF;
+}
+
+.comments .post.private .name {
+	background: #E1E1FF;
+}
+
+.comments .post.moderated {
+	background: #FFCCCC;
+}
+
+.comments .post.moderated .name {
+	background: #FFAAAA;
+}
+
+.comments .post .actions {
+	border-bottom: 1px solid #D8DFEA;
+	font-size: 9px;
+	padding-bottom: 3px;
+}
+
+.comments .post .history {
+	font-size: 9px;
+}
+
+.comments .form {
+	background: #F7F7F7;
+	border-bottom: 1px solid #CCCCCC;
+	padding: 10px;
+}
+
+.comments .form form {
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+
+.comments .form textarea {
+	display: block;
+	height: 50px;
+	padding: 0.75%;
+	width: 98%;
+	border: 1px solid #BDC7D8;
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+	font-size: 11px;
+}
+
+.comments .form .submit {
+	margin-left: 10px;
+	background-color: #3B5998;
+	border-color: #D9DFEA rgb(14, 31, 91) rgb(14, 31, 91) rgb(217, 223, 234);
+	border: 1px solid;
+	color: #FFFFFF;
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+	font-size: 11px;
+	padding: 2px 15px 3px;
+	text-align: center;
+}
+
+.comments .form .options {
+	float: left;
+}
+

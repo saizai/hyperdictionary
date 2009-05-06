@@ -408,8 +408,9 @@ module ActiveRecord #:nodoc:
           nonreloadables << klass
           next
         end
-        klass.instance_variables.each { |var| klass.send(:remove_instance_variable, var) }
-        klass.instance_methods(false).each { |m| klass.send :undef_method, m }
+# Removed to fix https://rails.lighthouseapp.com/projects/8994/tickets/1339-arbase-should-not-be-nuking-its-children-just-because-it-lost-interest
+#        klass.instance_variables.each { |var| klass.send(:remove_instance_variable, var) }
+#        klass.instance_methods(false).each { |m| klass.send :undef_method, m }
       end
       @@subclasses = {}
       nonreloadables.each { |klass| (@@subclasses[klass.superclass] ||= []) << klass }

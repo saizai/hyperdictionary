@@ -33,6 +33,7 @@ Things to be aware of:
 * The API keys will need to be changed off localhost or stuff will break.
 * You'll need a unique RPXNow API key for every deployment, because it's synchronized with the user database (so eg if you have multiple developers, each needs a key for their own localhost)
 * First admin user must be set via console (e.g. User.first.has_role 'admin')
+* The frozen rails version has been patched with this: https://rails.lighthouseapp.com/projects/8994/tickets/1339-arbase-should-not-be-nuking-its-children-just-because-it-lost-interest
 
 == Full externals list
 

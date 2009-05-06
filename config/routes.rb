@@ -1,7 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :profiles
 
-  map.resources :comments
+  map.resources :comments, :member => {:moderate => :put, :screen => :put }
 
   map.rpx_login '/rpx_login', :controller => 'users', :action => 'rpx_login'
   map.resources :users, :member => { :forgot_password => :get, :change_password => :put, :set_preference => :put }

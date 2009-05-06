@@ -1,0 +1,29 @@
+<% if logged_in_as_admin? or
+	  (!comment.moderated and
+	   !(comment.private and (!logged_in? or !(current_user.id == comment.creator_id or current_user.id == comment.commentable.try(:user).try(:id))))) %>
+	<div id="comment_post_<%= comment.id %>" class="post <%= ' private' if comment.private %><%= ' moderated' if comment.moderated %>">
+		<div class='pic'>
+			Pic
+		</div>
+		<div class='content'>
+			<span class="name"><%= link_to_user comment.creator %> wrote
+				<span class="time"><%= time_ago_in_words comment.created_at %> ago</span>
+			</span>
+			<div class="body">
+				<%= (h comment.body.strip).gsub(/\n/, '<br/>') %>
+			</div>
+			<% unless comment.created_at == comment.updated_at %>
+				<div class="history">Last updated: <%= time_ago_in_words comment.updated_at %> ago by <%= link_to_user comment.updater %></div>
+			<% end %>
+			<div class="actions">
+				<% if logged_in_as_admin? %>
+					<%= link_to_remote "#{ 'un' if comment.moderated  }moderate", :url  => moderate_comment_url(comment), :method => :put, :update => "comment_post_container_#{comment.id}" %>
+				<% end %>
+				<% if logged_in? and (current_user.is_admin? or current_user == comment.creator) %>
+					<%= link_to_remote "#{ 'un' if comment.private }screen", :url  => screen_comment_path(comment), :method => :put, :update => "comment_post_container_#{comment.id}" %>
+					<%= link_to_remote "delete", :url  => comment_path(comment), :method => :delete, :success => update_page {|page| page.remove "comment_post_container_#{comment.id}"} %>
+				<% end %>
+			</div>
+		</div>
+	</div>
+<% end %>

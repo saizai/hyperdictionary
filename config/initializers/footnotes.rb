@@ -52,6 +52,7 @@ module Footnotes
       # This method always receives a controller
       def initialize(controller)
         @current_user = controller.instance_variable_get("@current_user")
+        super
       end
 
       # The name that will appear as legend in fieldsets
@@ -69,8 +70,30 @@ module Footnotes
       def content
         escape(@current_user.inspect)
       end
+      
+      def title
+        legend
+      end
     end
-  end  
+    
+    class FirebugLiteNote < AbstractNote
+      def has_fieldset?
+        false
+      end
+      
+      def valid?
+        true
+      end
+      
+      def title
+        # This is just the Firebug Lite bookmarklet. Dynamically loads FBL, so we don't include it on page loads
+        <<-'END'
+          <a href="javascript:var firebug=document.createElement('script');firebug.setAttribute('src','http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js');document.body.appendChild(firebug);(function(){if(window.firebug.version){firebug.init();}else{setTimeout(arguments.callee);}})();void(firebug);">Firebug Lite</a>
+        END
+      end
+      
+    end
+  end
 end
 
-Footnotes::Filter.notes += [:current_user]
+Footnotes::Filter.notes += [:current_user, :firebug_lite]

@@ -11,4 +11,4 @@ config/initializers/*_keys.rb
 public/files/
 public/javascripts/all.js
 public/stylesheets/all.js
-
+config/mail.yml

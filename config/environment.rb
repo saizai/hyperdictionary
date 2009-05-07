@@ -35,9 +35,11 @@ Rails::Initializer.run do |config|
   config.gem 'francois-piston', :lib => 'piston', :source => 'http://gems.github.com'
   config.gem 'ruby-debug'
   config.gem 'SystemTimer', :lib => 'system_timer'
-  config.gem 'RedCloth', :lib => 'redcloth'
+#  config.gem 'RedCloth', :lib => 'redcloth'
+  config.gem 'bluecloth' # lowercase is 2.x, camelcase is 1.x
   config.gem 'utf8proc'
   config.gem "friendly_id"
+  config.gem 'chrislloyd-gravtastic', :lib => 'gravtastic', :version => '>= 2.1.0'
   
   # Add additional load paths for your own custom dirs
   # config.load_paths += %W( #{RAILS_ROOT}/extras )

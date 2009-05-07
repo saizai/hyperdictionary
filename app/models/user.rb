@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
   model_stamper
   acts_as_versioned :version_column => 'lock_version'
   acts_as_preferenced
+  has_gravatar :secure => true, :filetype => :png, :rating => 'PG', :default => 'identicon'
   
   validates_presence_of     :login
   validates_length_of       :login,    :within => 3..40
@@ -81,6 +82,10 @@ class User < ActiveRecord::Base
     end
 
     return u
+  end
+  
+  def avatar_asset
+    self.assets.find :first, :conditions => ["thumbnail = 'thumb' and filename LIKE ?", self.login + '_thumb.%']
   end
   
   # Note that we also store the primary one as identity_url (no s)

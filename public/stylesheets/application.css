@@ -76,7 +76,7 @@ textarea {
 	z-index:		1; 
     display:		block;
     position:		absolute;
-    top:			1.6em; 
+    top:			1em; /* 1.6em; is prettier a bit, but 1em allows user to mouse in to it easily and thus click links etc */
 	left:			0;
 	border:			thin solid #ff0;
 	background:		#ffe;

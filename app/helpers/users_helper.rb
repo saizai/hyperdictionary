@@ -1,5 +1,11 @@
 module UsersHelper
-  
+  def avatar user
+    if asset = user.avatar_asset
+      image_tag asset.public_filename
+    else
+      image_tag user.gravatar_url
+    end
+  end
   #
   # Use this to wrap view elements that the user can't access.
   # !! Note: this is an *interface*, not *security* feature !!

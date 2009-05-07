@@ -1,0 +1,26 @@
+# This is for mail *fetching* not mail *sending*.
+# E.g. this might be pointed at a catchall account, whereas the normal mailer is pointed at a nicely named account.
+
+development:
+  type: pop
+  server: localhost
+  username: username
+  password: password
+  
+test:
+  type: pop
+  server: localhost
+  username: username
+  password: password
+  
+production:
+  type: imap
+  use_login: true
+  ssl: true
+  port: 993
+  processed_folder: processed
+  retries: 5
+  server: imap.gmail.com
+  username: catchall@your.custom.google.apps.domain
+  password: some_long_and_random_password.
+  receiver: MailReceiverClass

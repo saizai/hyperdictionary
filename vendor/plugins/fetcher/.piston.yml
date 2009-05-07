@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  commit: 75c50d1ea877ec4796bdad24c989b4276e554899
+  branch: master
+lock: false
+repository_class: Piston::Git::Repository
+repository_url: git://github.com/ozataman/fetcher.git

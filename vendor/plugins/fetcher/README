@@ -1,0 +1,31 @@
+= Fetcher
+
+Fetcher is a simple message fetcher perfect for using in a daemon.
+
+It implements the following common pattern:
+
+1. Connect to a server
+2. Download available messages
+3. Send each message to another object for further processing
+4. Remove downloaded messages from the remote server
+
+Install using:
+script/plugin install svn://rubyforge.org/var/svn/slantwise/fetcher/trunk
+
+== Usage
+
+Create a new fetcher object like the following:
+
+  @fetcher = Fetcher.create({:type => :pop,
+                             :receiver => IncomingMailHandler,
+                             :server => 'mail.example.com',
+                             :username => 'jim',
+                             :password => 'test'})
+
+The receiver object is expected to have a receive method that takes a message as it's only argument.
+
+Call fetch to run the process.
+
+  @fetcher.fetch
+
+You can also subclass Fetcher::Base or one of the protocol-specific classed to override the standard behavior.

@@ -4,6 +4,17 @@
 	<div class="yui-u first"> 
 		<table>
 			<tr>
+				<td><span class="tooltip">Avatar 
+						<span>To replace this with a custom avatar, you can either:
+							 <ol type='a'>
+							 	<li>Get a <a href="http://gravatar.com/site/signup">Gravatar</a> (using <%= h @user.email %>)</li>
+								<li>Upload a picture below called <%= @user.login %>.png, .jpg, or .gif. For best results, make it 80x80 pixels.</li>
+							 </ol>
+							 Your avatar is your public face, so please make it something nice.
+						</span></span></td>
+				<td><%= avatar @user %></td>
+			</tr>
+			<tr>
 				<td>Joined on</td>
 				<td><%=h @user.created_at.to_s(:long) %></td>
 			</tr>

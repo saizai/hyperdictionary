@@ -30,6 +30,7 @@
 <script type='text/javascript'>
 	var swfu;
 	
+	window.onload = function () {
 		swfu = new SWFUpload({
 			// Flash Settings
 			flash_url : "/assets/swfupload.swf",
@@ -69,5 +70,6 @@
 			button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
 			button_cursor: SWFUpload.CURSOR.HAND
     	});
+	};
 </script>
 

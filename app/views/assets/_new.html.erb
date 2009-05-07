@@ -14,10 +14,22 @@
 	<% end %>
 </noscript>
 
+
+<div style="margin: 0px 10px;">
+	<div>
+		<form>
+  		<div style="display: inline; border: solid 1px #7FAAFF; background-color: #C5D9FF; padding: 2px;">
+  			<span id="spanButtonPlaceholder"></span>
+  		</div>
+		</form>
+	</div>
+	<div id="divFileProgressContainer" style="height: 75px;"></div>
+	<div id="thumbnails"></div>
+</div>
+
 <script type='text/javascript'>
 	var swfu;
 	
-	window.onload = function () {
 		swfu = new SWFUpload({
 			// Flash Settings
 			flash_url : "/assets/swfupload.swf",
@@ -57,17 +69,5 @@
 			button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
 			button_cursor: SWFUpload.CURSOR.HAND
     	});
-	};
 </script>
 
-<div style="margin: 0px 10px;">
-	<div>
-		<form>
-  		<div style="display: inline; border: solid 1px #7FAAFF; background-color: #C5D9FF; padding: 2px;">
-  			<span id="spanButtonPlaceholder"></span>
-  		</div>
-		</form>
-	</div>
-	<div id="divFileProgressContainer" style="height: 75px;"></div>
-	<div id="thumbnails"></div>
-</div>

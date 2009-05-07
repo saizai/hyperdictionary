@@ -85,6 +85,7 @@ class User < ActiveRecord::Base
   end
   
   def avatar_asset
+    # the self ensures we scope to this user's files
     self.assets.find :first, :conditions => ["thumbnail = 'thumb' and filename LIKE ?", self.login + '_thumb.%']
   end
   

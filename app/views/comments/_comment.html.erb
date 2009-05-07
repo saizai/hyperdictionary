@@ -3,7 +3,7 @@
 	   !(comment.private and (!logged_in? or !(current_user.id == comment.creator_id or current_user.id == comment.commentable.try(:user).try(:id))))) %>
 	<div id="comment_post_<%= comment.id %>" class="post <%= ' private' if comment.private %><%= ' moderated' if comment.moderated %>">
 		<div class='pic'>
-			Pic
+			<%= avatar comment.creator %>
 		</div>
 		<div class='content'>
 			<span class="name"><%= link_to_user comment.creator %> wrote

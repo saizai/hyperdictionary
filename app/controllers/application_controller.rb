@@ -28,6 +28,6 @@ class ApplicationController < ActionController::Base
   prepend_before_filter :set_session_from_query
   def set_session_from_query
     # Refuse to set if we already have an active session
-    self.session = ActiveRecord::SessionStore::Session.find_by_session_id(params[SESSION_KEY.to_sym]).data if params[SESSION_KEY.to_sym] and (session.nil? or session.data.empty?)
+    self.session = ActiveRecord::SessionStore::Session.find_by_session_id(params[SESSION_KEY.to_sym]).data if params[SESSION_KEY.to_sym] and (session.nil? or session.empty?)
   end
 end

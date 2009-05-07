@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :assets, :collection => { :swfupload => :post }, :member => {:download => :get}
+
   map.resources :profiles
 
   map.resources :comments, :member => {:moderate => :put, :screen => :put }

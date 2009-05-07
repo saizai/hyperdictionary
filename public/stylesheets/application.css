@@ -18,6 +18,14 @@ ul li.first {
 	border-bottom: thin solid #d3d3d3;
 }
 
+textarea {
+	display: block;
+	padding: 0.75%;
+	width: 98%;
+	border: 1px solid #BDC7D8;
+	height: 10em;
+}
+
 .flash {
 	text-align: center;
 	padding:	.3em .4em;
@@ -174,16 +182,6 @@ ul li.first {
 	width: 100%;
 	margin: 0px;
 	padding: 0px;
-}
-
-.comments .form textarea {
-	display: block;
-	height: 50px;
-	padding: 0.75%;
-	width: 98%;
-	border: 1px solid #BDC7D8;
-	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
-	font-size: 11px;
 }
 
 .comments .form .submit {

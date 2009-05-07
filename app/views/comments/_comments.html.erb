@@ -11,7 +11,8 @@
 			<%= f.error_messages %>
 			<div>
 				<%= f.text_area :body, :id => "new_comment_form_body_#{commentable.id}" %>
-			</div>
+  				<div class="wmd-preview"></div>
+  			</div>
 			<%= f.hidden_field :commentable_type, :value => commentable.class.to_s %>
 			<%= f.hidden_field :commentable_id, :value => commentable.id %>
 			<div id="'new_comment_form_submit_<%= commentable.id %>">

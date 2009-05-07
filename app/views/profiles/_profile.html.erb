@@ -13,6 +13,8 @@
 	<%= render :partial => 'profile_version', :collection => @profile.versions.reverse, :as => :profile %>
 <% end %>
 
+<%= render :partial => '/assets/assets', :locals => {:assets => @profile.assets, :attachable => @profile } %>
+
 <div id="profile_<%= profile.id %>_comments">
 	<%= render :partial => '/comments/comments', :locals => {:commentable => profile} %>
 </div>

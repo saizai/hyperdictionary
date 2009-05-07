@@ -6,8 +6,9 @@ class User < ActiveRecord::Base
   include Authentication::ByCookieToken
   include Authorization::AasmRolesWithOpenId
   
-  has_many :comments
+  has_many :comments, :foreign_key => 'creator_id'
   has_one :profile
+  has_many :assets, :foreign_key => 'creator_id'
   
   has_friendly_id :login
   acts_as_authorized_user

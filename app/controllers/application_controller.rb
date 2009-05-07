@@ -1,4 +1,4 @@
-class ApplicationController < ActionController::Base
+class ApplicationController < ActionController::Base  
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
   
@@ -20,5 +20,14 @@ class ApplicationController < ActionController::Base
   after_filter :unset_process_name_from_request
   def unset_process_name_from_request
     $0 = request.path[0,15] + "* " + $PROC_NAME
+  end
+
+  # This is a hack to get around cases (eg Flash) where we don't get the cookie per normal. 
+  # Must be prepended to ensure it executes before anyone tries to access (and thus set) current_user
+  # This is probably not the best way to do it, though; eg we ought to first check whether they log in from cookie, THEN try this
+  prepend_before_filter :set_session_from_query
+  def set_session_from_query
+    # Refuse to set if we already have an active session
+    self.session = ActiveRecord::SessionStore::Session.find_by_session_id(params[SESSION_KEY.to_sym]).data if params[SESSION_KEY.to_sym] and (session.nil? or session.data.empty?)
   end
 end

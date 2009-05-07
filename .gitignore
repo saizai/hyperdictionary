@@ -8,3 +8,4 @@ db/*.db
 db/schema.rb
 config/initializers/*_keys.rb
 .tmp*
+public/files/

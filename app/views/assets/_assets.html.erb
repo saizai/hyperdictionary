@@ -1,0 +1,5 @@
+<ul id="assets" class='menu'>
+	<%= render :partial => '/assets/asset', :collection => assets %>
+</ul>
+
+<%= render :partial => '/assets/new', :locals => ({:attachable => attachable } if defined? attachable) %>

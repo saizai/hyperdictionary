@@ -39,6 +39,10 @@
 					<%= render :partial => 'preferences', :locals => {:user => @user} %>
 				</td>
 			</tr>
+			<tr>
+				<td>Files</td>
+				<td><%= render :partial => '/assets/assets', :locals => {:assets => @assets} %></td>
+			</tr>
 		</table>
 	</div> 
 	<div class="yui-u"> 

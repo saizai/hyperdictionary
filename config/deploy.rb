@@ -43,6 +43,7 @@ namespace (:deploy) do
   
   # Use a shared config directory. Run cap deploy:configs:setup first.
   after "deploy:update_code", "deploy:configs:symlink"
+  after "deploy:update_code", "deploy:files:symlink"
   
   # Set up special permissions
 #  after "deploy:update_code", "deploy:set_permissions_staging"

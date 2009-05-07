@@ -1,0 +1,73 @@
+<noscript>
+	<h4>Please turn on JavaScript + Flash to use our fancier file uploader</h4>
+	<%= error_messages_for :asset %>
+	<% form_for(Asset.new, :html => { :multipart => true }) do |f| %>
+	  <p>
+	    <label for="uploaded_data">Upload a file:</label>
+	    <%= f.file_field :uploaded_data %>
+		<%= f.hidden_field :attachable_type, :value => attachable.class.to_s if defined? attachable %>
+		<%= f.hidden_field :attachable_id, :value => attachable.id if defined? attachable %>
+	  </p>
+	  <p>
+	    <%= submit_tag "Create" %>
+	  </p>
+	<% end %>
+</noscript>
+
+<script type='text/javascript'>
+	var swfu;
+	
+	window.onload = function () {
+		swfu = new SWFUpload({
+			// Flash Settings
+			flash_url : "/assets/swfupload.swf",
+			custom_settings : {
+				upload_target : "divFileProgressContainer"
+			},
+			debug: false,
+			// Create the custom swfupload_assets_path in the routes.rb file
+			upload_url : '<%= swfupload_assets_path SESSION_KEY.to_sym => session.session_id, :attachable_type => (attachable.class.to_s if defined? attachable), :attachable_id => (attachable.id if defined? attachable) -%>',
+			// flash_url : '/assets/swfupload_f9.swf',
+			
+			file_size_limit : '3 MB',
+			file_types : '*.jpg',
+			file_types_description : 'JPG Images',
+			file_upload_limit : '0',
+			
+			file_queue_error_handler : fileQueueError,
+			file_dialog_complete_handler : fileDialogComplete,
+			upload_progress_handler : uploadProgress,
+			upload_error_handler : uploadError,
+			upload_success_handler : uploadSuccess,
+			upload_complete_handler : uploadComplete,
+			
+			custom_settings : { 
+				upload_target : 'divFileProgressContainer'
+			},
+
+			// Button Settings
+			button_image_url : "/images/spyglass.png",
+			button_placeholder_id : "spanButtonPlaceholder",
+			button_width: 180,
+			button_height: 18,
+			button_text : '<span class="button">Select Images <span class="buttonSmall">(3 MB Max)</span></span>',
+			button_text_style : '.button { font-family: Helvetica, Arial, sans-serif; font-size: 12pt; } .buttonSmall { font-size: 10pt; }',
+			button_text_top_padding: 0,
+			button_text_left_padding: 18,
+			button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+			button_cursor: SWFUpload.CURSOR.HAND
+    	});
+	};
+</script>
+
+<div style="margin: 0px 10px;">
+	<div>
+		<form>
+  		<div style="display: inline; border: solid 1px #7FAAFF; background-color: #C5D9FF; padding: 2px;">
+  			<span id="spanButtonPlaceholder"></span>
+  		</div>
+		</form>
+	</div>
+	<div id="divFileProgressContainer" style="height: 75px;"></div>
+	<div id="thumbnails"></div>
+</div>

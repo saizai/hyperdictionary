@@ -9,6 +9,8 @@ class UsersController < ApplicationController
   def show   
     @user = User.find(params[:id]) # _by_login
     permit 'admin or (self of user)'
+    
+    @assets = @user.assets.original
   end
   
   # Note: Users can set any preferences on themselves. Do not use this for anything that needs to be secure; that's what Roles are for.

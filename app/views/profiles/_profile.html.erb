@@ -1,11 +1,15 @@
 <div>
-	<h2><%=h profile.name %> 	<small>(<%= h profile.profile_type.name %>)</small></h2>
-	<% link_to h(profile.url), profile.url if profile.url %>
+	<h2><%=h profile.name %>
+		<small>
+			(<%= h profile.profile_type.name %>)
+			<span><%= link_to 'Edit', edit_profile_path(profile) %></span>
+			<% content_tag :span, link_to(h(profile.url), profile.url), :class => 'url' if profile.url %>
+		</small>
+	</h2>
 </div>
 
 <div>
-  <span><%= link_to 'Edit', edit_profile_path(profile) %></span>
-  <%=h profile.body %>
+  <%= markdown profile.body %>
 </div>
 
 <% if @profile.lock_version > 1 %>

@@ -10,7 +10,7 @@
 				<span class="time"><%= time_ago_in_words comment.created_at %> ago</span>
 			</span>
 			<div class="body">
-				<%= (h comment.body.strip).gsub(/\n/, '<br/>') %>
+				<%= markdown comment.body %>
 			</div>
 			<% unless comment.created_at == comment.updated_at %>
 				<div class="history">Last updated: <%= time_ago_in_words comment.updated_at %> ago by <%= link_to_user comment.updater %></div>

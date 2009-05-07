@@ -21,4 +21,9 @@ module ApplicationHelper
   def check_box_only value
     check_box_tag nil, nil, value, :disabled => true
   end
+  
+  def markdowwn text
+    BlueCloth.new(h(text)).to_html
+  end
+  
 end

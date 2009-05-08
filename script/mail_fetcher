@@ -12,20 +12,19 @@ class MailFetcherDaemon < Daemon::Base
     
     logger = Logger.new("#{RAILS_ROOT}/log/#{RAILS_ENV}-mail.log") 
 
-	begin
-	  Lockfile.new('cron_mail_fetcher.lock', :retries => 0) do    
-	    # Add your own receiver object below
-	    @fetcher = Fetcher.create({:receiver => nil}.merge(@config))
+	Lockfile.new('cron_mail_fetcher.lock', :retries => 0) do    
+	  # Add your own receiver object below
+	  @fetcher = Fetcher.create({:receiver => nil}.merge(@config))
 		
-	    loop do
-	    	begin
-				@fetcher.fetch
-	  		rescue Errno::ENOTCONN 
-	  			# Gmail kills your socket after you log out rather than after you disconnect, so trying to disconnect raises an error. Ignore it.
-	  		end
+	  loop do
+	  	begin
+			@fetcher.fetch
+	  	rescue Errno::ENOTCONN 
+	  		# Gmail kills your socket after you log out rather than after you disconnect, so trying to disconnect raises an error. Ignore it.
+	  	end
 	      
-	      sleep(@sleep_time)
-	    end
+	    sleep(@sleep_time)
+	  end
     end
   rescue
     rescue Lockfile::MaxTriesLockError => e 

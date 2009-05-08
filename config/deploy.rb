@@ -44,6 +44,11 @@ namespace (:deploy) do
   # Use a shared config directory. Run cap deploy:configs:setup first.
   after "deploy:update_code", "deploy:configs:symlink"
   after "deploy:update_code", "deploy:files:symlink"
+  after "deploy:restart", "deploy:restart_mail_fetcher"
+  
+  task :restart_mail_fetcher, :roles => :app do
+    run "cd #{release_path} && RAILS_ENV=#{fetch(:rails_env, "production")} script/mail_fetcher restart"
+  end
   
   # Set up special permissions
 #  after "deploy:update_code", "deploy:set_permissions_staging"

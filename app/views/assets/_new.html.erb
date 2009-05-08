@@ -37,9 +37,9 @@
 			custom_settings : {
 				upload_target : "divFileProgressContainer"
 			},
-			debug: false,
+			debug: <%= (RAILS_ENV == 'development') or logged_in_as_admin? %>,
 			// Create the custom swfupload_assets_path in the routes.rb file
-			upload_url : '<%= swfupload_assets_path SESSION_KEY.to_sym => session.session_id, :attachable_type => (attachable.class.to_s if defined? attachable), :attachable_id => (attachable.id if defined? attachable) -%>',
+			upload_url : '<%= swfupload_assets_path SESSION_KEY.to_sym => request.session_options[:id], :attachable_type => (attachable.class.to_s if defined? attachable), :attachable_id => (attachable.id if defined? attachable) -%>',
 			// flash_url : '/assets/swfupload_f9.swf',
 			
 			file_size_limit : '3 MB',

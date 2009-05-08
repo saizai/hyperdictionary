@@ -24,7 +24,7 @@ Rails::Initializer.run do |config|
   config.gem 'mislav-will_paginate', :lib => 'will_paginate'
   config.gem 'uuidtools'
   config.gem "grosser-rpx_now", :lib => "rpx_now", :source => "http://gems.github.com"
-  config.gem 'rmagick', :lib => 'RMagick' # NOTE: installation for this is nontrivial. See its website (+ the DreamHost wiki, if on DH)
+  config.gem 'lockfile'
 #  config.gem 'tmtm-ruby-mysql', :lib => 'Mysql', :source => 'http://gems.github.com'
 #  config.gem "sqlite3-ruby", :lib => "sqlite3"
 #  config.gem 'rack'
@@ -32,6 +32,8 @@ Rails::Initializer.run do |config|
 #  config.gem 'rack-rack-contrib', :lib => 'rack/contrib',  :source => 'http://gems.github.com'
 
   # Not frozen because they cause conflicts and/or require native extensions
+  config.gem 'rmagick', :lib => 'RMagick' # NOTE: installation for this is nontrivial. See its website (+ the DreamHost wiki, if on DH)
+  config.gem 'mms2r'
   config.gem 'francois-piston', :lib => 'piston', :source => 'http://gems.github.com'
   config.gem 'ruby-debug'
   config.gem 'SystemTimer', :lib => 'system_timer'

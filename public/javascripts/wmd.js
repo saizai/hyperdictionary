@@ -63,7 +63,7 @@ return _14;
 }
 }
 };
-Attacklab.basePath=_f("wmd.js")||"/images/";
+Attacklab.basePath=_f("wmd.js")||"/javascripts/";
 for(var f,i=0;f=_5[i];i++){
 _a(f,false);
 }

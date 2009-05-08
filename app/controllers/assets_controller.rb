@@ -69,15 +69,19 @@ class AssetsController < ApplicationController
   end
 
   def swfupload
-p 'swfupload'
-p session
+p params
     # swfupload action set in routes.rb
     @asset = Asset.new :uploaded_data => params[:Filedata], :attachable_type => params[:attachable_type], :attachable_id => params[:attachable_id]
+p @asset
+p @asset.valid?
+p @asset.errors
     @asset.save!
     
     # This returns the thumbnail url for handlers.js to use to display the thumbnail
     render :text => @asset.public_filename(:thumb)
-  rescue
+  rescue Exception => e
+p e
+    logger.error e    
     render :text => "Error"
   end
   

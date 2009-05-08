@@ -9,12 +9,4 @@ class Asset < ActiveRecord::Base
   
   named_scope :original, :conditions => {:parent_id => nil }
   
-  # Adds a new temp_path to the array. This should take a string or a Tempfile. This class makes no
-  # attempt to remove the files, so Tempfiles should be used. Tempfiles remove themselves when they go out of scope.
-  # You can also use string paths for temporary files, such as those used for uploaded files in a web server.
-  def temp_path=(value)
-    temp_paths.unshift value
-    temp_path
-  end
-  
 end

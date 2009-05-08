@@ -125,6 +125,22 @@ module ActiveRecord #:nodoc:
         #    @auction.started?
         #    @auction.versions.first.started?
         #
+        #  * <tt>versioned_globs</tt> - Lets you specify columns that will exist on the versioned model but not on the original. The original must define both glob and glob= (with the same name as the column):
+        #  
+        #      class TranslatedThing
+        #        # translations_glob is a text field in the versioned table, but not present in the original table
+        #        acts_as_versioned :versioned_globs => :translations_glob
+        #        def translations_glob
+        #          self.translations.to_yaml # serialize the translations so we don't have to version the translations table itself
+        #        end
+        #        def translations_glob= glob
+        #          YAML.load(glob).each do |old_translation|
+        #            current_translation = ThingTranslation.find(translation.id)
+        #            # overwrite current w/ old data, etc
+        #          end
+        #        end
+        #      end
+        #
         # == Database Schema
         #
         # The model that you're versioning needs to have a 'version' attribute. The model is versioned 
@@ -170,7 +186,7 @@ module ActiveRecord #:nodoc:
 
           cattr_accessor :versioned_class_name, :versioned_foreign_key, :versioned_table_name, :versioned_inheritance_column, 
             :version_column, :max_version_limit, :track_altered_attributes, :version_condition, :version_sequence_name, :non_versioned_columns,
-            :version_association_options, :version_if_changed
+            :version_association_options, :version_if_changed, :versioned_globs
 
           self.versioned_class_name         = options[:class_name]  || "Version"
           self.versioned_foreign_key        = options[:foreign_key] || self.to_s.foreign_key
@@ -186,7 +202,8 @@ module ActiveRecord #:nodoc:
                                                 :foreign_key => versioned_foreign_key,
                                                 :dependent   => :delete_all
                                               }.merge(options[:association_options] || {})
-
+          self.versioned_globs              = [options[:versioned_globs]].flatten || []
+          
           if block_given?
             extension_module_name = "#{versioned_class_name}Extension"
             silence_warnings do
@@ -330,7 +347,11 @@ module ActiveRecord #:nodoc:
           self.class.versioned_columns.each do |col|
             new_model.send("#{col.name}=", orig_model.send(col.name)) if orig_model.has_attribute?(col.name)
           end
-
+          
+          self.class.versioned_globs.each do |col|
+            new_model.send("#{col}=", orig_model.send(col))
+          end
+          
           if orig_model.is_a?(self.class.versioned_class)
             new_model[new_model.class.inheritance_column] = orig_model[self.class.versioned_inheritance_column]
           elsif new_model.is_a?(self.class.versioned_class)

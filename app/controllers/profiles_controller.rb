@@ -1,5 +1,5 @@
 class ProfilesController < ApplicationController
-  permit 'admin', :only => :destroy
+  permit 'site_admin', :only => :destroy
   before_filter :login_required, :only => [:new, :create, :edit, :update]
   
   # GET /profiles
@@ -16,11 +16,11 @@ class ProfilesController < ApplicationController
   # GET /profiles/1
   # GET /profiles/1.xml
   def show
-    if params[:version]
-      @profile = Profile.find(params[:id]).versions.find_by_lock_version(params[:version])
-    else
+#    if params[:version]
+#      @profile = Profile.find(params[:id]).versions.find_by_lock_version(params[:version])
+#    else
       @profile = Profile.find(params[:id], :include => [:assets, {:comments => :creator}])
-    end
+#    end
 
     respond_to do |format|
       format.html # show.html.erb
@@ -42,13 +42,15 @@ class ProfilesController < ApplicationController
   # GET /profiles/1/edit
   def edit
     @profile = Profile.find(params[:id])
+    @owner = @profile.owner
+    permit 'site_admin or (self of owner) or (editor of profile)'
   end
 
   # POST /profiles
   # POST /profiles.xml
   def create
     @profile = Profile.new(params[:profile])
-
+    
     respond_to do |format|
       if @profile.save
         flash[:notice] = 'Profile was successfully created.'
@@ -65,7 +67,9 @@ class ProfilesController < ApplicationController
   # PUT /profiles/1.xml
   def update
     @profile = Profile.find(params[:id])
-
+    @owner = @profile.owner
+    permit 'site_admin or (self of owner) or (editor of profile)'
+    
     respond_to do |format|
       if @profile.update_attributes(params[:profile])
         flash[:notice] = 'Profile was successfully updated.'
@@ -82,6 +86,7 @@ class ProfilesController < ApplicationController
   # DELETE /profiles/1.xml
   def destroy
     @profile = Profile.find(params[:id])
+    permit 'site_admin or (self of owner)'
     @profile.destroy
 
     respond_to do |format|

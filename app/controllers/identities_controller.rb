@@ -1,4 +1,6 @@
 class IdentitiesController < ApplicationController
+  permit 'site_admin'
+  
   # GET /identities
   # GET /identities.xml
   def index

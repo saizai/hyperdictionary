@@ -45,7 +45,7 @@ config.after_initialize do
       # only allow admins
       # this obviously depends on how your auth system works
       def authorized?
-        current_user.has_role?('admin')
+        current_user.has_role?('site_admin')
       end
       
       # assume app's login required doesn't use http basic

@@ -3,8 +3,13 @@ class Identity < ActiveRecord::Base
   acts_as_paranoid
   stampable
   
-  belongs_to :user
+  validates_associated :user
+  validates_presence_of :user
+  validates_presence_of :url
+  validates_uniqueness_of :url
   
+  belongs_to :user
+    
   def before_validate 
     url.sub! /\/$/, ''
     name = nil if name.blank?

@@ -19,7 +19,7 @@
 				<% if logged_in_as_admin? %>
 					<%= link_to_remote "#{ 'un' if comment.moderated  }moderate", :url  => moderate_comment_url(comment), :method => :put, :update => "comment_post_container_#{comment.id}" %>
 				<% end %>
-				<% if logged_in? and (current_user.is_admin? or current_user == comment.creator) %>
+				<% if logged_in? and (logged_in_as_admin? or current_user == comment.creator) %>
 					<%= link_to_remote "#{ 'un' if comment.private }screen", :url  => screen_comment_path(comment), :method => :put, :update => "comment_post_container_#{comment.id}" %>
 					<%= link_to_remote "delete", :url  => comment_path(comment), :method => :delete, :success => update_page {|page| page.remove "comment_post_container_#{comment.id}"} %>
 				<% end %>

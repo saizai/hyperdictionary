@@ -4,7 +4,7 @@ module ApplicationHelper
   end
 
   def logged_in_as_admin?
-    logged_in? and current_user.has_role?('admin')
+    logged_in? and current_user.has_role?('site_admin')
   end
   
   def focus_on_div(div)

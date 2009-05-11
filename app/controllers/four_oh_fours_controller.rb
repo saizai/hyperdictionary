@@ -1,4 +1,6 @@
 class FourOhFoursController < ApplicationController
+  permit 'site_admin', :only => 'index'
+  
   def log
     FourOhFour.add_request(request.url,
                            request.env['HTTP_REFERER'] || '')

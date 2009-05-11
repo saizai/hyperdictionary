@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  permit 'admin', :only => :index
+  permit 'site_admin', :only => :index
   permit 'guest', :only => [:new, :create, :rpx_login], :permission_denied_message => 'Please log out first.'
   before_filter :login_required, :only => [:rpx_add, :change_password]
   
@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 
   def show   
     @user = User.find(params[:id], :include => [:roles, :preferences, :assets]) # _by_login
-    permit 'admin or (self of user)'
+    permit 'site_admin or (self of user)'
     
     @assets = @user.assets.original
   end
@@ -17,7 +17,7 @@ class UsersController < ApplicationController
   # Note: Users can set any preferences on themselves. Do not use this for anything that needs to be secure; that's what Roles are for.
   def set_preference
     @user = User.find(params[:id])
-    permit 'admin or (self of user)'
+    permit 'site_admin or (self of user)'
     preferred = if params[:preferred_type]
       preferred_class = params[:preferred_type].classify.constantize
       params[:preferred_id] ? preferred_class.find(params[:preferred_id]) : preferred_class

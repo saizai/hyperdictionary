@@ -7,7 +7,7 @@ class Profile < ActiveRecord::Base
   stampable
   translates :body 
   
-  belongs_to :user # This is for *identity* only. Use roles for everything else.
+  belongs_to :owner, :class_name => 'User', :foreign_key => 'user_id' # This is for *identity* only. Use roles for everything else.
   belongs_to :profile_type
   has_many :comments, :as => :commentable
   has_many :assets, :as => :attachable

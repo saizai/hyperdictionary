@@ -4,3 +4,4 @@ raise 'Change your session store keys!'
 SESSION_KEY = '_SOME SECRIT HASH HERE_session'
 ActionController::Base.session = { :session_key => SESSION_KEY, :secret => 'something good here - try rake secret' }
 ActionController::Base.session_store = :active_record_store
+ActiveRecord::SessionStore.session_class = Session # Makes our version (which is derived from the default) be used. Easy way to tap in.

@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   def unset_process_name_from_request
     $0 = request.path[0,15] + "* " + $PROC_NAME
   end
-
+  
   # This is a hack to get around cases (eg Flash) where we don't get the cookie per normal. 
   # Must be prepended to ensure it executes before anyone tries to access (and thus set) current_user
   # This is probably not the best way to do it, though; eg we ought to first check whether they log in from cookie, THEN try this

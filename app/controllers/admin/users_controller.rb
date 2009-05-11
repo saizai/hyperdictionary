@@ -1,5 +1,5 @@
 class Admin::UsersController < ApplicationController
-  permit 'admin'
+  permit 'site_admin'
 
   before_filter :find_user, :except => :index
 #  after_filter :refresh_user, :except => :index

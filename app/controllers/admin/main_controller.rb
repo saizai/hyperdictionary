@@ -1,5 +1,5 @@
 class Admin::MainController < ApplicationController
-  permit 'admin'
+  permit 'site_admin'
   
   def index
     @users = User.count

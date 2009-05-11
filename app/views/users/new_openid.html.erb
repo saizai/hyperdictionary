@@ -9,19 +9,19 @@
 	<table>
 		<tr>
 			<td><%= label_tag 'identity_url', 'Identity URL' %></td>
-			<td><%= f.text_field :identity_url %></td>
+			<td><%= @user.identities.last.url %></td>
 		</tr>
 		<tr>
-			<td><%= label_tag 'login' %></td>
+			<td><%= f.label :login %></td>
 			<td><%= f.text_field :login %></td>
 		</tr>
 		<tr>
-			<td><%= label_tag 'email' %></td>
+			<td><%= f.label :email %></td>
 			<td><%= f.text_field :email %>
-			(will be verified<%= " unless you use #{@user.email}" if @email_verified %>)</td>
+			(will be verified<%= " unless you use #{@user.identities.last.email}" if @user.identities.last.email_verified %>)</td>
 		</tr>
 		<tr>
-			<td><%= label_tag 'name', 'Real name' %></td>
+			<td><%= f.label :name, 'Real name' %></td>
 			<td><%= f.text_field :name %></td>
 		</tr>
 		

@@ -9,15 +9,22 @@ class User < ActiveRecord::Base
   has_many :comments, :foreign_key => 'creator_id'
   has_one :profile
   has_many :assets, :foreign_key => 'creator_id'
+  has_many :identities
+  has_many :sessions, :foreign_key => 'updater_id'
+  has_many :multi_sessions, :foreign_key => 'updater_id', :conditions => 'sessions.updater_id != sessions.creator_id', :class_name => 'Session'
+  has_many :multi_users, :through => :multi_sessions, :source =>  'creator', :class_name => 'User'
   
-  has_friendly_id :login
   acts_as_authorized_user
+  acts_as_preferenced
+  acts_as_tagger
+  has_gravatar :secure => true, :filetype => :png, :rating => 'PG', :default => 'identicon'
+  model_stamper
+  
   acts_as_authorizable
   acts_as_paranoid
-  model_stamper
   acts_as_versioned :version_column => 'lock_version'
-  acts_as_preferenced
-  has_gravatar :secure => true, :filetype => :png, :rating => 'PG', :default => 'identicon'
+  has_friendly_id :login
+  stampable
   
   validates_presence_of     :login
   validates_length_of       :login,    :within => 3..40
@@ -41,7 +48,6 @@ class User < ActiveRecord::Base
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
   attr_accessible :login, :email, :name, :password, :password_confirmation
-  attr_accessor :verified_email # temporary attribute
   
   def before_save
     # not before_create; this catches the case of a deleted profile
@@ -54,34 +60,63 @@ class User < ActiveRecord::Base
     self.identity_url.sub!(/\/$/, '') # remove trailing slashes
   end
   
+  def last_active
+    sessions.last.updated_at
+  end
+  
+  def ips
+    sessions.find(:all, :select => 'DISTINCT ip').map(&:ip)
+  end
+  
+  # Returns an array of User objects that have overlapped sessions w/ this user
+  # WARNING: This is not a cheap query. Don't run it often.
+  # TODO: make this a has_many association
+  def multis
+    return [] if self.new_record?
+# NOTE: as is this completely ignores scoping (e.g. paranoia). That's bad. How can this be rewritten to play nice?
+#    User.find_by_sql "SELECT DISTINCT users.* FROM users \
+#                      INNER JOIN sessions \
+#                        ON (sessions.updater_id = #{self.id} XOR sessions.creator_id = #{self.id}) AND \
+#                           (sessions.updater_id = users.id XOR sessions.creator_id = users.id) \
+#                      WHERE users.id !=  #{self.id}"
+    # It's roughly equal to this; which is really more efficient?
+    User.find(sessions.find(:all, :conditions => 'creator_id != updater_id', 
+      :select => 'DISTINCT creator_id, updater_id').map{|x| [x.creator_id, x.updater_id]}.flatten.uniq - [self.id])
+  end
+  
   # for use with RPX Now gem
-  def self.find_or_initialize_with_rpx(token)
+  def self.find_or_initialize_with_rpx token
+    identity = Identity.find_or_initialize_with_rpx token
+    return nil unless identity
+    user = identity.user
+    if user.nil?
+      user = User.new
+      user.identities << identity
+      user.name = identity.name
+      user.login = identity.login
+      user.email = identity.email
+      # TODO: grab photo
+    else
+      identity.save if identity.changed?
+    end
+    
+    return user
+  end
+  
+  def email_verified_by_open_id?
+    identities.find(:all, :conditions => {:email_verified => true}).map(&:email).include? email
+  end
+  
+  def add_identity_with_rpx token
     data = {}
     RPXNow.user_data(token, :extended => true) { |raw| data = raw }
     profile = data['profile']
     
     return nil if data.blank? or profile["identifier"].blank?
-
-    u = self.find(profile['primaryKey'].to_i) if profile['primaryKey'] # Get it from the mapping if we have that
-    u ||= self.find_by_identity_url(profile["identifier"].sub(/\/$/, '')) # Or not...
     
-    if u.nil?
-      u = self.new
-      u.identity_url = profile["identifier"] # Remove trailing slashes
-      u.name = profile['displayName'] || "#{profile['name']['givenName']} #{profile['name']['familyName']}"
-      u.name = nil if u.name.blank?
-      u.login = profile['preferredUsername']
-      u.email = profile['verifiedEmail'] || profile['email']
-      u.verified_email = profile['verifiedEmail'] # bypasses activation
-  #    u.gender = profile['gender']
-  #    u.birth_date = profile['birthday']
-  #    u.first_name = profile['givenName'] || profile['displayName']
-  #    u.last_name = profile['familyName']
-  #    u.country = profile['address']['country'] unless profile['address'].nil?
-  #   profile['photo'] # url
-    end
-
-    return u
+#    if Rails.env.production? or Rails.env.development?
+      RPXNow.map profile["identifier"].sub(/\/$/, ''), self.id
+#    end
   end
   
   def avatar_asset
@@ -89,11 +124,15 @@ class User < ActiveRecord::Base
     self.assets.find :first, :conditions => ["thumbnail = 'thumb' and filename LIKE ?", self.login + '_thumb.%']
   end
   
-  # Note that we also store the primary one as identity_url (no s)
-  def identity_urls
-    ret = ([identity_url] + RPXNow.mappings(self)).uniq
-    ret.empty? ? nil : ret
+  def identities_glob
+    self.identities.to_yaml
   end
+  
+  # TODO: somehow handle unpacking it again after a revert
+  def identities_glob= glob
+    logger.info "Tried to revert #{glob}"
+  end
+
   
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   #
@@ -123,7 +162,7 @@ class User < ActiveRecord::Base
     
   protected
     def password_required?
-      identity_url.blank? and (crypted_password.blank? or !password.blank?)
+      identities.map(&:url).blank? and (crypted_password.blank? or !password.blank?)
     end
     
     def make_activation_code

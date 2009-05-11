@@ -1,7 +1,7 @@
 <td>
 	<% (user.roles || []).each do |r| %>
-  		<%= r.to_s %>
-		<%= link_to_remote 'x', :url => remove_role_admin_user_path(user, :role_id => r.id), :method => :delete %>	
+		<%= link_to_remote 'X', {:url => remove_role_admin_user_path(user, :role_id => r.id), :method => :delete}, :class => 'close' %>	
+  		<%= r.to_s %><%= ', ' unless r == user.roles.last %>
 	<% end %>
 </td>
 <td>

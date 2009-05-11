@@ -1,5 +1,7 @@
 class ProfileType < ActiveRecord::Base
+  acts_as_authorizable
   acts_as_paranoid
+  stampable
   has_friendly_id :name
   
   has_many :profiles

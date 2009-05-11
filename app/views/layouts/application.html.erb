@@ -35,6 +35,12 @@
 					<% end %>
 					<% if logged_in_as_admin? %>
 						<li class='first'><%= link_to 'Admin', admin_root_path %></li>
+							<ul style="margin: 0 0 0 1em;">
+							    <li><%= link_to "Users", admin_users_path %></li>
+								<li><%= link_to "Exceptions", admin_logged_exceptions_path %></li>
+								<li><%= link_to "404s", admin_four_oh_fours_path %></li>
+								<li><%= link_to "Preferences", admin_preferences_path %></li>
+							</ul>
 					<% end %>
 				</ul>
 			</div> 

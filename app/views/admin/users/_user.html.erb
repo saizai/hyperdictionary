@@ -1,7 +1,9 @@
 <tr class="<%= cycle('odd', 'even') %>" id="user_<%= user.id %>">
-  <td><%= user.id %></td>
-  <td><%= link_to_user user %> (<%= link_to 'prefs', user_path(user) %>)</td>
-  <td><%=h user.email %></td>
+	<td><%= user.id %></td>
+	<td><%= link_to_user user %> (<%= link_to 'prefs', user_path(user) %>)</td>
+	<td><%= h user.email %></td>
+	<td><%= user.ips.join(', ') %></td>
+	<td><%= user.multis.map{|multi| link_to multi.login, user_path(multi) }.join(', ') %>
 	<td><%= user.activated_at.to_s :short %>
 		<% if !user.activated? %>
 			<%= link_to_remote 'activate', :url => admin_user_path(user), :method => :put %>
@@ -18,27 +20,27 @@
 				page["add_url_#{user.id}"].visual_effect :appear, :duration => 0.2
 			end %>
 		</span>
-		<% user.identity_urls.each do |url| %>
+		<% user.identities.each do |identity| %>
 			<span style="float:left;">
-		        <%= link_to_remote 'x', :url => unmap_admin_user_path(user, :url => url), :method => :delete, :confirm => "Are you sure? This will probably prevent them from logging in again."  %>
-				<a href="<%= url%>"><%= h url %></a>
+		        <%= link_to_remote 'X', :url => unmap_admin_user_path(user, :identity_id => identity.id), :method => :delete, :confirm => "Are you sure? This will probably prevent them from logging in again.", :class => 'close' %>
+				<a href="<%= identity.url%>"><%= h identity.url %></a>
 			</span>
 		<% end %>
 		<% form_remote_tag :url => map_admin_user_path(user), :method => :put do  %>
 			<span id="add_url_<%= user.id %>" style="display: none;"><br/>
-				<%= text_field_tag :url, nil, :size => 40 %>
+				<%= text_field_tag :url, nil, :style => 'width: 70%;' %>
 				<%= submit_tag 'Add' %>
 			</span>
 		<% end %>
 	</td>
-  <td><%= user.state %>
-    <% unless user == current_user %>
-      <% if user.active? %>
-        <%= link_to_remote 'disable', :url => suspend_admin_user_path(user), :method => :put  %>
-      <% else %>
-        <%= link_to_remote 'enable', :url => unsuspend_admin_user_path(user), :method => :put  %>
-      <% end %>
-    <% end %>
-  </td>
-  <%= render :partial => 'user_roles', :locals => {:user => user} %>
+	<td><%= user.state %>
+		<% unless user == current_user %>
+		  <% if user.active? %>
+		    <%= link_to_remote 'disable', :url => suspend_admin_user_path(user), :method => :put  %>
+		  <% else %>
+		    <%= link_to_remote 'enable', :url => unsuspend_admin_user_path(user), :method => :put  %>
+		  <% end %>
+		<% end %>
+	</td>
+	<%= render :partial => 'user_roles', :locals => {:user => user} %>
 </tr>

@@ -16,12 +16,11 @@ class ProfilesController < ApplicationController
   # GET /profiles/1
   # GET /profiles/1.xml
   def show
-# AAV is too broken right now. Wait until after it's fixed.
-#    if params[:version]
-#      @profile = Profile.find(params[:id]).versions.find_by_lock_version(params[:version])
-#    else
-      @profile = Profile.find(params[:id])
-#    end
+    if params[:version]
+      @profile = Profile.find(params[:id]).versions.find_by_lock_version(params[:version])
+    else
+      @profile = Profile.find(params[:id], :include => [:assets, {:comments => :creator}])
+    end
 
     respond_to do |format|
       format.html # show.html.erb

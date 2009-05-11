@@ -202,7 +202,7 @@ module ActiveRecord #:nodoc:
                                                 :foreign_key => versioned_foreign_key,
                                                 :dependent   => :delete_all
                                               }.merge(options[:association_options] || {})
-          self.versioned_globs              = [options[:versioned_globs]].flatten || []
+          self.versioned_globs              = [options[:versioned_globs]].flatten - [nil]
           
           if block_given?
             extension_module_name = "#{versioned_class_name}Extension"

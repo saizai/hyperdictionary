@@ -5,7 +5,7 @@ class Admin::UsersController < ApplicationController
 #  after_filter :refresh_user, :except => :index
   
   def index
-    @users = User.paginate :all, :per_page => 50, :page => params[:page]
+    @users = User.paginate :all, :per_page => 50, :page => params[:page], :include => [{:roles_users => :role}, :identities, {:profile => :slugs}]
     @anon_roles = AnonUser.roles
   end
   
@@ -54,12 +54,13 @@ class Admin::UsersController < ApplicationController
   end
   
   def map
-    RPXNow.map params[:url], @user.id
+    @user.identities.build :url => params[:url]
+    @user.save
     refresh_user
   end
   
   def unmap
-    RPXNow.unmap params[:url], @user.id 
+    @user.identities.find(params[:identity_id]).destroy
     refresh_user
   end
   

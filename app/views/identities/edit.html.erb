@@ -1,0 +1,12 @@
+<h1>Editing identity</h1>
+
+<% form_for(@identity) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @identity %> |
+<%= link_to 'Back', identities_path %>

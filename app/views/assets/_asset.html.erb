@@ -1,5 +1,5 @@
 <li id="asset_<%= asset.id %>">
 	<%= icon asset %>
+	<%= link_to_remote "X", {:url => asset_path(asset), :method => :delete, :confirm => "are you sure?"}, :class => 'close' %>
 	<%= link_to asset.filename, download_asset_path(asset) %>
-	(<%= link_to_remote("Delete", {:url => asset_path(asset), :method => :delete, :confirm => "are you sure?"}) %>)
 </li>

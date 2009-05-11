@@ -1,8 +1,10 @@
 class Profile < ActiveRecord::Base
+  acts_as_authorizable
   acts_as_paranoid
+  acts_as_taggable
   acts_as_versioned :version_column => 'lock_version', :extend => Ddb::Userstamp::Stampable::ClassMethods, :versioned_globs => :translations_glob
-  stampable
   has_friendly_id :name, :use_slug => true
+  stampable
   translates :body 
   
   belongs_to :user # This is for *identity* only. Use roles for everything else.
@@ -19,12 +21,12 @@ class Profile < ActiveRecord::Base
   validates_associated :profile_type
   validates_associated :user
   
-  attr_accessible :name, :body, :url, :profile_type_id # User must be set explicitly
+  attr_accessible :name, :body, :url, :profile_type_id, :tag_list # User must be set explicitly
   
   # This is used by versioning; we don't want to version the translations table per se, just serialize it like this
   # The glob is only present on the db table, not the real one.
   def translations_glob
-    globalize_translations.to_yaml
+    self.globalize_translations.to_yaml
   end
   
   # TODO: somehow handle unpacking it again after a revert

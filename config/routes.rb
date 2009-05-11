@@ -1,11 +1,14 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :assets, :collection => { :swfupload => :post }, :member => {:download => :get}
+  map.resources :identities
 
+  map.resources :assets, :collection => { :swfupload => :post }, :member => {:download => :get}
+  map.resources :tags
   map.resources :profiles
 
   map.resources :comments, :member => {:moderate => :put, :screen => :put }
 
   map.rpx_login '/rpx_login', :controller => 'users', :action => 'rpx_login'
+  map.rpx_add '/rpx_add', :controller => 'users', :action => 'rpx_add'
   map.resources :users, :member => { :forgot_password => :get, :change_password => :put, :set_preference => :put }
   map.logout '/logout', :controller => 'sessions', :action => 'destroy'
   map.login  '/login',  :controller => 'sessions', :action => 'new'

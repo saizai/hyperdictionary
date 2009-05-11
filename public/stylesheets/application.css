@@ -1,9 +1,18 @@
 th, td {
 	border: none;
+	padding: 0.1em;
 }
 
+tr.even {
+	background: #F5FFFF;
+}
+
+ul.menu {
+	margin: 0 0 1em;
+}
 ul.menu li {
 	list-style: none;
+	min-height:	18px;
 }
 
 ul li.first {
@@ -54,17 +63,20 @@ textarea {
 	float:	right;
 }
 
-.flash .close a {
+.close a, a.close {
 	color:				#f00;
 	text-decoration:	none;
 }
 
 .tooltip {
     position: relative; /*this is the key*/
+}
+	
+.highlight {
 	background-color: #ffa;
 }
 
-.tooltip:hover{
+.highlight:hover{
 	background-color: #ff6;
 }
 
@@ -85,6 +97,11 @@ textarea {
 	white-space:	nowrap;
 }
 
+.icon {
+	float:			left;
+	width:			16px;
+	margin-right:	5px;
+}
 
 .comments {
 	display: block;

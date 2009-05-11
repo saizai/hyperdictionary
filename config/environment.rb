@@ -25,6 +25,9 @@ Rails::Initializer.run do |config|
   config.gem 'uuidtools'
   config.gem "grosser-rpx_now", :lib => "rpx_now", :source => "http://gems.github.com"
   config.gem 'lockfile'
+  config.gem "friendly_id"
+  config.gem 'chrislloyd-gravtastic', :lib => 'gravtastic', :version => '>= 2.1.0'
+  config.gem 'sishen-rtranslate', :lib => 'rtranslate', :version => '>= 1.0'
 #  config.gem 'tmtm-ruby-mysql', :lib => 'Mysql', :source => 'http://gems.github.com'
 #  config.gem "sqlite3-ruby", :lib => "sqlite3"
 #  config.gem 'rack'
@@ -34,14 +37,13 @@ Rails::Initializer.run do |config|
   # Not frozen because they cause conflicts and/or require native extensions
   config.gem 'rmagick', :lib => 'RMagick' # NOTE: installation for this is nontrivial. See its website (+ the DreamHost wiki, if on DH)
   config.gem 'mms2r'
+  config.gem 'hpricot' # required by mms2r
   config.gem 'francois-piston', :lib => 'piston', :source => 'http://gems.github.com'
   config.gem 'ruby-debug'
-  config.gem 'SystemTimer', :lib => 'system_timer'
+  config.gem 'SystemTimer', :lib => 'system_timer' # makes memcache faster
 #  config.gem 'RedCloth', :lib => 'redcloth'
   config.gem 'bluecloth' # lowercase is 2.x, camelcase is 1.x
   config.gem 'utf8proc'
-  config.gem "friendly_id"
-  config.gem 'chrislloyd-gravtastic', :lib => 'gravtastic', :version => '>= 2.1.0'
   
   # Add additional load paths for your own custom dirs
   # config.load_paths += %W( #{RAILS_ROOT}/extras )

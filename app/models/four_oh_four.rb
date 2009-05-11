@@ -1,4 +1,5 @@
 class FourOhFour < ActiveRecord::Base
+  acts_as_authorizable
   acts_as_paranoid
   
   def self.add_request(url, referer)

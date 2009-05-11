@@ -1,7 +1,17 @@
 <h1>Preferences (# users)</h1>
 
-<ul>
-	<% @preferences.each do |pref| %>
-		<li><%= "#{pref.name} (#{pref.count})" %></li>
+<table>
+	<tr><th>Name</th><th>Total</th><th>%</th><th>Value</th></tr>
+	<% @preferences.each do |pref|
+		total = pref[1].sum{|val| val[1].to_i}
+		 %>
+		<tr>
+			<td><%= pref[0] %></td>
+			<td><%= total %></td>
+			<% pref[1].each do |value| %>
+				<td><%= number_to_percentage(100.0 * value[1].to_i / total, :precision => 0) %></td>
+				<td><%= value[0] %></td>
+			<% end %>
+		</tr>
 	<% end %>
-</ul>
+</table>

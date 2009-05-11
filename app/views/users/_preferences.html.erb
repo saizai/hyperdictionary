@@ -1,7 +1,6 @@
-<% (user.preferences || []).each do |pref| 
-	next unless pref.value # ignore false ones
-%>
-	<%= pref.to_s %>
-	<%= link_to_remote 'x', :url => set_preference_user_path(user, :preference => pref.name, :value => false, :preferred_id => pref.preferred_id, :preferred_type => pref.preferred_type), 
-			:method => :put, :update => {:success => "user_preferences_#{user.id}" } %>	
+<%  prefs = (user.preferences || []).select{|pref| pref.value}
+	prefs.each do |pref| %>
+	<%= link_to_remote 'X', {:url => set_preference_user_path(user, :preference => pref.name, :value => false, :preferred_id => pref.preferred_id, :preferred_type => pref.preferred_type), 
+			:method => :put, :update => {:success => "user_preferences_#{user.id}" }}, :class => 'close' %>	
+	<%= pref.to_s %><%= ', ' unless pref == prefs.last %>
 <% end %>

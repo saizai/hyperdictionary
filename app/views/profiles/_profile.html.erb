@@ -12,6 +12,10 @@
   <%= markdown profile.body %>
 </div>
 
+<% profile.tags.each do |tag| -%>
+	<%= link_to_tag(tag) %>
+<% end -%>
+  
 <% if @profile.lock_version > 1 %>
 	<div style="margin: 20px 0px 10px; 1px solid black;">Revision history:</div>
 	<%= render :partial => 'profile_version', :collection => @profile.versions.reverse, :as => :profile %>

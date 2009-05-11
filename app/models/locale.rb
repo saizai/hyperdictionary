@@ -1,5 +1,7 @@
 class Locale < ActiveRecord::Base
+  acts_as_authorizable
   acts_as_paranoid
+  stampable
   acts_as_versioned :version_column => 'lock_version'
   acts_as_tree :order => :name
   has_friendly_id :abbreviation

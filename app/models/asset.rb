@@ -1,4 +1,9 @@
 class Asset < ActiveRecord::Base
+  acts_as_authorizable
+  acts_as_paranoid
+  acts_as_taggable
+  stampable
+  
   has_attachment  :storage => :file_system, 
                   :path_prefix => 'public/files/assets',
                   :max_size => 1.megabytes,

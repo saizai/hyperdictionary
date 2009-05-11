@@ -30,4 +30,12 @@ class ApplicationController < ActionController::Base
     # Refuse to set if we already have an active session
     self.session = ActiveRecord::SessionStore::Session.find_by_session_id(params[SESSION_KEY.to_sym]).data if params[SESSION_KEY.to_sym] and (session.nil? or session.empty?)
   end
+  
+  # Used by our custom Session class to record the IP in sessions
+  # Thus you can do user.sessions.map(&:ip) and get all their previous IPs
+  # Maybe e.g. require extra auth if they're coming from a new IP, or use it for tracking suspicious behavior
+  before_filter :inject_ip
+  def inject_ip
+    session[:ip] = request.remote_ip
+  end
 end

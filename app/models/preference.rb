@@ -1,4 +1,5 @@
 class Preference < ActiveRecord::Base
+  acts_as_authorizable
   
   belongs_to :preferrer, :polymorphic => true
   belongs_to :preferred, :polymorphic => true

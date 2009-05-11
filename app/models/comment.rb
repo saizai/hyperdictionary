@@ -4,8 +4,11 @@ class Comment < ActiveRecord::Base
   belongs_to :comment_type
   
   acts_as_authorizable
-  acts_as_paranoid # never actually delete stuff
+  acts_as_paranoid
+  acts_as_taggable
+  stampable
   acts_as_versioned :version_column => 'lock_version' # and save all copies too
+  acts_as_nested_set :scope => [:commentable_type, :commentable_id]
   
   validates_presence_of :body
   # title optional

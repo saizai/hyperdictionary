@@ -4,11 +4,11 @@
 	<div class="yui-u first"> 
 		<table>
 			<tr>
-				<td><span class="tooltip">Avatar 
+				<td><span class="tooltip highlight">Avatar 
 						<span>To replace this with a custom avatar, you can either:
 							 <ol type='a'>
 							 	<li>Get a <a href="http://gravatar.com/site/signup">Gravatar</a> (using <%= h @user.email %>)</li>
-								<li>Upload a picture below called <%= @user.login %>.png, .jpg, or .gif. For best results, make it 80x80 pixels on transparent background.</li>
+								<li>Upload a picture below called <%= @user.login %>.png, .jpg, or .gif.<br/>For best results, make it 80x80 pixels on transparent background.</li>
 							 </ol>
 							 Your avatar is your public face, so please make it something nice.
 						</span></span></td>
@@ -19,7 +19,7 @@
 				<td><%=h @user.created_at.to_s(:long) %></td>
 			</tr>
 			<tr>
-				<td><span class="tooltip">Name <span>Whee you has a name</span></span></td>
+				<td>Name</td>
 				<td><%=h @user.name %></td>
 			</tr>
 			<tr>
@@ -30,54 +30,83 @@
 				<td>Email</td>
 				<td><%=h @user.email %></td>
 			</tr>
-			<% if !(urls = RPXNow.mappings(@user.id)).empty? %>
-				<tr>
-					<td>Identities</td>
-					<td><%= urls.map{|u| "<a href='#{u}'>#{u}</a>"}.join('<br/>') %></td>
-				</tr>
-			<% end %>
-			<% if current_user == @user and @user.crypted_password? %>
-				<tr>
-					<td>Password</td>
-					<td><%= link_to_function("(Change)") {|page| page[:password_change_form].visual_effect :appear, :duration => 0.2}	%></td>
-				</tr>
-			<% end %>
 			<tr>
+				<td>Identities</td>
 				<td>
-					Preferences
-				</td>
-				<td id='user_preferences_<%= @user.id %>'>
-					<%= render :partial => 'preferences', :locals => {:user => @user} %>
+					<%= @user.identities.map{|identity| "<a href='#{identity.url}'>#{identity.url}</a><br/>"} %>
+					<%= link_to_function("Add new", :id => "add_identity_link"){|page| 
+							page[:add_identity_link].hide
+							page[:add_identity_form].visual_effect :appear, :duration => 0.2
+						} %>
+					<div id="add_identity_form" style="display: none;"><%= RPXNow.embed_code(RPX_SUBDOMAIN, rpx_add_url )%></div>
 				</td>
 			</tr>
+			<% if current_user == @user %>
+				<tr>
+					<td>Password</td>
+					<td><%= link_to_function("#{@user.crypted_password? ? 'change' : 'add'} password", :id => "password_change_link", :style=> "display: #{@user.errors.empty? ? 'block' : 'none'};" ) {|page| 
+							page[:password_change_link].hide
+							page[:password_change_form].visual_effect :appear, :duration => 0.2
+						} %>
+						<% if current_user == @user and @user.crypted_password? %>
+							<% form_for @user, :url => change_password_user_path(@user), 
+								:html => {:id=>"password_change_form", :style=> "display: #{@user.errors.empty? ? 'none' : 'block'};" }  do |f| %>
+								<%= error_messages_for :user, :header_message => nil, :message => nil %>
+								<table >
+										<% if @user.crypted_password? %>
+											<tr>
+												<td><%= label_tag "old_password" %></td>
+												<td><%= password_field_tag :old_password, @old_password, :size => 20 %></td>
+											</tr>
+										<% end %>
+									  	<tr>
+									  		<td><%= f.label "password", 'New password' %></td>
+									  		<td><%= f.password_field :password, :size => 20 %></td>
+										</tr>
+									  	<tr>
+									  		<td><%= f.label 'password_confirmation', 'Confirm new' %></td>
+									  		<td><%= f.password_field :password_confirmation, :size => 20 %></td>
+										</tr>
+										
+										<tr>
+											<td><%= submit_tag 'Change Password', :disable_with => "Changing..." %></td>
+											<td><%= link_to_function("cancel") {|page|
+													page[:password_change_link].visual_effect :appear, :duration => 0.2
+													page[:password_change_form].hide
+												}	%></td>
+										</tr>
+								</table>
+							<% end %>
+						<% end %>
+					</td>
+				</tr>
+			<% end %>
+			<% if logged_in_as_admin? or !@user.roles.blank? %>
+				<tr>
+					<td>Roles</td>
+					<% if logged_in_as_admin? %>
+						<%= render :partial => '/admin/users/user_roles', :locals => {:user => @user} %>
+					<% else %>
+						<td><%= (@user.roles || []).map(&:to_s).join(', ') %></td>
+					<% end %>
+				</tr>
+			<% end %>
+			<% if !@user.preferences.blank? %>
+				<tr>
+					<td>
+						Preferences
+					</td>
+					<td id='user_preferences_<%= @user.id %>'>
+						<%= render :partial => 'preferences', :locals => {:user => @user} %>
+					</td>
+				</tr>
+			<% end %>
 			<tr>
-				<td><span class="tooltip">Files <span>You can also just email your files to upload@<%= APP_HOST %></span></span></td>
+				<td><span class="tooltip highlight">Files <span>You can also just email your files to upload@<%= APP_HOST %></span></span></td>
 				<td><%= render :partial => '/assets/assets', :locals => {:assets => @assets} %></td>
 			</tr>
 		</table>
 	</div> 
 	<div class="yui-u"> 
-		<% if current_user == @user and @user.crypted_password? %>
-			<% form_for @user, :url => change_password_user_path(@user), 
-				:html => {:id=>"password_change_form", :style=> "display: #{@user.errors.empty? ? 'none' : 'block'}; float: left; margin: 10px;" }  do |f| %>
-				<%= error_messages_for :user %>
-				<table >
-						<tr>
-							<td><%= label_tag "old_password" %></td>
-							<td><%= password_field_tag :old_password, @old_password, :size => 20 %></td>
-						</tr>
-					  	<tr>
-					  		<td><%= f.label "password", 'New password' %></td>
-					  		<td><%= f.password_field :password, :size => 20 %></td>
-						</tr>
-					  	<tr>
-					  		<td><%= f.label 'password_confirmation', 'Confirm new' %></td>
-					  		<td><%= f.password_field :password_confirmation, :size => 20 %></td>
-						</tr>
-						
-						<tr><td><%= submit_tag 'Change Password', :disable_with => "Changing..." %></td></tr>
-				</table>
-			<% end %>
-		<% end %>
 	</div> 
 </div> 

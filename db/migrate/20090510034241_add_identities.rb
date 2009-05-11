@@ -19,7 +19,7 @@ class AddIdentities < ActiveRecord::Migration
     
     User::Version.delete_all
     
-    User.find_each do |user|
+    User.find_each :conditions => 'identity_url IS NOT NULL' do |user|
       user.identities.build :url => user.identity_url
       user.save
     end

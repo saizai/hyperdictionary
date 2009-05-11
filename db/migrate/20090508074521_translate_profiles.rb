@@ -20,7 +20,7 @@ class TranslateProfiles < ActiveRecord::Migration
     Profile::Version.delete_all # see below. Too much of a pain to move over.
     
     # find_each ensures we don't grab something huge
-    Profile.find_each(:batch_size => 100, :include => :globalize_translations) {|profile|
+    Profile.find_each(:batch_size => 100, :include => :globalize_translations, :conditions => 'body IS NOT NULL') {|profile|
       # Globalize overwrote the .body= and .body accessors to hook to its table, above.
       # So we need to undercut it to read the real thing and set it, thus seeding the translations table
       # This should also set the versions table's glob for the newly set, most recent version.

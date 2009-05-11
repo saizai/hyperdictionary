@@ -63,7 +63,11 @@ module Daemon
       end
       pid = PidFile.recall(daemon)
       FileUtils.rm(daemon.pid_fn)
-      pid && Process.kill("TERM", pid)
+      begin
+        pid && Process.kill("TERM", pid)
+      rescue Errno::ESRCH
+        puts "Process #{pid} was already dead. Killed by system?"
+      end
     end
   end
 end

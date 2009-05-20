@@ -99,7 +99,7 @@ class CommentsController < ApplicationController
     respond_to do |format|
       if @comment.save
         # because of how the nested set works (:-/) we have to move it to the child AFTER saving it. Kinda lame.
-        @comment.move_to_child_of parent_id if parent_id
+        @comment.move_to_child_of parent_id if !parent_id.blank?
         format.js   { render :partial => 'comment'  }
         format.html {
           flash[:notice] = 'Comment was successfully created.'

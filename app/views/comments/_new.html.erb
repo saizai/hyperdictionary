@@ -1,0 +1,33 @@
+<% remote_form_for( Comment.new,
+	:html => {:id => "new_comment_form_#{commentable.id}", :class => 'form' },
+	:loading => "$('new_comment_form_indicator_#{ commentable.id }').show(); Form.disable('new_comment_form_#{ commentable.id }');",
+    :success => "$('new_comment_form_body_#{commentable.id}').value = ''; $('new_comment_form_indicator_#{ commentable.id }').hide(); 
+					Form.enable('new_comment_form_#{ commentable.id }'); Field.focus('new_comment_form_body_#{commentable.id}');",
+	:update => "comments_#{commentable.id}",
+	:position => :top ) do |f| %>
+	<%= f.error_messages %>
+	<div>
+		<%= f.text_area :body, :id => "new_comment_form_body_#{commentable.id}" %>
+			<div class="wmd-preview"></div>
+		</div>
+	<%= f.hidden_field :commentable_type, :value => commentable.class.to_s %>
+	<%= f.hidden_field :commentable_id, :value => commentable.id %>
+	<div id="new_comment_form_submit_<%= commentable.id %>">
+		<span id="new_comment_form_options_<%= commentable.id %>" class='options'>
+			<%= f.label :private %> <%= f.check_box :private %>
+			<% if logged_in_as_admin? %>
+				<%= f.label :moderated %> <%= f.check_box :moderated %>
+			<% end %>
+		</span>
+		<%= f.submit "Post", :class => 'submit' %>
+		<%= image_tag 'ajax-spinner.gif', :id => "new_comment_form_indicator_#{ commentable.id }", :style => 'display:none;' %>
+		
+		<%= f.hidden_field :parent_id, :value => nil %>
+		<span id="new_comment_form_parent_<%= commentable.id %>"></span>
+		<%= link_to_function 'X', nil, :id => "new_comment_form_parent_clear_#{commentable.id}", :class => 'close', :style => 'display: none;' do |page|
+				page['comment_parent_id'].value = nil
+				page["new_comment_form_parent_#{commentable.id}"].replace_html ''
+				page["new_comment_form_parent_clear_#{commentable.id}"].hide
+			end %>
+	</div>
+<% end %>

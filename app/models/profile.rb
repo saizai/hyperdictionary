@@ -7,7 +7,7 @@ class Profile < ActiveRecord::Base
   stampable
   translates :body 
   
-  belongs_to :owner, :class_name => 'User', :foreign_key => 'user_id' # This is for *identity* only. Use roles for everything else.
+  belongs_to :owner, :class_name => 'User', :foreign_key => 'user_id' # This is for *identity* only. Use proper roles for everything else.
   belongs_to :profile_type
   has_many :comments, :as => :commentable
   has_many :assets, :as => :attachable
@@ -19,7 +19,7 @@ class Profile < ActiveRecord::Base
   validates_uniqueness_of :url, :allow_nil => true, :case_sensitive => false
   validates_presence_of :profile_type
   validates_associated :profile_type
-  validates_associated :user
+  validates_associated :owner
   
   attr_accessible :name, :body, :url, :profile_type_id, :tag_list # User must be set explicitly
   

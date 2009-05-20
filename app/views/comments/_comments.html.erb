@@ -1,35 +1,11 @@
 <div class="comments">	
-	<div class='title'><%= commentable.name %>'s Wall Foo bar</div>
-	<div class='subtitle'>Subtitle text</div>
-	<div id="new_comment_form_<%= commentable.id %>" class='form'>
-		<% form_remote_for( Comment.new,
-			:loading => "$('new_comment_form_indicator_#{ commentable.id }').show(); Form.disable('new_comment_form_#{ commentable.id }');",
-		    :success => "$('new_comment_form_body_#{commentable.id}').value = ''; $('new_comment_form_indicator_#{ commentable.id }').hide(); 
-							Form.enable('new_comment_form_#{ commentable.id }'); Field.focus('new_comment_form_body_#{commentable.id}');",
-			:update => "comments_#{commentable.id}",
-			:position => :top ) do |f| %>
-			<%= f.error_messages %>
-			<div>
-				<%= f.text_area :body, :id => "new_comment_form_body_#{commentable.id}" %>
-  				<div class="wmd-preview"></div>
-  			</div>
-			<%= f.hidden_field :commentable_type, :value => commentable.class.to_s %>
-			<%= f.hidden_field :commentable_id, :value => commentable.id %>
-			<div id="'new_comment_form_submit_<%= commentable.id %>">
-				<div id="new_comment_form_options_<%= commentable.id %>" class='options'>
-					<%= f.label :private %> <%= f.check_box :private %>
-					<% if logged_in_as_admin? %>
-						<%= f.label :moderated %> <%= f.check_box :moderated %>
-					<% end %>
-				</div>
-				<%= f.submit "Post", :class => 'submit' %>
-				<%= image_tag 'ajax-spinner.gif', :id => "new_comment_form_indicator_#{ commentable.id }", :style => 'display:none;' %>
-			</div>
-		<% end %>
-	</div>
+	<div class='title'><%= commentable.name %>'s Comments</div>
+	<!-- <div class='subtitle'>Subtitle text</div> -->
+	<%= render :partial => '/comments/new', :locals => {:commentable => commentable} %>
 	<div id="comments_<%= commentable.id %>">
-		<% commentable.comments.reverse.each do |comment| %>
-			<!-- The container is a workaround for the fact that Ajax.Updater doesn't support replace (only replace_html) -->
+		<% commentable.comments.roots.reverse.each do |comment| %>
+			<% # The container is a workaround for the fact that Ajax.Updater doesn't support replace (only replace_html) 
+				%>
 			<div  id="comment_post_container_<%= comment.id %>" >
 				<%= render :partial => '/comments/comment', :locals => {:comment => comment} %>
 			</div>

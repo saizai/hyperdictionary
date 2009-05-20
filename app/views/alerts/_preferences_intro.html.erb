@@ -1,0 +1,13 @@
+<% if logged_in? and !current_user.get_preference('Skip preferences intro') %>
+	<div class="flash info" id='n00balert_prefs' >
+		<span class='close' title='close'>
+			<%= link_to_remote 'X', :url => set_preference_user_path(current_user, :preference => 'Skip preferences intro', :value => true), :method => :put,
+				:success => update_page {|page| page.remove 'n00balert_prefs' }
+			 %>
+		</span>
+		<h4>This is your preferences page.</h4>
+		The information on this page is only visible to you and site admins.<br/>
+		From here you can easily change your avatar, identities, or password as well as manage your files.<br/>
+		Mouseover the highlighted text to learn more.
+	</div>
+<% end %>

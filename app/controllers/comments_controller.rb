@@ -92,11 +92,14 @@ class CommentsController < ApplicationController
   # POST /comments
   # POST /comments.xml
   def create
+    parent_id = params[:comment].delete :parent_id
     @comment = Comment.new(params[:comment])
     @comment.comment_type ||= CommentType.find_or_create_by_name('comment')
     
     respond_to do |format|
       if @comment.save
+        # because of how the nested set works (:-/) we have to move it to the child AFTER saving it. Kinda lame.
+        @comment.move_to_child_of parent_id if parent_id
         format.js   { render :partial => 'comment'  }
         format.html {
           flash[:notice] = 'Comment was successfully created.'

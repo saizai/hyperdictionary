@@ -1,7 +1,8 @@
 class Comment < ActiveRecord::Base
-  belongs_to :user
+  belongs_to :creator
   belongs_to :commentable, :polymorphic => true
   belongs_to :comment_type
+  # Also parent, but acts_as_nested_set handles that
   
   acts_as_authorizable
   acts_as_paranoid
@@ -12,7 +13,9 @@ class Comment < ActiveRecord::Base
   
   validates_presence_of :body
   # title optional
-  validates_associated :user # but not its presence
+  validates_associated :creator # but not its presence
+  validates_associated :updater
+  validates_associated :deleter
   validates_associated :commentable
   validates_presence_of :commentable
   validates_associated :comment_type

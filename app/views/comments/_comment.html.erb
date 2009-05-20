@@ -1,7 +1,7 @@
 <% if logged_in_as_admin? or
 	  (!comment.moderated and
 	   !(comment.private and (!logged_in? or !(current_user.id == comment.creator_id or current_user.id == comment.commentable.try(:user).try(:id))))) %>
-	<div id="comment_post_<%= comment.id %>" class="post <%= ' private' if comment.private %><%= ' moderated' if comment.moderated %>">
+	<div id="comment_post_<%= comment.id %>" class="post <%= ' private' if comment.private %><%= ' moderated' if comment.moderated %> level_<%= [4, comment.level].min %>">
 		<div class='pic'>
 			<%= avatar comment.creator %>
 		</div>
@@ -16,6 +16,13 @@
 				<div class="history">Last updated: <%= time_ago_in_words comment.updated_at %> ago by <%= link_to_user comment.updater %></div>
 			<% end %>
 			<div class="actions">
+				<%= link_to_function 'reply' do |page|
+						page['comment_parent_id'].value = comment.id # FIXME: Should descend from ["new_comment_form_#{comment.commentable_id}"]
+						page["new_comment_form_parent_#{comment.commentable_id}"].replace_html "(reply to #{link_to_user comment.creator})"
+						page["new_comment_form_parent_clear_#{comment.commentable_id}"].show
+						page["new_comment_form_body_#{comment.commentable_id}"].focus
+					end
+				 %>
 				<% if logged_in_as_admin? %>
 					<%= link_to_remote "#{ 'un' if comment.moderated  }moderate", :url  => moderate_comment_url(comment), :method => :put, :update => "comment_post_container_#{comment.id}" %>
 				<% end %>
@@ -25,5 +32,14 @@
 				<% end %>
 			</div>
 		</div>
+	</div>
+<% else %>
+	<div id="comment_post_<%= comment.id %>" class="post <%= ' private' if comment.private %><%= ' moderated' if comment.moderated %>">
+		<%= comment.moderated ? 'Moderated' : 'Private' %> comment
+	</div>
+<% end %>
+<% comment.children.each do |subcomment| %>
+	<div  id="comment_post_container_<%= subcomment.id %>" >
+		<%= render :partial => '/comments/comment', :locals => {:comment => subcomment} %>
 	</div>
 <% end %>

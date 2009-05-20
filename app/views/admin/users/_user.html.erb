@@ -22,7 +22,7 @@
 		</span>
 		<% user.identities.each do |identity| %>
 			<span style="float:left;">
-		        <%= link_to_remote 'X', :url => unmap_admin_user_path(user, :identity_id => identity.id), :method => :delete, :confirm => "Are you sure? This will probably prevent them from logging in again.", :class => 'close' %>
+		        <%= link_to_remote 'X', {:url => unmap_admin_user_path(user, :identity_id => identity.id), :method => :delete, :confirm => "Are you sure? This will probably prevent them from logging in again."}, :class => 'close' %>
 				<a href="<%= identity.url%>"><%= h identity.url %></a>
 			</span>
 		<% end %>

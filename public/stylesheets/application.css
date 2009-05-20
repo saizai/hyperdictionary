@@ -71,14 +71,6 @@ textarea {
 .tooltip {
     position: relative; /*this is the key*/
 }
-	
-.highlight {
-	background-color: #ffa;
-}
-
-.highlight:hover{
-	background-color: #ff6;
-}
 
 .tooltip span {
 	display: none
@@ -90,11 +82,23 @@ textarea {
     position:		absolute;
     top:			1em; /* 1.6em; is prettier a bit, but 1em allows user to mouse in to it easily and thus click links etc */
 	left:			0;
-	border:			thin solid #ff0;
-	background:		#ffe;
+	border:			thin solid grey;
+	background:		#FFF;
   	padding:		.3em .6em;
 	text-align:		left;
 	white-space:	nowrap;
+}
+	
+.highlight {
+	background-color: #ffa;
+}
+
+.highlight:hover{
+	background-color: #ff6;
+}
+
+.highlight:hover span {
+	background:		#ffe;
 }
 
 .icon {
@@ -177,6 +181,26 @@ textarea {
 
 .comments .post.moderated .name {
 	background: #FFAAAA;
+}
+
+.comments .post.level_1 {
+	width:	98%;
+}
+
+.comments .post.level_2 {
+	width:	96%;
+}
+
+.comments .post.level_3 {
+	width:	94%;
+}
+
+.comments .post.level_4 {
+	width:	92%;
+}
+
+.comments .post.level_5 {
+	width:	90%;
 }
 
 .comments .post .actions {

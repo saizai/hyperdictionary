@@ -2,11 +2,15 @@
 	<h2><%=h profile.name %>
 		<small>
 			(<%= h profile.profile_type.name %>)
-			<span><%= link_to 'Edit', edit_profile_path(profile) %></span>
-			<% content_tag :span, link_to(h(profile.url), profile.url), :class => 'url' if profile.url %>
+			<% if profile.edited_by? current_user %>
+				<span><%= link_to 'Edit', edit_profile_path(profile) %></span>
+			<% end %>
 		</small>
+			<% content_tag :span, link_to(h(profile.url), profile.url), :class => 'url' if profile.url %>
 	</h2>
 </div>
+
+<%= render :partial => '/profiles/roles', :locals => {:profile => profile} %>
 
 <div>
   <%= markdown profile.body %>
@@ -16,12 +20,12 @@
 	<%= link_to_tag(tag) %>
 <% end -%>
   
-<% if @profile.lock_version > 1 %>
+<% if profile.lock_version > 1 and profile.edited_by? current_user %>
 	<div style="margin: 20px 0px 10px; 1px solid black;">Revision history:</div>
-	<%= render :partial => 'profile_version', :collection => @profile.versions.reverse, :as => :profile %>
+	<%= render :partial => 'profile_version', :collection => profile.versions.reverse, :as => :profile %>
 <% end %>
 
-<%= render :partial => '/assets/assets', :locals => {:assets => @profile.assets, :attachable => @profile } %>
+<%= render :partial => '/assets/assets', :locals => {:assets => profile.assets, :attachable => profile, :upload => profile.edited_by?(current_user) } %>
 
 <div id="profile_<%= profile.id %>_comments">
 	<%= render :partial => '/comments/comments', :locals => {:commentable => profile} %>

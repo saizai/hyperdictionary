@@ -12,7 +12,7 @@
 	<td>
 		<%= check_box_only user.crypted_password? %>
 		<%= link_to_remote 'reset', :url => reset_admin_user_path(user), :method => :put %>
-		<%= '(sent)' if user.password_reset_code? %>
+		<%= '<small>(sent)</small>' if user.password_reset_code? %>
 	</td>
 	<td style="max-width: 400px; overflow-x: hidden;">
 		<span style="margin-right: 5px; float: left;"><%= link_to_function("add", :id => "add_url_link_#{user.id}") do |page|

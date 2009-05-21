@@ -241,11 +241,11 @@ class AnonUser
     # And override the ones that call self, 'cause getting a fake self.roles that works like a real association is a major pain
     def roles_for( authorizable_obj, role_name = nil )
       # The double find thing is so that acts_as_paranoid (if present) can hook in properly. It's not a significant performance hit, anyway; still better than before. ;-)
-      Role.find(RolesUser.find(:all, :conditions =>  roles_for_conditions(authorizable_obj, role_name, ['roles_users.user_id IS NULL']), :joins => :role, :select => :id).map(&:id))
+      Role.find(RolesUser.find(:all, :conditions =>  roles_for_conditions(authorizable_obj, role_name, ['roles_users.user_id IS NULL']), :joins => :role, :select => 'roles.id').map(&:id))
     end
   
     def roles
-      Role.find(RolesUser.find(:all, :conditions =>  "roles_users.user_id IS NULL", :joins => :role, :select => :id).map(&:id))
+      Role.find(RolesUser.find(:all, :conditions =>  "roles_users.user_id IS NULL", :joins => :role, :select => 'roles.id').map(&:id))
     end
     
     def id
@@ -255,7 +255,7 @@ class AnonUser
     private 
     
     def roles_by_name role_name
-      Role.find(RolesUser.find(:all, :conditions =>  ["roles_users.user_id IS NULL and name = ?", role_name], :joins => :role, :select => :id).map(&:id))
+      Role.find(RolesUser.find(:all, :conditions =>  ["roles_users.user_id IS NULL and name = ?", role_name], :joins => :role, :select => 'roles.id').map(&:id))
     end
     
     def add_role role

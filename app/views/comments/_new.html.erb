@@ -15,7 +15,7 @@
 	<div id="new_comment_form_submit_<%= commentable.id %>">
 		<span id="new_comment_form_options_<%= commentable.id %>" class='options'>
 			<%= f.label :private %> <%= f.check_box :private %>
-			<% if logged_in_as_admin? %>
+			<% if commentable.moderated_by? current_user %>
 				<%= f.label :moderated %> <%= f.check_box :moderated %>
 			<% end %>
 		</span>

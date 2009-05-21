@@ -4,7 +4,7 @@ class Identity < ActiveRecord::Base
   stampable
   
   validates_associated :user
-  validates_presence_of :user
+#  validates_presence_of :user # Causes error when creating a new user 
   validates_presence_of :url
   validates_uniqueness_of :url
   
@@ -28,7 +28,6 @@ class Identity < ActiveRecord::Base
     
     identity = self.find_or_initialize_by_url profile['identifier'].sub(/\/$/, '')
     identity ||= self.new
-    identity.data_blob = ActiveSupport::Gzip.compress(rpx_data.to_yaml)
     identity.name = profile['displayName'] || "#{profile['name']['givenName']} #{profile['name']['familyName']}"
     identity.login = profile['preferredUsername']
     identity.email = profile['verifiedEmail'] || profile['email']
@@ -37,6 +36,7 @@ class Identity < ActiveRecord::Base
     identity.birth_date = profile['birthday']
     identity.country = profile['address']['country'] unless profile['address'].nil?
     identity.photo = profile['photo'] # url
+    identity.data_blob = rpx_data.to_yaml # ActiveSupport::Gzip.compress(rpx_data.to_yaml)
     
     return identity
   end

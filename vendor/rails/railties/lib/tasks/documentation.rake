@@ -2,22 +2,21 @@ namespace :doc do
   desc "Generate documentation for the application. Set custom template with TEMPLATE=/path/to/rdoc/template.rb or title with TITLE=\"Custom Title\""
   Rake::RDocTask.new("app") { |rdoc|
     rdoc.rdoc_dir = 'doc/app'
-    rdoc.template = ENV['template'] if ENV['template']
+    rdoc.template = 'lib/rdoc/generators/template/html/jamis.rb'
     rdoc.title    = ENV['title'] || "Rails Application Documentation"
     rdoc.options << '--line-numbers' << '--inline-source'
     rdoc.options << '--charset' << 'utf-8'
-    rdoc.rdoc_files.include('doc/README_FOR_APP')
+    rdoc.rdoc_files.include('README*')
     rdoc.rdoc_files.include('app/**/*.rb')
     rdoc.rdoc_files.include('lib/**/*.rb')
   }
-
+  
   desc "Generate documentation for the Rails framework"
   Rake::RDocTask.new("rails") { |rdoc|
     rdoc.rdoc_dir = 'doc/api'
-    rdoc.template = "#{ENV['template']}.rb" if ENV['template']
+    rdoc.template = 'lib/rdoc/generators/template/html/jamis.rb'
     rdoc.title    = "Rails Framework Documentation"
     rdoc.options << '--line-numbers' << '--inline-source'
-    rdoc.rdoc_files.include('README')
     rdoc.rdoc_files.include('vendor/rails/railties/CHANGELOG')
     rdoc.rdoc_files.include('vendor/rails/railties/MIT-LICENSE')
     rdoc.rdoc_files.include('vendor/rails/railties/README')
@@ -70,8 +69,8 @@ namespace :doc do
         options << "--title '#{plugin.titlecase} Plugin Documentation'"
         options << '--line-numbers' << '--inline-source'
         options << '--charset' << 'utf-8'
-        options << '-T html'
-
+        options << '--template' <<  'lib/rdoc/generators/template/html/jamis.rb'
+        
         files.include("#{plugin_base}/lib/**/*.rb")
         if File.exist?("#{plugin_base}/README")
           files.include("#{plugin_base}/README")    

@@ -7,10 +7,10 @@ class User < ActiveRecord::Base
   include Authorization::AasmRolesWithOpenId
   
   has_many :comments, :foreign_key => 'creator_id'
-  has_one :profile
+  has_one :profile, :autosave => true, :dependent => :destroy
   has_many :assets, :foreign_key => 'creator_id'
-  has_many :identities
-  has_many :sessions, :foreign_key => 'updater_id'
+  has_many :identities, :autosave => true, :dependent => :destroy
+  has_many :sessions, :foreign_key => 'updater_id', :autosave => true
   has_many :multi_sessions, :foreign_key => 'updater_id', :conditions => 'sessions.updater_id != sessions.creator_id', :class_name => 'Session'
   has_many :multi_users, :through => :multi_sessions, :source =>  'creator', :class_name => 'User'
   
@@ -52,8 +52,15 @@ class User < ActiveRecord::Base
   def before_save
     # not before_create; this catches the case of a deleted profile
     unless self.profile
-      self.build_profile :profile_type_id => ProfileType.find_or_create_by_name('person'), :url => self.identity_url, :name => self.name, :body => "I'm a new user. Say hello!"
+      self.build_profile :profile_type_id => ProfileType.find_or_create_by_name('person'), :url => self.identities.first.url, :name => self.login, 
+        :body => "Hi, my name is #{self.name}; I'm new here. Say hello!"
     end
+  end
+  
+  def after_save
+    # Profile wasn't able to set this itself, 'cause user didn't yet exist (ish)
+    # TODO: could probably be made to work automatically w/ profile.after_create somehow...
+    self.has_role 'owner', profile
   end
   
   def before_validate
@@ -80,8 +87,8 @@ class User < ActiveRecord::Base
 #                           (sessions.updater_id = users.id XOR sessions.creator_id = users.id) \
 #                      WHERE users.id !=  #{self.id}"
     # It's roughly equal to this; which is really more efficient?
-    User.find(sessions.find(:all, :conditions => 'creator_id != updater_id', 
-      :select => 'DISTINCT creator_id, updater_id').map{|x| [x.creator_id, x.updater_id]}.flatten.uniq - [self.id])
+    User.find(:all, :conditions => ['id in (?)', sessions.find(:all, :conditions => 'creator_id != updater_id', 
+      :select => 'DISTINCT creator_id, updater_id').map{|x| [x.creator_id, x.updater_id]}.flatten.uniq - [self.id]])
   end
   
   # for use with RPX Now gem
@@ -104,7 +111,8 @@ class User < ActiveRecord::Base
   end
   
   def email_verified_by_open_id?
-    identities.find(:all, :conditions => {:email_verified => true}).map(&:email).include? email
+    # Must use select here, not find, so it's compatible w/ new records
+    identities.select{|id| id.email_verified}.map(&:email).include? email
   end
   
   def add_identity_with_rpx token
@@ -161,8 +169,9 @@ class User < ActiveRecord::Base
   end
     
   protected
+    # Triggers validation on password & confirmation
     def password_required?
-      identities.map(&:url).blank? and (crypted_password.blank? or !password.blank?)
+      identities.empty? and (crypted_password.blank? or !password.blank?)
     end
     
     def make_activation_code

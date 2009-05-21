@@ -85,9 +85,13 @@ class UsersController < ApplicationController
     
     if success and @user.errors.empty?
       flash[:notice] = "Thanks for signing up!"
-      flash[:notice] += " We're sending you an email with your activation code." if @user.pending?
-      redirect_back_or_default('/')
-    elsif @user.identity_url?
+      if @user.pending?
+        flash[:notice] += " We're sending you an email with your activation code." 
+      else
+        self.current_user = @user
+      end
+      redirect_back_or_default('/home')
+    elsif !@user.identities.blank?
       render :action => 'new_openid'
     else
       flash[:error]  = "We couldn't set up that account, sorry.  Please try again, or contact an admin (link is above)."

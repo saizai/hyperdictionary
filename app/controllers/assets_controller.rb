@@ -1,7 +1,7 @@
 class AssetsController < ApplicationController
   # FIXME: Pass sessions through to allow cross-site forgery protection
 #  protect_from_forgery :except => :swfupload
-  before_filter :require_login
+  before_filter :login_required
   
   # GET /assets
   # GET /assets.xml

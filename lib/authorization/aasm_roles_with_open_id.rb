@@ -19,11 +19,11 @@ module Authorization
         
         # Override a couple things to handle OpenID flow
         aasm_event :register do
-          transitions :from => :passive, :to => :pending, :guard => Proc.new {|u| !(u.crypted_password.blank? && u.password.blank?) or !u.identity_url.blank? } # password OR url
+          transitions :from => :passive, :to => :pending, :guard => Proc.new {|u| !(u.crypted_password.blank? && u.password.blank?) or !u.identities.empty? } # password OR url
         end
         
         aasm_event :activate do
-          transitions :from => :passive, :to => :active, :guard => Proc.new {|u| u.verified_email == u.email } # Skip registration (email confirm) if OpenID says it's good
+          transitions :from => :passive, :to => :active, :guard => Proc.new {|u| u.email_verified_by_open_id? } # Skip registration (email confirm) if OpenID says it's good
           transitions :from => :pending, :to => :active 
         end
         

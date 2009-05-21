@@ -35,7 +35,7 @@
 			<tr>
 				<td>Identities</td>
 				<td>
-					<%= @user.identities.map{|identity| "<a href='#{identity.url}'>#{identity.url}</a><br/>"} %>
+					<%= @user.identities.map{|identity| link_to(identity.url, identity.url) + "<br/>"} %>
 					<%= link_to_function("Add new", :id => "add_identity_link"){|page| 
 							page[:add_identity_link].hide
 							page[:add_identity_form].visual_effect :appear, :duration => 0.2

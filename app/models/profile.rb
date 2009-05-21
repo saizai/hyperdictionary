@@ -23,6 +23,16 @@ class Profile < ActiveRecord::Base
   
   attr_accessible :name, :body, :url, :profile_type_id, :tag_list # User must be set explicitly
   
+  # Standard roles that moderators can set. These are mutually exclusive.
+  ROLES = %w(reader commenter editor member moderator owner)
+  ROLE_VERBS = %w(read commented edited member moderated owned)
+  # There's also: Subscriber 
+  
+  def after_create
+    creator.has_role 'owner', self if creator
+    AnonUser.has_role 'commenter', self
+  end
+  
   # This is used by versioning; we don't want to version the translations table per se, just serialize it like this
   # The glob is only present on the db table, not the real one.
   def translations_glob
@@ -32,6 +42,19 @@ class Profile < ActiveRecord::Base
   # TODO: somehow handle unpacking it again after a revert
   def translations_glob= glob
     logger.info "Tried to revert #{glob}"
+  end
+  
+  
+  # Permissions are hierarchical, not piecemeal, so here are some convenience accessors
+  ROLE_VERBS.each_with_index do |verb, i| 
+    # Whee metaprogramming
+    define_method "#{verb}_by?".to_sym do |user|
+      user ||= AnonUser
+      user.has_role?('site_admin') or
+      # & = set intersection; [i..-1] = 'this role or any higher one'
+      !(user.roles_for(self).map(&:name) & ROLES[i..-1]).empty? or
+      !(AnonUser.roles_for(self).map(&:name) & ROLES[i..-1]).empty? # Every user has at least the permissions of the anon user
+    end
   end
   
 end

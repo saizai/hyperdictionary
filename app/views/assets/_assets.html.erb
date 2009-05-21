@@ -2,4 +2,4 @@
 	<%= render :partial => '/assets/asset', :collection => assets %>
 </ul>
 
-<%= render :partial => '/assets/new', :locals => ({:attachable => attachable } if defined? attachable) %>
+<%= render :partial => '/assets/new', :locals => ({:attachable => attachable } if defined? attachable) if !defined? upload or upload %>

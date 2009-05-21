@@ -22,4 +22,11 @@ class Comment < ActiveRecord::Base
   validates_presence_of :comment_type
   
   
+  def visible_to? user
+    user ||= AnonUser
+    commentable.read_by?(user) and
+      (!moderated or commentable.moderated_by? user) and
+      (!private or commentable.member_by? user or (creator_id and user.id == creator_id))
+  end
+  
 end

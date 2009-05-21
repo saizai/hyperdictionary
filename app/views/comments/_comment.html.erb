@@ -1,7 +1,5 @@
-<% if logged_in_as_admin? or
-	  (!comment.moderated and
-	   !(comment.private and (!logged_in? or !(current_user.id == comment.creator_id or current_user.id == comment.commentable.try(:user).try(:id))))) %>
-	<div id="comment_post_<%= comment.id %>" class="post <%= ' private' if comment.private %><%= ' moderated' if comment.moderated %> level_<%= [4, comment.level].min %>">
+<div id="comment_post_<%= comment.id %>" class="post <%= ' private' if comment.private %><%= ' moderated' if comment.moderated %> level_<%= [4, comment.level].min %>">
+	<% if comment.visible_to? current_user %>
 		<div class='pic'>
 			<%= avatar comment.creator %>
 		</div>
@@ -23,21 +21,21 @@
 						page["new_comment_form_body_#{comment.commentable_id}"].focus
 					end
 				 %>
-				<% if logged_in_as_admin? %>
+				<% if comment.commentable.moderated_by? current_user %>
 					<%= link_to_remote "#{ 'un' if comment.moderated  }moderate", :url  => moderate_comment_url(comment), :method => :put, :update => "comment_post_container_#{comment.id}" %>
 				<% end %>
-				<% if logged_in? and (logged_in_as_admin? or current_user == comment.creator) %>
+				<% if comment.commentable.member_by? current_user %>
 					<%= link_to_remote "#{ 'un' if comment.private }screen", :url  => screen_comment_path(comment), :method => :put, :update => "comment_post_container_#{comment.id}" %>
+				<% end %>
+				<% if comment.commentable.owned_by? current_user %>
 					<%= link_to_remote "delete", :url  => comment_path(comment), :method => :delete, :success => update_page {|page| page.remove "comment_post_container_#{comment.id}"} %>
 				<% end %>
 			</div>
 		</div>
-	</div>
-<% else %>
-	<div id="comment_post_<%= comment.id %>" class="post <%= ' private' if comment.private %><%= ' moderated' if comment.moderated %>">
+	<% else %>
 		<%= comment.moderated ? 'Moderated' : 'Private' %> comment
-	</div>
-<% end %>
+	<% end %>
+</div>
 <% comment.children.each do |subcomment| %>
 	<div  id="comment_post_container_<%= subcomment.id %>" >
 		<%= render :partial => '/comments/comment', :locals => {:comment => subcomment} %>

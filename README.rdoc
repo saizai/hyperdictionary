@@ -9,7 +9,7 @@ Our primary audience in the near term is field linguists and conlangers, whose n
 Later on, this audience will expand to general linguistics research and general public use as a next-gen dictionary. 
 
 It will support, in rough order of priority:
-* all standard rich web 2.0 app features (including REST API) - see separate readme[link:/README-generic_app.rdoc]
+* all standard rich web 2.0 app features (including REST API) - see separate readme
 * dictionary / lexicon management (entry, search, etc)
 * transcription and annotation management
 * custom collocations
@@ -29,7 +29,7 @@ It will be available both in this form (as run-your-own OSS), as well as freely 
 
 The first component of Kura 2, the rich generic web app, will be forked into its own respository, and available under the same licensing terms. 
 Its purpose is to make it easy to create rich applications without having to re-code all the same old stuff over and over again.
-Please see its readme[link:README-generic_app.rdoc] file for more information.
+Please see its readme file for more information.
 
 If you are interested in participating, please join our mailing list. We need Ruby / Rails coders, complex data entry scripters, and testers.
 

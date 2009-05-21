@@ -1,0 +1,41 @@
+<% if profile.edited_by? current_user %>
+	<table>
+		<tr>
+			<th>User</th>
+			<th><span class="tooltip highlight">Role 
+				<span><dl>
+					<dt>Reader</dt><dd>can read the profile & public comments</dd>
+					<dt>Commenter</dt><dd>can also leave comments & read own screened comments (unless anonymous)</dd>
+					<dt>Editor</dt><dd>can also edit the profile, attach files, and see these roles</dd>
+					<dt>Member</dt><dd>can also screen comments and edit without review required</dd>
+					<dt>Moderator</dt><dd>can also moderate comments</dd>
+					<dt>Owner</dt><dd>can also set these roles and delete comments</dd>
+				</dl></span></span>
+			</th>
+		</tr>
+		<tr>
+			<td>Anonymous</td>
+			<td>
+				<%= anon_roles = profile.accepted_roles_by(AnonUser).map(&:name).join(',') 
+					anon_roles.blank? ? 'None' : anon_roles %>
+			</td>
+		</tr>
+		<% profile.users.each do |user| %>
+			<tr>
+				<td><%= link_to_user user %></td>
+				<td><%= profile.accepted_roles_by(user).map(&:name).map(&:capitalize).join(',') %></td>
+			</tr>
+		<% end %>
+		
+		<% if profile.owned_by? current_user 
+			form_remote_tag :url => 'foo', :method => :put do  %>
+			<tr>
+				<td><%= text_field_tag :login, nil, :size => 10 %></td>
+				<td><%= select_tag :role, options_for_select(Profile::ROLES.map(&:capitalize)) %></td>
+				<td><%= submit_tag 'Add' %></td>
+			</tr>
+			<% end 
+		end %>
+	
+	</table>
+<% end %>

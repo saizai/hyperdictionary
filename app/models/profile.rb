@@ -9,7 +9,7 @@ class Profile < ActiveRecord::Base
   
   belongs_to :owner, :class_name => 'User', :foreign_key => 'user_id' # This is for *identity* only. Use proper roles for everything else.
   belongs_to :profile_type
-  has_many :comments, :as => :commentable
+  has_many :comments, :as => :commentable, :dependent => :destroy
   has_many :assets, :as => :attachable
   
   # body # run through sanitization filter!

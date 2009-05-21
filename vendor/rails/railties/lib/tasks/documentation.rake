@@ -6,6 +6,7 @@ namespace :doc do
     rdoc.title    = ENV['title'] || "Rails Application Documentation"
     rdoc.options << '--line-numbers' << '--inline-source'
     rdoc.options << '--charset' << 'utf-8'
+    rdoc.rdoc_files.include('README.rdoc') if File.exist? 'README.rdoc'
     rdoc.rdoc_files.include('README*')
     rdoc.rdoc_files.include('app/**/*.rb')
     rdoc.rdoc_files.include('lib/**/*.rb')
@@ -17,9 +18,9 @@ namespace :doc do
     rdoc.template = 'lib/rdoc/generators/template/html/jamis.rb'
     rdoc.title    = "Rails Framework Documentation"
     rdoc.options << '--line-numbers' << '--inline-source'
+    rdoc.rdoc_files.include('vendor/rails/railties/README')
     rdoc.rdoc_files.include('vendor/rails/railties/CHANGELOG')
     rdoc.rdoc_files.include('vendor/rails/railties/MIT-LICENSE')
-    rdoc.rdoc_files.include('vendor/rails/railties/README')
     rdoc.rdoc_files.include('vendor/rails/railties/lib/{*.rb,commands/*.rb,rails_generator/*.rb}')
     rdoc.rdoc_files.include('vendor/rails/activerecord/README')
     rdoc.rdoc_files.include('vendor/rails/activerecord/CHANGELOG')

@@ -1,6 +1,6 @@
 <div id="comment_post_<%= comment.id %>" class="post <%= ' private' if comment.private %><%= ' moderated' if comment.moderated %> level_<%= [4, comment.level].min %>">
 	<% if comment.visible_to? current_user %>
-		<div class='pic'>
+		<div class='avatar'>
 			<%= avatar comment.creator %>
 		</div>
 		<div class='content'>
@@ -14,7 +14,7 @@
 				<div class="history">Last updated: <%= time_ago_in_words comment.updated_at %> ago by <%= link_to_user comment.updater %></div>
 			<% end %>
 			<div class="actions">
-				<%= link_to_function 'reply' do |page|
+				<%= link_to_function image_tag('comment_add.png'), nil, :title => 'Reply' do |page|
 						page['comment_parent_id'].value = comment.id # FIXME: Should descend from ["new_comment_form_#{comment.commentable_id}"]
 						page["new_comment_form_parent_#{comment.commentable_id}"].replace_html "(reply to #{link_to_user comment.creator})"
 						page["new_comment_form_parent_clear_#{comment.commentable_id}"].show
@@ -22,13 +22,16 @@
 					end
 				 %>
 				<% if comment.commentable.moderated_by? current_user %>
-					<%= link_to_remote "#{ 'un' if comment.moderated  }moderate", :url  => moderate_comment_url(comment), :method => :put, :update => "comment_post_container_#{comment.id}" %>
+					<%= link_to_remote image_tag("shield#{ '_gray' if comment.moderated  }.png"), {:url  => moderate_comment_url(comment), :method => :put, :update => "comment_post_container_#{comment.id}"},
+							:title => "#{'un' if comment.moderated}moderate comment".capitalize %>
 				<% end %>
 				<% if comment.commentable.member_by? current_user %>
-					<%= link_to_remote "#{ 'un' if comment.private }screen", :url  => screen_comment_path(comment), :method => :put, :update => "comment_post_container_#{comment.id}" %>
+					<%= link_to_remote image_tag("eye#{ '_gray' if comment.private }.png"), {:url  => screen_comment_path(comment), :method => :put, :update => "comment_post_container_#{comment.id}"},
+							:title => "#{'un' if comment.private}screen comment".capitalize %>
 				<% end %>
 				<% if comment.commentable.owned_by? current_user %>
-					<%= link_to_remote "delete", :url  => comment_path(comment), :method => :delete, :success => update_page {|page| page.remove "comment_post_container_#{comment.id}"} %>
+					<%= link_to_remote image_tag("comment_delete.png"), {:url  => comment_path(comment), :method => :delete, :success => update_page {|page| page.remove "comment_post_container_#{comment.id}"}},
+							:title => "Delete comment" %>
 				<% end %>
 			</div>
 		</div>

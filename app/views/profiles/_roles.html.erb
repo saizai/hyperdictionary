@@ -1,41 +1,63 @@
 <% if profile.edited_by? current_user %>
-	<table>
-		<tr>
-			<th>User</th>
-			<th><span class="tooltip highlight">Role 
-				<span><dl>
-					<dt>Reader</dt><dd>can read the profile & public comments</dd>
-					<dt>Commenter</dt><dd>can also leave comments & read own screened comments (unless anonymous)</dd>
-					<dt>Editor</dt><dd>can also edit the profile, attach files, and see these roles</dd>
-					<dt>Member</dt><dd>can also screen comments and edit without review required</dd>
-					<dt>Moderator</dt><dd>can also moderate comments</dd>
-					<dt>Owner</dt><dd>can also set these roles and delete comments</dd>
-				</dl></span></span>
-			</th>
-		</tr>
-		<tr>
-			<td>Anonymous</td>
-			<td>
-				<%= anon_roles = profile.accepted_roles_by(AnonUser).map(&:name).join(',') 
-					anon_roles.blank? ? 'None' : anon_roles %>
-			</td>
-		</tr>
-		<% profile.users.each do |user| %>
-			<tr>
-				<td><%= link_to_user user %></td>
-				<td><%= profile.accepted_roles_by(user).map(&:name).map(&:capitalize).join(',') %></td>
-			</tr>
-		<% end %>
-		
-		<% if profile.owned_by? current_user 
-			form_remote_tag :url => 'foo', :method => :put do  %>
-			<tr>
-				<td><%= text_field_tag :login, nil, :size => 10 %></td>
-				<td><%= select_tag :role, options_for_select(Profile::ROLES.map(&:capitalize)) %></td>
-				<td><%= submit_tag 'Add' %></td>
-			</tr>
-			<% end 
+	<span id='profile_roles_container_<%= profile.id %>'>
+		<%= link_to_function(image_tag('user_edit.png'), :id => "profile_roles_link_#{profile.id}") do |page|
+			page.visual_effect :toggle_blind, "profile_roles_#{profile.id}"
 		end %>
-	
-	</table>
+		<div id='profile_roles_<%= profile.id %>' <%= 'style="display: none;"' unless defined? shown and shown %>>
+			<table>
+				<tr>
+					<th>User</th>
+					<th><span class="tooltip highlight">Role 
+						<span><dl>
+							<dt>Reader</dt><dd>can read the profile & public comments</dd>
+							<dt>Commenter</dt><dd>can also leave comments & read own screened comments (unless anonymous)</dd>
+							<dt>Tagger</dt><dd>can also edit tags</dd>
+							<dt>Editor</dt><dd>can also edit the profile, attach files, and see these roles</dd>
+							<dt>Member</dt><dd>can also screen comments and edit without review required</dd>
+							<dt>Moderator</dt><dd>can also moderate comments</dd>
+							<dt>Owner</dt><dd>can also set these roles and delete comments</dd>
+						</dl></span></span>
+					</th>
+				</tr>
+				
+				<% ([AnonUser] + profile.users).each do |user| %>
+					<tr>
+						<td><%= link_to_user user %></td>
+						<td>
+							<span id="profile_role_<%= user.id %>">
+								<%= existing_roles = profile.accepted_roles_by(user).map(&:name).map(&:capitalize)
+									existing_roles.join(',') %>
+							</span>
+							<span id="profile_role_edit_<%= user.id %>" style="display: none;">
+								<% form_remote_tag :url => change_role_profile_path(:authenticity_token => form_authenticity_token,
+										:login => (user.login rescue nil)), :method => :put do  %>
+									<%= select_tag :role, options_for_select([nil] + Profile::ROLES.map(&:capitalize),
+											 (Profile::ROLES.map(&:capitalize) & existing_roles).first) %>
+									<%= image_submit_tag 'add.png' %>
+								<% end if profile.owned_by? current_user %>
+							</span>
+						</td>
+						<td><%= link_to_function image_tag('pencil.png'), nil, :id => "profile_role_edit_link_#{user.id}" do |page|  
+									page["profile_role_#{user.id}"].toggle
+									page["profile_role_edit_#{user.id}"].toggle
+									page["profile_role_edit_link_#{user.id}"].toggle
+								end if profile.owned_by? current_user %></td>
+					</tr>
+				<% end %>
+				
+				<% if profile.owned_by? current_user 
+					# Unfortunately, we can't use a normal form_remote_tag here, because the form breaks on the row.
+					# Instead, we use a link_to_remote to submit the row itself as if it were a form (which it is).
+					# submit_to_remote is similar, but lacks the ability to take an image tag.
+					%>
+					<tr id='profile_new_role_<%= profile.id %>'>
+						<td><%= text_field_tag :login, nil, :size => 10 %></td>
+						<td><%= select_tag :role, options_for_select(Profile::ROLES.map(&:capitalize)) %></td>
+						<td><%= link_to_remote image_tag('add.png'), :submit => "profile_new_role_#{profile.id}", 
+									:url => change_role_profile_path(:authenticity_token => form_authenticity_token), :method => :put %></td>
+					</tr>
+				<% end %>
+			</table>
+		</div>
+	</span>
 <% end %>

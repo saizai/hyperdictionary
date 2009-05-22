@@ -1,3 +1,7 @@
+body {
+	font-family: georgia,arial,helvetica,clean,sans-serif;
+}
+
 th, td {
 	border: none;
 	padding: 0.1em;
@@ -139,7 +143,7 @@ textarea {
 	margin-top: 10px;
 }
 
-.comments .post .pic {
+.avatar {
 	float: left;
 	width: 80px;
 }

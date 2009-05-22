@@ -14,4 +14,7 @@ class Asset < ActiveRecord::Base
   
   named_scope :original, :conditions => {:parent_id => nil }
   
+  def self.width size
+    attachment_options[:thumbnails][size][/\d*/]
+  end
 end

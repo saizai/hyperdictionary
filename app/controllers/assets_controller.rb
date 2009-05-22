@@ -1,6 +1,4 @@
 class AssetsController < ApplicationController
-  # FIXME: Pass sessions through to allow cross-site forgery protection
-#  protect_from_forgery :except => :swfupload
   before_filter :login_required
   
   # GET /assets
@@ -105,9 +103,9 @@ class AssetsController < ApplicationController
     @creator = @asset.creator
     permit 'site_admin or (self of creator)'
     @asset.destroy
-
+    
     respond_to do |format|
-      format.js   { page.remove "asset_#{@asset.id}" }
+      format.js   { head :ok }
       format.html { redirect_to(assets_url) }
       format.xml  { head :ok }
     end

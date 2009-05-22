@@ -63,10 +63,6 @@ class User < ActiveRecord::Base
     self.has_role 'owner', profile
   end
   
-  def before_validate
-    self.identity_url.sub!(/\/$/, '') # remove trailing slashes
-  end
-  
   def last_active
     sessions.last.updated_at
   end
@@ -127,9 +123,9 @@ class User < ActiveRecord::Base
 #    end
   end
   
-  def avatar_asset
+  def avatar_asset size = :thumb
     # the self ensures we scope to this user's files
-    self.assets.find :first, :conditions => ["thumbnail = 'thumb' and filename LIKE ?", self.login + '_thumb.%']
+    self.assets.find :first, :conditions => ["thumbnail = '#{size}' and filename LIKE ?", self.login + "_#{size}.%"]
   end
   
   def identities_glob

@@ -27,7 +27,7 @@ class ProfilesController < ApplicationController
       format.xml  { render :xml => @profile }
     end
   end
-
+  
   # GET /profiles/new
   # GET /profiles/new.xml
   def new
@@ -44,6 +44,29 @@ class ProfilesController < ApplicationController
     @profile = Profile.find(params[:id])
     @owner = @profile.owner
     permit 'site_admin or (self of owner) or (editor of profile)'
+  end
+  
+  def change_role
+    @profile = Profile.find(params[:id])
+    permit 'site_admin or (owner of profile)'
+    @user = params[:login] ? User.find(params[:login]) : AnonUser
+    Profile::ROLES.each do |old_role|
+      @user.has_no_role old_role, @profile
+    end
+    @user.has_role params[:role], @profile if params[:role]
+    
+    respond_to do |format|
+      format.js { 
+        render :update do |page|
+          page.replace "profile_roles_container_#{@profile.id}", :partial => '/profiles/roles', :locals => {:profile => @profile, :shown => true}
+        end
+      }
+      format.html { 
+        flash[:notice] = 'Roles successfully updated.'
+        redirect_to @profile
+      }
+      format.xml { head :ok }
+    end
   end
 
   # POST /profiles

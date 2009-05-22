@@ -1,13 +1,13 @@
 module UsersHelper
-  def avatar user
+  def avatar user, size = :thumb
     if user
-      if asset = user.avatar_asset
+      if asset = user.avatar_asset(size)
         image_tag asset.public_filename
       else
-        image_tag user.gravatar_url
+        image_tag user.gravatar_url(:size => Asset.width(size))
       end
     else
-      image_tag 'anonymous_avatar.jpg'
+      image_tag 'anonymous_avatar.jpg', :width => Asset.width(size)
     end
   end
     
@@ -57,7 +57,7 @@ module UsersHelper
   # By default this will link to a user's *profile*, rather than the *user* per se. Pass :user => true to override.
   
   def link_to_user(user, options={})
-    return 'Anonymous' unless user
+    return 'Anonymous' unless user and user != AnonUser
     options.reverse_merge! :content_method => :login, :title_method => :login, :class => :nickname, :user => false
     content_text      = options.delete(:content_text)
     content_text    ||= user.send(options.delete(:content_method))

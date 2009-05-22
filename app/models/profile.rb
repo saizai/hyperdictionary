@@ -24,9 +24,10 @@ class Profile < ActiveRecord::Base
   attr_accessible :name, :body, :url, :profile_type_id, :tag_list # User must be set explicitly
   
   # Standard roles that moderators can set. These are mutually exclusive.
-  ROLES = %w(reader commenter editor member moderator owner)
-  ROLE_VERBS = %w(read commented edited member moderated owned)
-  # There's also: Subscriber 
+  ROLES = %w(reader commenter tagger editor member moderator owner)
+  ROLE_VERBS = %w(read commented tagged edited member moderated owned)
+  
+  EXTRA_ROLES = %w(subscriber)
   
   def after_create
     creator.has_role 'owner', self if creator

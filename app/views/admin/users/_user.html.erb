@@ -1,21 +1,21 @@
 <tr class="<%= cycle('odd', 'even') %>" id="user_<%= user.id %>">
 	<td><%= user.id %></td>
-	<td><%= link_to_user user %> (<%= link_to 'prefs', user_path(user) %>)</td>
+	<td><%= link_to image_tag('person.png'), user_path(user), :title => 'Preferences page' %><%= link_to_user user %></td>
 	<td><%= h user.email %></td>
 	<td><%= user.ips.join(', ') %></td>
 	<td><%= user.multis.map{|multi| link_to multi.login, user_path(multi) }.join(', ') %>
 	<td><%= user.activated_at.to_s :short %>
 		<% if !user.activated? %>
-			<%= link_to_remote 'activate', :url => admin_user_path(user), :method => :put %>
+			<%= link_to_remote image_tag('accept.png'), {:url => admin_user_path(user), :method => :put}, :title => 'Force activation' %>
 		<% end %>
 	</td> 
 	<td>
 		<%= check_box_only user.crypted_password? %>
-		<%= link_to_remote 'reset', :url => reset_admin_user_path(user), :method => :put %>
-		<%= '<small>(sent)</small>' if user.password_reset_code? %>
+		<%= link_to_remote image_tag("email#{ '_open' if user.password_reset_code?}.png"), {:url => reset_admin_user_path(user), :method => :put}, 
+				:title => "Email password reset link#{ ' (again)' if user.password_reset_code? }" %>
 	</td>
 	<td style="max-width: 400px; overflow-x: hidden;">
-		<span style="margin-right: 5px; float: left;"><%= link_to_function("add", :id => "add_url_link_#{user.id}") do |page|
+		<span style="margin-right: 5px; float: left;"><%= link_to_function(image_tag('add.png'), :id => "add_url_link_#{user.id}") do |page|
 				page["add_url_link_#{user.id}"].hide
 				page["add_url_#{user.id}"].visual_effect :appear, :duration => 0.2
 			end %>
@@ -29,16 +29,16 @@
 		<% form_remote_tag :url => map_admin_user_path(user), :method => :put do  %>
 			<span id="add_url_<%= user.id %>" style="display: none;"><br/>
 				<%= text_field_tag :url, nil, :style => 'width: 70%;' %>
-				<%= submit_tag 'Add' %>
+				<%= image_submit_tag 'add.png' %>
 			</span>
 		<% end %>
 	</td>
 	<td><%= user.state %>
 		<% unless user == current_user %>
 		  <% if user.active? %>
-		    <%= link_to_remote 'disable', :url => suspend_admin_user_path(user), :method => :put  %>
+		    <%= link_to_remote image_tag('flag_yellow.png'), {:url => suspend_admin_user_path(user), :method => :put}, :title => 'Suspend user'  %>
 		  <% else %>
-		    <%= link_to_remote 'enable', :url => unsuspend_admin_user_path(user), :method => :put  %>
+		    <%= link_to_remote image_tag('flag_green.png'), {:url => unsuspend_admin_user_path(user), :method => :put}, :title => 'Unsuspend user'  %>
 		  <% end %>
 		<% end %>
 	</td>

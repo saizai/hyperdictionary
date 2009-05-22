@@ -1,16 +1,18 @@
 <div>
+	<div class='avatar'>
+		<%= avatar profile.owner %>
+	</div>
 	<h2><%=h profile.name %>
+		<% content_tag :span, link_to(h(profile.url), profile.url), :class => 'url' if profile.url %>
 		<small>
 			(<%= h profile.profile_type.name %>)
 			<% if profile.edited_by? current_user %>
-				<span><%= link_to 'Edit', edit_profile_path(profile) %></span>
+				<span><%= link_to image_tag('page_edit.png'), edit_profile_path(profile) %></span>
 			<% end %>
+			<%= render :partial => '/profiles/roles', :locals => {:profile => profile} %>
 		</small>
-			<% content_tag :span, link_to(h(profile.url), profile.url), :class => 'url' if profile.url %>
 	</h2>
 </div>
-
-<%= render :partial => '/profiles/roles', :locals => {:profile => profile} %>
 
 <div>
   <%= markdown profile.body %>
@@ -19,6 +21,9 @@
 <% profile.tags.each do |tag| -%>
 	<%= link_to_tag(tag) %>
 <% end -%>
+<% if profile.commented_by? current_user %>
+	<%= image_tag 'tag_edit.png' %>
+<% end %>
   
 <% if profile.lock_version > 1 and profile.edited_by? current_user %>
 	<div style="margin: 20px 0px 10px; 1px solid black;">Revision history:</div>

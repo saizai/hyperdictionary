@@ -3,7 +3,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :assets, :collection => { :swfupload => :post }, :member => {:download => :get}
   map.resources :tags
-  map.resources :profiles
+  map.resources :profiles, :member => {:change_role => :put}
 
   map.resources :comments, :member => {:moderate => :put, :screen => :put }
 

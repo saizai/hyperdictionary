@@ -7,7 +7,7 @@
 	<% end %>
 </td>
 <td>
-	<%= link_to_function("add", :id => "add_link_#{user.id}") do |page|
+	<%= link_to_function(image_tag('add.png'), :id => "add_link_#{user.id}") do |page|
 			page["add_link_#{user.id}"].hide
 			page["add_#{user.id}"].visual_effect :appear, :duration => 0.2
 		end %>
@@ -16,7 +16,7 @@
 			Role <%= text_field_tag :name, nil, :size => 10 %>
 			Class <%= select_tag 'class', options_for_select([nil] + model_names, nil), :include_blank => true  %>
 			ID <%= text_field_tag :class_id, nil, :size => 3 %>
-			<%= submit_tag 'Add' %>
+			<%= image_submit_tag 'add.png' %>
 		</span>
 	<% end %>
 </td>

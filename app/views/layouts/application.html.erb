@@ -13,6 +13,11 @@
 <body class="<%= body_class %>"> 
 	<div id="doc2" class="yui-t1"><!—-overall document wrapper--> 
 		<div id="hd" role="banner"><!--header / masthead-->
+			<noscript>
+				<div style="font-size: 1.5em;" class="flash error">
+					Please turn on JavaScript!
+				</div>
+			</noscript>
 			<%= render :partial => 'layouts/user_header' %>
 		</div> 
 		<div id="bd"><!--body-->

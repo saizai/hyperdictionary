@@ -67,6 +67,19 @@ class ProfilesController < ApplicationController
       }
       format.xml { head :ok }
     end
+    
+  rescue ActiveRecord::RecordNotFound
+    respond_to do |format|
+      format.js { 
+        render :update do |page|
+          page.alert "User #{params[:login]} not found."
+        end
+      }
+      format.html { 
+        flash[:error] = "User #{params[:login]} not found."
+        redirect_to @profile
+      }
+    end
   end
 
   # POST /profiles

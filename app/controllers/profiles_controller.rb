@@ -69,14 +69,15 @@ class ProfilesController < ApplicationController
     end
     
   rescue ActiveRecord::RecordNotFound
+    error_text = "User #{params[:login]} not found."
     respond_to do |format|
       format.js { 
         render :update do |page|
-          page.alert "User #{params[:login]} not found."
+          page.alert error_text
         end
       }
       format.html { 
-        flash[:error] = "User #{params[:login]} not found."
+        flash[:error] = error_text
         redirect_to @profile
       }
     end

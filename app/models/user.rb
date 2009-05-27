@@ -52,7 +52,7 @@ class User < ActiveRecord::Base
   def before_save
     # not before_create; this catches the case of a deleted profile
     unless self.profile
-      self.build_profile :profile_type_id => ProfileType.find_or_create_by_name('person'), :url => self.identities.first.url, :name => self.login, 
+      self.build_profile :profile_type_id => ProfileType.find_or_create_by_name('person'), :url => self.identities.first.try(:url), :name => self.login, 
         :body => "Hi, my name is #{self.name}; I'm new here. Say hello!"
     end
   end

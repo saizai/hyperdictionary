@@ -30,7 +30,11 @@ class Profile < ActiveRecord::Base
   EXTRA_ROLES = %w(subscriber)
   
   def after_create
-    creator.has_role 'owner', self if creator
+    if creator
+      creator.has_role 'owner', self
+      creator.has_role 'subscriber', self
+    end
+    
     AnonUser.has_role 'commenter', self
   end
   

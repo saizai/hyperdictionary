@@ -42,9 +42,10 @@ If you are interested in participating, please join our mailing list. We need Ru
 
 === Inspiration
 
-* {Kura}[http://www.kura.ats.lmu.de]
+* {Kura}[http://www.kura.ats.lmu.de] {old site}[http://rempt.xs4all.nl/linguistics/proposal.html]
 * {Linguist's Shoebox}[http://www.sil.org/computing/shoebox]
 * {ELAN}[http://www.mpi.nl/tools/elan]
 * {WordNet}[http://wordnet.princeton.edu]
 * {EtymOnline}[http://etymonline.com]
 * {Wiktionary}[http://wiktionary.org]
+* {Natural Language ToolKit}[http://www.nltk.org/]

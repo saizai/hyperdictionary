@@ -21,12 +21,16 @@ class Comment < ActiveRecord::Base
   validates_associated :comment_type
   validates_presence_of :comment_type
   
-  
   def visible_to? user
     user ||= AnonUser
     commentable.read_by?(user) and
       (!moderated or commentable.moderated_by? user) and
       (!private or commentable.member_by? user or (creator_id and user.id == creator_id))
+  end
+  
+  def after_create
+    # The fancy method_missing 'has_subscribers' fails on polymorphic associations for some reason
+    (commentable.has_roles('subscriber') - [creator]).each {|subscriber| CommentMailer.deliver_new self, subscriber }
   end
   
 end

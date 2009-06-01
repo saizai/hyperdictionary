@@ -66,7 +66,7 @@ class CommentsController < ApplicationController
   def screen
     @comment = Comment.find(params[:id])
     @commenter = @comment.creator
-    @owner = @comment.commentable.try :user
+    @owner = @comment.commentable.try :owner
     permit 'site_admin or (self of commenter) or (self of owner)'
     
     @comment.toggle :private

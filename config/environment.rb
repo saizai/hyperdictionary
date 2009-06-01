@@ -11,6 +11,12 @@ if ENV['RAILS_ENV'] == 'production'  # don't bother on dev
 #  require '/home/kura2/.gem/ruby/1.8/gems/RedCloth-4.1.9/lib/redcloth.rb'  # Need this for EACH LOCAL gem you want to use, otherwise it uses the ones in /usr/lib
 end
 
+# Redirect logger to console if using it
+if "irb" == $0
+   RAILS_DEFAULT_LOGGER = Logger.new(STDOUT)
+end
+
+
 Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
@@ -44,6 +50,7 @@ Rails::Initializer.run do |config|
 #  config.gem 'RedCloth', :lib => 'redcloth'
   config.gem 'bluecloth' # lowercase is 2.x, camelcase is 1.x
   config.gem 'utf8proc'
+  # config.gem 'fiveruns_tuneup', :version => '>= 0.8.20'
   
   # Add additional load paths for your own custom dirs
   # config.load_paths += %W( #{RAILS_ROOT}/extras )
@@ -67,3 +74,4 @@ Rails::Initializer.run do |config|
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
   # config.i18n.default_locale = :de
 end
+

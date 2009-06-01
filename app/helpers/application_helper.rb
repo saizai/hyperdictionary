@@ -22,6 +22,10 @@ module ApplicationHelper
     check_box_tag nil, nil, value, :disabled => true
   end
   
+  def full_title
+    APP_NAME.humanize + (@title ? ": #{@title}" : '')
+  end
+  
 #  def markdowwn text
 #    BlueCloth.new(h(text)).to_html
 #  end

@@ -3,7 +3,7 @@ class Profile < ActiveRecord::Base
   acts_as_paranoid
   acts_as_taggable
   acts_as_versioned :version_column => 'lock_version', :extend => Ddb::Userstamp::Stampable::ClassMethods, :versioned_globs => :translations_glob
-  has_friendly_id :name, :use_slug => true
+  has_friendly_id :name #, :use_slug => true
   stampable
   translates :body 
   
@@ -32,6 +32,10 @@ class Profile < ActiveRecord::Base
   def after_create
     creator.has_role 'owner', self if creator
     AnonUser.has_role 'commenter', self
+  end
+  
+  def after_save
+    (self.has_subscribers - [updater]).each {|subscriber| ProfileMailer.deliver_update self, subscriber }
   end
   
   # This is used by versioning; we don't want to version the translations table per se, just serialize it like this

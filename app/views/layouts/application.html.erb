@@ -1,65 +1,67 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
  
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-  <title><%= APP_NAME.humanize %><%= ' :' + @title if @title %></title>
-  <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.7.0/build/reset-fonts-grids/reset-fonts-grids.css&2.7.0/build/base/base-min.css">
-  <%= stylesheet_link_tag :all, :cache => true %>
-  <%= javascript_include_tag :all, :cache => true %>
-</head>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<%= I18n.locale %>" lang="<%= I18n.locale %>">
+	<head>
+	  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+	  <meta name='title' content='<%= full_title %>' />
+	  <meta name="description" content=<%= @description %> />
+	  <title><%= full_title %></title>
+	  <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.7.0/build/reset-fonts-grids/reset-fonts-grids.css&2.7.0/build/base/base-min.css">
+	  <%= stylesheet_link_tag :all, :cache => true %>
+	  <%= javascript_include_tag :all, :cache => true %>
+	</head>
 
-<body class="<%= body_class %>"> 
-	<div id="doc2" class="yui-t1"><!—-overall document wrapper--> 
-		<div id="hd" role="banner"><!--header / masthead-->
-			<noscript>
-				<div style="font-size: 1.5em;" class="flash error">
-					Please turn on JavaScript!
-				</div>
-			</noscript>
-			<%= render :partial => 'layouts/user_header' %>
-		</div> 
-		<div id="bd"><!--body-->
-			<div id="yui-main"> 
-				<div class="yui-b" id="content"  role="main"><!--primary-->
-					<%= render :partial => '/layouts/flashes' -%>
-					<%= render :partial => '/alerts/welcome' %>
-					<%= yield %>
+	<body class="<%= body_class %>"> 
+		<div id="doc2" class="yui-t1"><!—-overall document wrapper--> 
+			<div id="hd" role="banner"><!--header / masthead-->
+				<noscript>
+					<div style="font-size: 1.5em;" class="flash error">
+						Please turn on JavaScript!
+					</div>
+				</noscript>
+				<%= render :partial => 'layouts/user_header' %>
+			</div> 
+			<div id="bd"><!--body-->
+				<div id="yui-main"> 
+					<div class="yui-b" id="content"  role="main"><!--primary-->
+						<%= render :partial => '/layouts/flashes' -%>
+						<%= render :partial => '/alerts/welcome' %>
+						<%= render :partial => '/layouts/addthis' %>
+						<%= yield %>
+					</div> 
+				</div> 
+				<div class="yui-b"><!--secondary-->
+					<ul class='menu' role="complementary navigation">
+						<li><%= link_to 'Main', root_path %></li>
+						<li><%= link_to 'About', about_path %>
+						<li><%= link_to 'Profiles', profiles_path %></li>
+						<li><a href="#" onclick="UserVoice.Popin.show(); return false;">Feedback</a></li>
+						<% if logged_in? %>
+							<li class='first'><%= link_to 'Home', home_path %></li>
+							<li><%= link_to 'Preferences', user_path(current_user) %></li>
+						<% end %>
+						<% if logged_in_as_admin? %>
+							<li class='first'><%= link_to 'Admin', admin_root_path %></li>
+								<ul style="margin: 0 0 0 1em;">
+								    <li><%= link_to "Users", admin_users_path %></li>
+									<li><%= link_to "Exceptions", admin_logged_exceptions_path %></li>
+									<li><%= link_to "404s", admin_four_oh_fours_path %></li>
+									<li><%= link_to "Preferences", admin_preferences_path %></li>
+								</ul>
+						<% end %>
+					</ul>
 				</div> 
 			</div> 
-			<div class="yui-b"><!--secondary-->
-				<ul class='menu' role="complementary navigation">
-					<li><%= link_to 'Main', root_path %></li>
-					<li><%= link_to 'About', about_path %>
-					<li><%= link_to 'Profiles', profiles_path %></li>
-					<li><a href="#" onclick="UserVoice.Popin.show(); return false;">Feedback</a></li>
-					<% if logged_in? %>
-						<li class='first'><%= link_to 'Home', home_path %></li>
-						<li><%= link_to 'Preferences', user_path(current_user) %></li>
-					<% end %>
-					<% if logged_in_as_admin? %>
-						<li class='first'><%= link_to 'Admin', admin_root_path %></li>
-							<ul style="margin: 0 0 0 1em;">
-							    <li><%= link_to "Users", admin_users_path %></li>
-								<li><%= link_to "Exceptions", admin_logged_exceptions_path %></li>
-								<li><%= link_to "404s", admin_four_oh_fours_path %></li>
-								<li><%= link_to "Preferences", admin_preferences_path %></li>
-							</ul>
-					<% end %>
-				</ul>
+			<div id="ft" role="contentinfo"><!--footer-->
+				<% if Rails.env.development? or logged_in_as_admin? %>
+				  <div id="footnotes_holder">
+				  </div>
+				<% end %>
 			</div> 
 		</div> 
-		<div id="ft" role="contentinfo"><!--footer-->
-			<% if Rails.env.development? or logged_in_as_admin? %>
-			  <div id="footnotes_holder">
-			  </div>
-			<% end %>
-		</div> 
-	</div> 
-	<%= render :partial => '/layouts/uservoice' %>
-</body> 
-
+		<%= render :partial => '/layouts/uservoice' %>
+	</body> 
 </html>
 
 

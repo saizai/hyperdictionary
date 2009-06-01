@@ -108,8 +108,7 @@ module Authorization
             user_count_of(roles)
           elsif method_name =~ /^has_(\w+)$/
             roles = roles_array_from($1)
-            users = self.accepted_roles.find_all_by_name(roles, :include => :users).collect { |role| role.users }
-            users.flatten.compact.uniq if users
+            has_roles roles
           else
             super
           end

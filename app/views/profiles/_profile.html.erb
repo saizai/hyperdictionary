@@ -9,6 +9,9 @@
 			<% if profile.edited_by? current_user %>
 				<span><%= link_to image_tag('page_edit.png'), edit_profile_path(profile) %></span>
 			<% end %>
+			<span style="float:right;" id="profile_<%=profile.id %>_subscribe">
+				<%= render :partial => '/profiles/subscribe', :locals => {:profile => profile} %>
+			</span>
 			<%= render :partial => '/profiles/roles', :locals => {:profile => profile} %>
 		</small>
 	</h2>

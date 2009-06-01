@@ -1,0 +1,7 @@
+<%= @user.name%>, <%= @comment.creator.try(:name) || 'Anonymous' %> left a new comment<%- if @commentable_name %> on <%= @commentable_name %><% end -%>:
+
+<%= @comment.body %>
+
+Visit <%= @url %> to change your subscription settings.
+
+- <%= APP_NAME %>

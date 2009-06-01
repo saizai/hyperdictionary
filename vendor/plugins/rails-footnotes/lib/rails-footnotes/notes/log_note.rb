@@ -18,6 +18,9 @@ module Footnotes
           else 
             RAILS_DEFAULT_LOGGER.instance_variable_get('@logdev').filename
           end
+          
+          return 'in console' unless filename
+          
           file_string = File.open(filename).read.to_s
 
           # We try to select the specified action from the log

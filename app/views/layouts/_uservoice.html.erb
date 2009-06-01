@@ -1,7 +1,12 @@
-<script type="text/javascript">
-  var uservoiceJsHost = ("https:" == document.location.protocol) ? "https://uservoice.com" : "http://cdn.uservoice.com";
-  document.write(unescape("%3Cscript src='" + uservoiceJsHost + "/javascripts/widgets/tab.js' type='text/javascript'%3E%3C/script%3E"))
-</script>
+<% if false
+	# This fetches the script from UV's CDN. In theory, this would be faster. 
+	# Unfortunately, their CDN kinda sucks, so it's in our own js directory. This means we need to update it if it changes.
+	 %>
+	<script type="text/javascript">
+	  var uservoiceJsHost = ("https:" == document.location.protocol) ? "https://uservoice.com" : "http://cdn.uservoice.com";
+	  document.write(unescape("%3Cscript src='" + uservoiceJsHost + "/javascripts/widgets/tab.js' type='text/javascript'%3E%3C/script%3E"))
+	</script>
+<% end %>
 <script type="text/javascript">
 UserVoice.Popin.setup({ 
 	key: '<%= USERVOICE_KEY %>',

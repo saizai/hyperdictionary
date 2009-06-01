@@ -21,7 +21,8 @@ class ProfilesController < ApplicationController
 #    else
       @profile = Profile.find(params[:id], :include => [:assets, {:comments => :creator}])
 #    end
-
+    @title = @profile.name
+    
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @profile }
@@ -44,6 +45,24 @@ class ProfilesController < ApplicationController
     @profile = Profile.find(params[:id])
     @owner = @profile.owner
     permit 'site_admin or (self of owner) or (editor of profile)'
+  end
+  
+  def subscribe
+    @profile = Profile.find(params[:id])
+    if subscribed = current_user.has_role?('subscriber', @profile)
+      current_user.has_no_role 'subscriber', @profile
+    else
+      current_user.has_role 'subscriber', @profile
+    end
+    
+    respond_to do |format|
+      format.js   { render :partial => '/profiles/subscribe', :locals => {:profile => @profile}  }
+      format.html {
+        flash[:notice] = "Successfully #{ 'un' if subscribed }subscribed."
+        redirect_to @profile
+      }
+      format.xml  { head :ok }
+    end
   end
   
   def change_role

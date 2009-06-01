@@ -73,7 +73,8 @@ textarea {
 }
 
 .tooltip {
-    position: relative; /*this is the key*/
+    position:	relative; /*this is the key*/
+	cursor:		help;
 }
 
 .tooltip span {

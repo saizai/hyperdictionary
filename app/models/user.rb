@@ -56,10 +56,11 @@ class User < ActiveRecord::Base
     end
   end
   
-  def after_save
+  def after_create
     # Profile wasn't able to set this itself, 'cause user didn't yet exist (ish)
     # TODO: could probably be made to work automatically w/ profile.after_create somehow...
     self.has_role 'owner', profile
+    self.has_role 'subscriber', profile
   end
   
   def last_active

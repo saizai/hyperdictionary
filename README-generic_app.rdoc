@@ -12,7 +12,8 @@ This is a full featured yet generic application. It comes with:
 * users vs profiles separation (so you can have profiles for other things too, like groups, w/ the same code)
 * user preferences
 * role-based authorization w/ handling of roles for anonymous users
-* comments and tagging w/ AJAX
+* comments and tagging w/ AJAX, subscription, & email notification
+* intelligent profile role levels
 * fancy file upload (attachment_fu + SWFUpload)
 * fancy namespaced admin views for managing users, seeing debug info inline, etc (some debug info will be visible to all users if in dev mode)
 * WAI ARIA support (for use w/ screen readers, e.g. visually impaired people)
@@ -30,9 +31,8 @@ This is a full featured yet generic application. It comes with:
 
 Things to be aware of:
 * If changing things in-place (e.g. w/ << instead of foo=), first call foo_will_change!, otherwise versioning (and other stuff) will break.
-* The API keys will need to be changed off localhost or stuff will break.
-* You'll need a unique RPXNow API key for every deployment, because it's synchronized with the user database (so eg if you have multiple developers, each needs a key for their own localhost)
-* First admin user must be set via console (e.g. User.first.has_role 'admin')
+* You need to get your own API keys. Some of mine will work, but only for localhost. Look in config/initializers.
+* First admin user must be set via console (e.g. User.first.has_role 'site_admin')
 * The frozen rails version has been patched with this: https://rails.lighthouseapp.com/projects/8994/tickets/1339-arbase-should-not-be-nuking-its-children-just-because-it-lost-interest
 
 == Full externals list

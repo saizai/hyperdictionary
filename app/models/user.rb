@@ -30,9 +30,11 @@ class User < ActiveRecord::Base
   validates_length_of       :login,    :within => 3..40
   validates_uniqueness_of   :login
   validates_format_of       :login,    :with => Authentication.login_regex, :message => Authentication.bad_login_message
+  validates_exclusion_of    :login,    :in => %w( anonymous anonuser admin )
 
   validates_format_of       :name,     :with => Authentication.name_regex,  :message => Authentication.bad_name_message, :allow_nil => true
   validates_length_of       :name,     :maximum => 100
+  
   
   validates_presence_of     :email
   validates_uniqueness_of   :email

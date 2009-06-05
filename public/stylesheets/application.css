@@ -146,7 +146,16 @@ textarea {
 
 .avatar {
 	float: left;
+}
+
+.avatar.thumb {
 	width: 80px;
+	margin: 0 10px 10px 0;
+}
+
+.avatar.icon {
+	width: 16px;
+	margin: 0 2px 0 0;
 }
 
 .comments .post .content {

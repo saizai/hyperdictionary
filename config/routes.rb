@@ -25,7 +25,9 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :four_oh_fours
     admin.resources :users, :member => {:suspend => :put, :unsuspend => :put, :purge => :delete, :activate => :put, 
                                         :add_role => :put, :remove_role => :delete, :unmap => :delete, :map => :put,
-                                        :reset => :put } do |users|
+                                        :reset => :put },
+                            # This is really a member function, but we don't know which member until after runtime, so we can't require ID
+                            :collection => {:spoof => :put} do |users|
       users.resources :roles
     end
   end

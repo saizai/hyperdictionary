@@ -2,23 +2,47 @@ module AuthenticatedSystem
   protected
     # Returns true or false if the user is logged in.
     # Preloads @current_user with the user model if they're logged in.
-    def logged_in?
-      !!current_user
+    def logged_in?(do_not_spoof = false)
+      current_user(do_not_spoof) and current_user(do_not_spoof) != AnonUser
     end
-
+    
     # Accesses the current user from the session.
     # Future calls avoid the database because nil is not equal to false.
-    def current_user
+    def current_user(do_not_spoof = false)
       @current_user ||= (login_from_session || login_from_basic_auth || login_from_cookie) unless @current_user == false
+      if do_not_spoof
+        @current_user || AnonUser
+      else
+        # We have to duplicate the logic here a bit, or it hits infinite recursion checking the role.
+        @spoofed_current_user = if session[:spoofing_user?] and @current_user.has_role?('site_admin')
+          session[:spoofed_user].blank? ? AnonUser : User.find(session[:spoofed_user])
+        else
+          @current_user
+        end
+      end
     end
-
+    
     # Store the given user id in the session.
     def current_user=(new_user)
       session[:user_id] = new_user ? new_user.id : nil
       @current_user = new_user || false
     end
-
-    # Check if the user is authorized
+    
+    def logged_in_as_admin?(do_not_spoof = false)
+      logged_in?(do_not_spoof) and current_user(do_not_spoof).has_role?('site_admin')
+    end
+    
+    def spoofing_user?
+      current_user != current_user(true)
+    end
+       
+    # Inclusion hook to make #current_user and #logged_in?
+    # available as ActionView helper methods.
+    def self.included(base)
+      base.send :helper_method, :current_user, :logged_in?, :logged_in_as_admin?, :really_logged_in_as_admin?, :spoofing_user?, :spoofed_user if base.respond_to? :helper_method
+    end
+    
+     # Check if the user is authorized
     #
     # Override this method in your controllers if you want to restrict access
     # to only a few actions or if you want to check if the user
@@ -32,6 +56,7 @@ module AuthenticatedSystem
     #  end
     #
     def authorized?(action = action_name, resource = nil)
+      raise "This should not be called; use authorization plugin instead"
       logged_in?
     end
 
@@ -50,7 +75,7 @@ module AuthenticatedSystem
     #   skip_before_filter :login_required
     #
     def login_required
-      authorized? || access_denied
+      logged_in? || access_denied
     end
 
     # Redirect as appropriate when an access request fails.
@@ -93,12 +118,6 @@ module AuthenticatedSystem
       session[:return_to] = nil
     end
 
-    # Inclusion hook to make #current_user and #logged_in?
-    # available as ActionView helper methods.
-    def self.included(base)
-      base.send :helper_method, :current_user, :logged_in?, :authorized? if base.respond_to? :helper_method
-    end
-
     #
     # Login
     #
@@ -134,12 +153,16 @@ module AuthenticatedSystem
     # havoc with forgery protection, and is only strictly necessary on login.
     # However, **all session state variables should be unset here**.
     def logout_keeping_session!
+      logger.info "AUDIT: Admin #{@current_user.login} stopped spoofing user #{User.find(session[:spoofed_user]).login rescue 'not found'} (via logout)" if session[:spoofing_user?]
+      
       # Kill server-side auth cookie
       @current_user.forget_me if @current_user.is_a? User
       @current_user = false     # not logged in, and don't do it for me
       kill_remember_cookie!     # Kill client-side auth cookie
       session[:user_id] = nil   # keeps the session but kill our variable
       # explicitly kill any other session variables you set
+      session[:spoofed_user] = nil
+      session[:spoofing_user?] = nil
     end
 
     # The session should only be reset at the tail end of a form POST --
@@ -153,9 +176,6 @@ module AuthenticatedSystem
     #
     # Remember_me Tokens
     #
-    # Cookies shouldn't be allowed to persist past their freshness date,
-    # and they should be changed at each login
-
     # Cookies shouldn't be allowed to persist past their freshness date,
     # and they should be changed at each login
 

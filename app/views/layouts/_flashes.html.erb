@@ -1,7 +1,34 @@
 <div id="flashes">
 	<% flash.each do |key, value| -%>
-			<div class="flash <%= key %>">
-				<%=h value %>
-			</div>
+		<div class="flash <%= key %>">
+			<%=h value %>
+		</div>
+	<% end -%>
+	<% [:info, :error, :warning].each do |type| 
+		id = "js_flash_#{type}" -%>
+		<div class="flash <%= type %>" style="display: none;" id="<%= id %>">
+		</div>
+		<%= javascript_tag <<-END
+				var #{id}_lock = false;
+				$('#{id}').observe('DOMSubtreeModified', function(event) { 
+					// This lock is necessary because Firefox (but not Safari; dunno IE) will throw a SubtreeModified event when the following code is executed.
+					// Which in turn invokes this observer. Which recurses and causes stack overflow, i.e. Firefox hang/crash. Boo.
+					if(!#{id}_lock) {
+						#{id}_lock = true;
+						#{ update_page do |page|
+						  page[id].appear
+					      page.delay(5) do
+					        page[id].fade
+							# CRITICALLY IMPORTANT - The assignment MUST occur AFTER everything else is done.
+							# NOTE: Prototype/Scriptaculous will execute all these statements in sequence, but NOT wait for them to finish (including delays)!
+							# This means it must be done here; if it's at the end of the observer, then it'll get hit before Scriptaculous is done.
+							page.delay(2) do
+								page.assign "#{id}_lock", false
+							end
+					      end
+						end }
+					} });
+			END
+		%>
 	<% end -%>
 </div>

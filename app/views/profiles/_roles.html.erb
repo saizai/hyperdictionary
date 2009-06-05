@@ -1,12 +1,11 @@
 <% if profile.edited_by? current_user %>
 	<span id='profile_roles_container_<%= profile.id %>'>
-		<%= link_to_function(image_tag('user_edit.png'), :id => "profile_roles_link_#{profile.id}") do |page|
+		<%= link_to_function(image_tag('user_edit.png'), :id => "profile_roles_link_#{profile.id}", :title => "Show / edit roles") do |page|
 			page.visual_effect :toggle_blind, "profile_roles_#{profile.id}"
 		end %>
 		<div id='profile_roles_<%= profile.id %>' <%= 'style="display: none;"' unless defined? shown and shown %>>
 			<table>
 				<tr>
-					<th>User</th>
 					<th><span class="tooltip highlight">Role 
 						<span><dl>
 							<dt>Reader</dt><dd>can read the profile & public comments</dd>
@@ -18,30 +17,13 @@
 							<dt>Owner</dt><dd>can also set these roles and delete comments</dd>
 						</dl></span></span>
 					</th>
+					<th>User</th>
 				</tr>
 				
-				<% ([AnonUser] + profile.users).each do |user| %>
+				<% profile.users_by_roles.each do |role, users| %>
 					<tr>
-						<td><%= link_to_user user %></td>
-						<td>
-							<span id="profile_role_<%= user.id %>">
-								<%= existing_roles = profile.accepted_roles_by(user).map(&:name).map(&:capitalize)
-									existing_roles.join(',') %>
-							</span>
-							<span id="profile_role_edit_<%= user.id %>" style="display: none;">
-								<% form_remote_tag :url => change_role_profile_path(:authenticity_token => form_authenticity_token,
-										:login => (user.login rescue nil)), :method => :put do  %>
-									<%= select_tag :role, options_for_select([nil] + Profile::ROLES.map(&:capitalize),
-											 (Profile::ROLES.map(&:capitalize) & existing_roles).first) %>
-									<%= image_submit_tag 'add.png' %>
-								<% end if profile.owned_by? current_user %>
-							</span>
-						</td>
-						<td><%= link_to_function image_tag('pencil.png'), nil, :id => "profile_role_edit_link_#{user.id}" do |page|  
-									page["profile_role_#{user.id}"].toggle
-									page["profile_role_edit_#{user.id}"].toggle
-									page["profile_role_edit_link_#{user.id}"].toggle
-								end if profile.owned_by? current_user %></td>
+						<td><%= role.capitalize %></td>
+						<td><%= users.map{|user| link_to_user user}.join(', ') %></td>
 					</tr>
 				<% end %>
 				
@@ -51,10 +33,22 @@
 					# submit_to_remote is similar, but lacks the ability to take an image tag.
 					%>
 					<tr id='profile_new_role_<%= profile.id %>'>
+						<td><%= select_tag :role, options_for_select([nil] + Profile::ROLES.map(&:capitalize)) %></td>
 						<td><%= text_field_tag :login, nil, :size => 10 %></td>
-						<td><%= select_tag :role, options_for_select(Profile::ROLES.map(&:capitalize)) %></td>
 						<td><%= link_to_remote image_tag('add.png'), :submit => "profile_new_role_#{profile.id}", 
-									:url => change_role_profile_path(:authenticity_token => form_authenticity_token), :method => :put %></td>
+									:url => change_role_profile_path(:authenticity_token => form_authenticity_token), :method => :put %>
+							<span class="tooltip highlight">What's this? 
+								<span>
+									To add OR change a role, just select the role, type the user's name, and press the <%= image_tag('add.png')%>.<br/>
+									To remove a role (i.e. remove all special permissions a user has), select the top (empty) choice from the roles list.<br/>
+									To change the default permissions, type 'anonymous' for the user (or leave it blank).<br/>
+									Please note: you can't set special permissions for logged in users vs truly anonymous users.<br/>
+									<br/>
+									Hover over 'Role' above to see what all the roles mean.<br/>
+									By default, Anonymous is a Commenter.
+								</span>
+							</span>			
+						</td>
 					</tr>
 				<% end %>
 			</table>

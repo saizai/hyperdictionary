@@ -67,24 +67,24 @@ class CommentsController < ApplicationController
     @comment = Comment.find(params[:id])
     @commenter = @comment.creator
     @owner = @comment.commentable.try :owner
-    permit 'site_admin or (self of commenter) or (self of owner)'
-    
-    @comment.toggle :private
-    
-    respond_to do |format|
-      if @comment.save
-        format.js   { render :partial => 'comment'  }
-        format.html {
-          flash[:notice] = 'Comment was successfully screened.'
-          redirect_to comment.commentable 
-        }
-        format.xml  { head :ok }
-      else
-        format.html { 
-          flash[:notice] = 'Error screening comment.'
-          redirect_to comment.commentable 
-        }
-        format.xml  { render :xml => @comment.errors, :status => :unprocessable_entity }
+    permit 'site_admin or (self of commenter) or (self of owner)' do
+      @comment.toggle :private
+      
+      respond_to do |format|
+        if @comment.save
+          format.js   { render :partial => 'comment'  }
+          format.html {
+            flash[:notice] = 'Comment was successfully screened.'
+            redirect_to comment.commentable 
+          }
+          format.xml  { head :ok }
+        else
+          format.html { 
+            flash[:notice] = 'Error screening comment.'
+            redirect_to comment.commentable 
+          }
+          format.xml  { render :xml => @comment.errors, :status => :unprocessable_entity }
+        end
       end
     end
   end
@@ -118,16 +118,17 @@ class CommentsController < ApplicationController
 #  def update
 #    @comment = Comment.find(params[:id])
 #    @commenter = @comment.creator
-#    permit 'site_admin or (self of commenter)'
+#    permit 'site_admin or (self of commenter)' do
 #
-#    respond_to do |format|
-#      if @comment.update_attributes(params[:comment])
-#        flash[:notice] = 'Comment was successfully updated.'
-#        format.html { redirect_to(@comment) }
-#        format.xml  { head :ok }
-#      else
-#        format.html { render :action => "edit" }
-#        format.xml  { render :xml => @comment.errors, :status => :unprocessable_entity }
+#      respond_to do |format|
+#        if @comment.update_attributes(params[:comment])
+#          flash[:notice] = 'Comment was successfully updated.'
+#          format.html { redirect_to(@comment) }
+#          format.xml  { head :ok }
+#        else
+#          format.html { render :action => "edit" }
+#          format.xml  { render :xml => @comment.errors, :status => :unprocessable_entity }
+#        end
 #      end
 #    end
 #  end
@@ -138,12 +139,13 @@ class CommentsController < ApplicationController
     @comment = Comment.find(params[:id])
     @commenter = @comment.creator
     @owner = @comment.commentable.try :user
-    permit 'site_admin or (self of commenter) or (self of owner)'
-    @comment.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(comments_url) }
-      format.xml  { head :ok }
+    permit 'site_admin or (self of commenter) or (self of owner)' do
+      @comment.destroy
+  
+      respond_to do |format|
+        format.html { redirect_to(comments_url) }
+        format.xml  { head :ok }
+      end
     end
   end
 end

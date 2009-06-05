@@ -3,10 +3,6 @@ module ApplicationHelper
     "#{controller.controller_name} #{controller.controller_name}-#{controller.action_name}"
   end
 
-  def logged_in_as_admin?
-    logged_in? and current_user.has_role?('site_admin')
-  end
-  
   def focus_on_div(div)
     update_page do |page|
       page[div].focus
@@ -25,7 +21,7 @@ module ApplicationHelper
   def full_title
     APP_NAME.humanize + (@title ? ": #{@title}" : '')
   end
-  
+ 
 #  def markdowwn text
 #    BlueCloth.new(h(text)).to_html
 #  end

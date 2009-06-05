@@ -9,24 +9,25 @@ class UsersController < ApplicationController
 
   def show   
     @user = User.find(params[:id], :include => [:roles, :preferences, :assets]) # _by_login
-    permit 'site_admin or (self of user)'
-    
-    @assets = @user.assets.original
+    permit 'site_admin or (self of user)' do
+      @assets = @user.assets.original
+    end
   end
   
   # Note: Users can set any preferences on themselves. Do not use this for anything that needs to be secure; that's what Roles are for.
   def set_preference
     @user = User.find(params[:id])
-    permit 'site_admin or (self of user)'
-    preferred = if params[:preferred_type]
-      preferred_class = params[:preferred_type].classify.constantize
-      params[:preferred_id] ? preferred_class.find(params[:preferred_id]) : preferred_class
-    else
-      nil
+    permit 'site_admin or (self of user)' do
+      preferred = if params[:preferred_type]
+        preferred_class = params[:preferred_type].classify.constantize
+        params[:preferred_id] ? preferred_class.find(params[:preferred_id]) : preferred_class
+      else
+        nil
+      end
+      @user.set_preference params[:preference], params[:value], preferred || @user
+      
+      render :partial => '/users/preferences', :locals => {:user => @user}
     end
-    @user.set_preference params[:preference], params[:value], preferred || @user
-    
-    render :partial => '/users/preferences', :locals => {:user => @user}
   end
   
   # Technically, this breaks REST and is un-DRY, because it handles both user and session creation. Oh well, APIs.

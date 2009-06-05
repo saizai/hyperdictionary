@@ -67,38 +67,42 @@ class ProfilesController < ApplicationController
   
   def change_role
     @profile = Profile.find(params[:id])
-    permit 'site_admin or (owner of profile)'
-    @user = params[:login] ? User.find(params[:login]) : AnonUser
-    Profile::ROLES.each do |old_role|
-      @user.has_no_role old_role, @profile
-    end
-    @user.has_role params[:role], @profile if params[:role]
-    
-    respond_to do |format|
-      format.js { 
-        render :update do |page|
-          page.replace "profile_roles_container_#{@profile.id}", :partial => '/profiles/roles', :locals => {:profile => @profile, :shown => true}
+    permit 'site_admin or (owner of profile)' do
+      begin
+        login = params[:login].try :downcase
+        @user = ((login.blank? or login == 'anonymous') ? AnonUser : User.find(login))
+        Profile::ROLES.each do |old_role|
+          @user.has_no_role old_role, @profile
         end
-      }
-      format.html { 
-        flash[:notice] = 'Roles successfully updated.'
-        redirect_to @profile
-      }
-      format.xml { head :ok }
-    end
-    
-  rescue ActiveRecord::RecordNotFound
-    error_text = "User #{params[:login]} not found."
-    respond_to do |format|
-      format.js { 
-        render :update do |page|
-          page.alert error_text
+        @user.has_role params[:role], @profile unless params[:role].blank?
+        
+        respond_to do |format|
+          format.js { 
+            render :update do |page|
+              page.replace "profile_roles_container_#{@profile.id}", :partial => '/profiles/roles', :locals => {:profile => @profile, :shown => true}
+            end
+          }
+          format.html { 
+            flash[:notice] = 'Roles successfully updated.'
+            redirect_to @profile
+          }
+          format.xml { head :ok }
         end
-      }
-      format.html { 
-        flash[:error] = error_text
-        redirect_to @profile
-      }
+        
+      rescue ActiveRecord::RecordNotFound
+        error_text = "User #{params[:login]} not found."
+        respond_to do |format|
+          format.js { 
+            render :update do |page|
+              page.alert error_text
+            end
+          }
+          format.html { 
+            flash[:error] = error_text
+            redirect_to @profile
+          }
+        end
+      end
     end
   end
 
@@ -124,16 +128,16 @@ class ProfilesController < ApplicationController
   def update
     @profile = Profile.find(params[:id])
     @owner = @profile.owner
-    permit 'site_admin or (self of owner) or (editor of profile)'
-    
-    respond_to do |format|
-      if @profile.update_attributes(params[:profile])
-        flash[:notice] = 'Profile was successfully updated.'
-        format.html { redirect_to(@profile) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @profile.errors, :status => :unprocessable_entity }
+    permit 'site_admin or (self of owner) or (editor of profile)' do
+      respond_to do |format|
+        if @profile.update_attributes(params[:profile])
+          flash[:notice] = 'Profile was successfully updated.'
+          format.html { redirect_to(@profile) }
+          format.xml  { head :ok }
+        else
+          format.html { render :action => "edit" }
+          format.xml  { render :xml => @profile.errors, :status => :unprocessable_entity }
+        end
       end
     end
   end
@@ -142,12 +146,13 @@ class ProfilesController < ApplicationController
   # DELETE /profiles/1.xml
   def destroy
     @profile = Profile.find(params[:id])
-    permit 'site_admin or (self of owner)'
-    @profile.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(profiles_url) }
-      format.xml  { head :ok }
+    permit 'site_admin or (self of owner)' do
+      @profile.destroy
+  
+      respond_to do |format|
+        format.html { redirect_to(profiles_url) }
+        format.xml  { head :ok }
+      end
     end
   end
 end

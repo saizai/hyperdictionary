@@ -101,13 +101,14 @@ class AssetsController < ApplicationController
   def destroy
     @asset = Asset.find(params[:id])
     @creator = @asset.creator
-    permit 'site_admin or (self of creator)'
-    @asset.destroy
-    
-    respond_to do |format|
-      format.js   { head :ok }
-      format.html { redirect_to(assets_url) }
-      format.xml  { head :ok }
+    permit 'site_admin or (self of creator)' do
+      @asset.destroy
+      
+      respond_to do |format|
+        format.js   { head :ok }
+        format.html { redirect_to(assets_url) }
+        format.xml  { head :ok }
+      end
     end
   end
 end

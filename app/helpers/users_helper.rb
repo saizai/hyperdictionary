@@ -1,16 +1,16 @@
 module UsersHelper
   def avatar user, size = :thumb
-    if user
+    image_tag (if user
       if asset = user.avatar_asset(size)
-        image_tag asset.public_filename
+        asset.public_filename
       else
-        image_tag user.gravatar_url(:size => Asset.width(size))
+        user.gravatar_url(:size => Asset.width(size))
       end
     else
-      image_tag 'anonymous_avatar.jpg', :width => Asset.width(size)
-    end
+       'anonymous_avatar.jpg'
+    end), :class => "avatar #{size}"
   end
-    
+  
   #
   # Use this to wrap view elements that the user can't access.
   # !! Note: this is an *interface*, not *security* feature !!

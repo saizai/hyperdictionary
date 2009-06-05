@@ -1,5 +1,5 @@
 <div>
     <%= link_to 'X', profile, :confirm => 'Are you sure?', :method => :delete, :class => 'close' if logged_in_as_admin? %>
-	<%= image_tag "#{profile.profile_type.name}.png" %>
+	<%= type_icon profile %>
 	<%= avatar profile.owner, :icon %> <%= link_to h(profile.name), profile_path(profile) %>
 </div>

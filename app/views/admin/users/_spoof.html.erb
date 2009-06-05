@@ -1,0 +1,22 @@
+<% if logged_in_as_admin?(true) %>
+	<span style="margin-left: 1em;">
+		<span class="tooltip highlight">Spoof user 
+			<span>This admin power tool will make you appear to be another user.<br/>
+			It will NOT generate login/logout events. If you log out, you log out for real.<br/>
+			It will NOT clear your session when changed and will NOT spoof the users's last session.<br/>
+			It WILL make you have the same priviledges as the user, EXCEPT for this tool.<br/>
+			All actions you do will appear to be actions by that user.<br/>
+			<br/>
+			Changes will only take effect when clicking the checkbox.<br/>
+			Specify empty string or 'anonymous' to become the anonymous user<br/>
+			<br/>
+			<font style="color: red">Use with care!</font></span></span>:<br/>
+		<span id="spoof_user_form" style="margin-left: 1em;">
+			<%= check_box_tag 'spoof_user?', '1', spoofing_user?, :id => 'spoof_user?', 
+				:onclick => remote_function(:url => spoof_admin_users_url, :submit => 'spoof_user_form', :method => :put,
+					:update => {:success => 'spoof_user_container', :failure => 'js_flash_error'}) %>
+			<%= text_field_tag :id, current_user.login, :size => 10, :style => ('background: chartreuse;' if spoofing_user?) %>
+			<%= image_tag 'ajax-spinner.gif', :id => "spoof_user_indicator", :style => 'display:none;' %>
+		</span>
+	</span>
+<% end %>

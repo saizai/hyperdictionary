@@ -13,4 +13,8 @@ class Role < ActiveRecord::Base
   def to_s
     "#{self.name} #{self.authorizable_type} #{self.authorizable_id}".strip
   end
+  
+  def before_save
+    name.downcase!
+  end
 end

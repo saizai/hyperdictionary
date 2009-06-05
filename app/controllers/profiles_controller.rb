@@ -21,11 +21,13 @@ class ProfilesController < ApplicationController
 #    else
       @profile = Profile.find(params[:id], :include => [:assets, {:comments => :creator}])
 #    end
-    @title = @profile.name
-    
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @profile }
+    permit 'reader of profile' do
+      @title = @profile.name
+      
+      respond_to do |format|
+        format.html # show.html.erb
+        format.xml  { render :xml => @profile }
+      end
     end
   end
   
@@ -49,19 +51,21 @@ class ProfilesController < ApplicationController
   
   def subscribe
     @profile = Profile.find(params[:id])
-    if subscribed = current_user.has_role?('subscriber', @profile)
-      current_user.has_no_role 'subscriber', @profile
-    else
-      current_user.has_role 'subscriber', @profile
-    end
-    
-    respond_to do |format|
-      format.js   { render :partial => '/profiles/subscribe', :locals => {:profile => @profile}  }
-      format.html {
-        flash[:notice] = "Successfully #{ 'un' if subscribed }subscribed."
-        redirect_to @profile
-      }
-      format.xml  { head :ok }
+    permit '(reader of profile) or (subscriber of profile)' do
+      if subscribed = current_user.has_role?('subscriber', @profile)
+        current_user.has_no_role 'subscriber', @profile
+      else
+        current_user.has_role 'subscriber', @profile
+      end
+      
+      respond_to do |format|
+        format.js   { render :partial => '/profiles/subscribe', :locals => {:profile => @profile}  }
+        format.html {
+          flash[:notice] = "Successfully #{ 'un' if subscribed }subscribed."
+          redirect_to @profile
+        }
+        format.xml  { head :ok }
+      end
     end
   end
   

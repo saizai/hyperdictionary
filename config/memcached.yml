@@ -6,20 +6,25 @@ defaults:
   compression: true
   debug: false
   namespace: app
+# Breaks modelized session (and therefore multi detection)
   sessions: false
+# Has its own servers listing
   session_servers: false
-  fragments: false
+  fragments: true
   memory: 64
   servers: localhost:11211
   benchmarking: true
   raise_errors: true
-  fast_hash: false
-  fastest_hash: false
+# Breaks compatibility w/ non-ruby (str[2] as int)
+  fast_hash: true
+# Breaks compatibility w/ non-ruby non-same-arch (Object#hash)
+  fastest_hash: true
 
 development:
   sessions: false
-  fragments: false
-  servers: localhost:11211
+  fragments: true
+  debug: true
+#  servers: localhost:11211
 
 # turn off caching
 test: 
@@ -28,7 +33,7 @@ test:
 production:
   memory: 256
   benchmarking: false
-  servers:
-    - 192.185.254.121:11211
-    - 192.185.254.138:11211
-    - 192.185.254.160:11211
+  servers: saizai.dyndns.org:11211
+#    - 192.185.254.121:11211
+#    - 192.185.254.138:11211
+#    - 192.185.254.160:11211

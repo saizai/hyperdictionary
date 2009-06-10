@@ -141,7 +141,11 @@ module Authorization
           end
           
           if role_name
-            conditions[0] << ' and roles.name = ?'
+            if role_name.is_a? Array
+              conditions[0] << ' and roles.name IN (?)'
+            else
+              conditions[0] << ' and roles.name = ?'
+            end
             conditions << role_name
           end
           conditions

@@ -6,6 +6,7 @@ class Profile < ActiveRecord::Base
   has_friendly_id :name #, :use_slug => true
   stampable
   translates :body 
+  acts_as_cached
   
   belongs_to :owner, :class_name => 'User', :foreign_key => 'user_id' # This is for *identity* only. Use proper roles for everything else.
   belongs_to :profile_type
@@ -24,8 +25,8 @@ class Profile < ActiveRecord::Base
   attr_accessible :name, :body, :url, :profile_type_id, :tag_list # User must be set explicitly
   
   # Standard roles that moderators can set. These are mutually exclusive.
-  ROLES = %w(reader commenter tagger editor member moderator owner)
-  ROLE_VERBS = %w(read commented tagged edited member moderated owned)
+  ROLES = %w(reader commenter tagger editor member owner moderator)
+  ROLE_VERBS = %w(read commented tagged edited member owned moderated)
   
   EXTRA_ROLES = %w(subscriber)
   
@@ -38,7 +39,11 @@ class Profile < ActiveRecord::Base
     AnonUser.has_role 'commenter', self
   end
   
+  after_destroy :expire_cache
+  
   def after_save
+    expire_cache
+    expire_fragment :controller => "profiles", :action => "show", :id => self.id #, :action_suffix => role
     (self.has_subscribers - [updater]).each {|subscriber| ProfileMailer.deliver_update self, subscriber }
   end
   
@@ -53,17 +58,20 @@ class Profile < ActiveRecord::Base
     logger.info "Tried to revert #{glob}"
   end
   
+  def highest_role_by user
+    user ||= AnonUser
+    return Profile::ROLES[-1] if user.is_site_admin?
+    roles = user.roles_for(self, Profile::ROLES)
+    roles += AnonUser.roles_for(self, Profile::ROLES) unless user == AnonUser 
+    max_role = roles.map{|role| Profile::ROLES.index role.name }.max
+    max_role ? Profile::ROLES[max_role] : nil
+  end
   
   # Permissions are hierarchical, not piecemeal, so here are some convenience accessors
   ROLE_VERBS.each_with_index do |verb, i| 
     # Whee metaprogramming
     define_method "#{verb}_by?".to_sym do |user|
-      user ||= AnonUser
-      user.has_role?('site_admin') or
-      # & = set intersection; [i..-1] = 'this role or any higher one'
-      !(user.roles_for(self).map(&:name) & ROLES[i..-1]).empty? or
-      !(AnonUser.roles_for(self).map(&:name) & ROLES[i..-1]).empty? # Every user has at least the permissions of the anon user
+      Profile::ROLES.index(highest_role_by(user)) >= i
     end
   end
-  
 end

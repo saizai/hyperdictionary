@@ -6,21 +6,27 @@ Please see https://www.pivotaltracker.com/projects/12879 (release 0 = version 1 
 
 == What's the point?
 
-There's a lot of stuff that damn near every Web x.0 application has. It's kinda pointless to keep doing it over and over, and increases the barrier to making a cool new app.
+There's a lot of stuff that damn near every Web 2.0 application has. It's kinda pointless to keep doing it over and over, and increases the barriers to making a cool new app.
 
-This is a full featured yet generic application. It comes with:
-* full scale users & profiles
-  * stateful users w/ OpenID (via RPXNow) support and authorization
+This app will let you just write the "cool new" parts and so that the "app" parts are already done.
+
+This is a very full featured yet generic application. It comes with:
+* full users & profiles
+  * stateful users w/ OpenID support and authorization (via RPXNow)
   * remember me, activation, password reset, email veracification; optional ReCaptcha (set it in UsersController#new)
   * user preferences w/ easy newbie introductions / alerts
-  * custom icon AND gravatar support
   * role-based authorization including full per-record roles for anonymous users
   * users vs profiles separation (so you can have profiles for other things too, like groups, w/ the same code)
+  * fancy file upload (attachment_fu + SWFUpload) w/ email-it-in support (just run script/mail_fetcher & check config/mail.yml)
+  * custom icon AND gravatar support
+  * tagging (and tag classification as nested sets)
   * intelligent profile role levels (reader, commenter, tagger, editor, member, owner, moderator) w/ easy role editing interface
-  * comments and tagging w/ AJAX, subscriptions, RSS, & email notification
-  * fancy file upload (attachment_fu + SWFUpload)
+  * comments w/ AJAX, subscriptions, RSS, email notification, and email response (w/ mail fetcher)
+  * user-to-user messaging, 'comment wall', or threaded forum views (including 'wall-to-wall' messaging)
+  * user-to-user friendships w/ automatic scrape of Facebook friendships
 * admin tools:
   * fancy namespaced admin views for managing users, seeing debug info inline, etc (some debug info will be visible to all users if in dev mode)
+  * automatic multi-account detection and linking
   * user-spoofing powertool (w/ audit logging)
   * 404 and exception logging (and notification)
   * process name hack to show current request processing in top
@@ -33,16 +39,23 @@ This is a full featured yet generic application. It comes with:
   * at least some API keys that will work for you on localhost (they're mine)
   * integration tests and rdoc-umentation
 * other useful stuff:
+  * full record-level localization, including AJAX Google Translate, user-entered translations (moderated or not), side-by-side multilingual view, preferences, etc
+  * modelized session for easy access & manipulation (derived from the default ActiveRecord session store)
+  * basic SEO integration
+  * AddThis bookmark/share widget
+  * UserVoice feedback widget (as standard link in sidebar)
   * WAI ARIA support (for use w/ screen readers, e.g. visually impaired people)
   * easy automatic JS flasher - just update js_flash_info/_warning/_error
   * userstamping, paranoia, versioning, optimistic locking
-* well factored, fully documented, efficient, bug-free, easy to understand, resource-oriented code
+* well factored, fully documented, testable, efficient, bug-free, easy to understand, resource-oriented code
 
 Things to be aware of:
 * If changing things in-place (e.g. w/ user.foo<< instead of user.foo=), first call foo_will_change!, otherwise versioning (and other stuff) will break.
 * You need to get your own API keys. Some of mine will work, but probably only for localhost. Look in config/initializers.
 * First admin user must be set via console (e.g. User.first.has_role 'site_admin')
+* It depends on *Magick (RMagick/ImageMagick by default), which has nontrivial {install process}(http://rmagick.rubyforge.org/install-faq.html). Change your processor in models/assets.rb if you prefer something else.
 * The frozen rails version has been patched with this: https://rails.lighthouseapp.com/projects/8994/tickets/1339-arbase-should-not-be-nuking-its-children-just-because-it-lost-interest
+* You may not use this for commercial or closed source purposes without a license. Please email me if you would like one.
 
 == Full externals list
 

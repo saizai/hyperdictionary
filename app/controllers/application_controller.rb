@@ -9,6 +9,15 @@ class ApplicationController < ActionController::Base
   # Scrub sensitive parameters from your log
   filter_parameter_logging :password, :password_confirmation, :old_password, :uploaded_data
   
+  before_filter :local_cache_for_request # using cache_fu
+  before_filter :set_cache_override # Be very careful using this on a high traffic page; all hits within the time of your hit will be uncached
+  def set_cache_override
+    returning true do
+      ActsAsCached.skip_cache_gets = !!params[:skip_cache]
+    end
+  end
+  
+  
   # Hack to show what requests a process is handling in top (if it's in short mode)
   $PROC_NAME ||= "#{$0} #{$*.join(' ')}" # keep the original. Note that this isn't really what ps thinks it was to start; ruby's $0 isn't very smart, it seems
   

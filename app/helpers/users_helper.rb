@@ -1,7 +1,7 @@
 module UsersHelper
   def avatar user, size = :thumb
     image_tag (if user
-      if asset = user.avatar_asset(size)
+      if asset = user.assets.avatar(size)
         asset.public_filename
       else
         user.gravatar_url(:size => Asset.width(size))

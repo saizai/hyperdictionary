@@ -13,6 +13,7 @@ class Asset < ActiveRecord::Base
   belongs_to :attachable, :polymorphic => true
   
   named_scope :original, :conditions => {:parent_id => nil }
+  named_scope :size, lambda { |size| { :conditions => [ "thumbnail = ?", size.to_s ] }  } # and filename LIKE "_#{size}.%"
   
   def self.width size
     attachment_options[:thumbnails][size][/\d*/]

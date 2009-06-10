@@ -8,11 +8,21 @@ class User < ActiveRecord::Base
   
   has_many :comments, :foreign_key => 'creator_id'
   has_one :profile, :autosave => true, :dependent => :destroy
-  has_many :assets, :foreign_key => 'creator_id'
+  
+  # This is suboptimal. See http://stackoverflow.com/questions/958676/change-a-finder-method-w-parameters-to-an-association
+  has_many :assets, :foreign_key => 'creator_id' do
+    def avatar size = :thumb
+      find :first, :conditions => ["thumbnail = ? and filename LIKE ?", size.to_s, proxy_owner.login + "_#{size}.%"]
+    end
+  end
+    
   has_many :identities, :autosave => true, :dependent => :destroy
   has_many :sessions, :foreign_key => 'updater_id', :autosave => true
   has_many :multi_sessions, :foreign_key => 'updater_id', :conditions => 'sessions.updater_id != sessions.creator_id', :class_name => 'Session'
   has_many :multi_users, :through => :multi_sessions, :source =>  'creator', :class_name => 'User'
+  
+  has_many :friendships
+  has_many :friends, :through => :friendships, :foreign_key => 'from_user_id', :class_name => 'User'
   
   acts_as_authorized_user
   acts_as_preferenced
@@ -125,18 +135,13 @@ class User < ActiveRecord::Base
 #    end
   end
   
-  def avatar_asset size = :thumb
-    # the self ensures we scope to this user's files
-    self.assets.find :first, :conditions => ["thumbnail = '#{size}' and filename LIKE ?", self.login + "_#{size}.%"]
-  end
-  
   def identities_glob
     self.identities.to_yaml
   end
   
   # TODO: somehow handle unpacking it again after a revert
   def identities_glob= glob
-    logger.info "Tried to revert #{glob}"
+    raise "Tried to revert #{glob}"
   end
 
   

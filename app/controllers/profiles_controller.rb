@@ -21,7 +21,7 @@ class ProfilesController < ApplicationController
 #    else
       @profile = Profile.find(params[:id], :include => [:assets, {:comments => :creator}])
 #    end
-    permit 'reader of profile' do
+    permit @profile.read_by?(current_user) do
       @title = @profile.name
       
       respond_to do |format|
@@ -45,13 +45,12 @@ class ProfilesController < ApplicationController
   # GET /profiles/1/edit
   def edit
     @profile = Profile.find(params[:id])
-    @owner = @profile.owner
-    permit 'site_admin or (self of owner) or (editor of profile)'
+    permit @profile.edited_by?(current_user)
   end
   
   def subscribe
     @profile = Profile.find(params[:id])
-    permit '(reader of profile) or (subscriber of profile)' do
+    permit @profile.read_by?(current_user) or current_user.is_subscriber_of?(@profile) do
       if subscribed = current_user.has_role?('subscriber', @profile)
         current_user.has_no_role 'subscriber', @profile
       else
@@ -71,7 +70,7 @@ class ProfilesController < ApplicationController
   
   def change_role
     @profile = Profile.find(params[:id])
-    permit 'site_admin or (owner of profile)' do
+    permit @profile.owned_by?(current_user) do
       begin
         login = params[:login].try :downcase
         @user = ((login.blank? or login == 'anonymous') ? AnonUser : User.find(login))
@@ -131,8 +130,7 @@ class ProfilesController < ApplicationController
   # PUT /profiles/1.xml
   def update
     @profile = Profile.find(params[:id])
-    @owner = @profile.owner
-    permit 'site_admin or (self of owner) or (editor of profile)' do
+    permit @profile.edited_by?(current_user) do
       respond_to do |format|
         if @profile.update_attributes(params[:profile])
           flash[:notice] = 'Profile was successfully updated.'
@@ -150,7 +148,7 @@ class ProfilesController < ApplicationController
   # DELETE /profiles/1.xml
   def destroy
     @profile = Profile.find(params[:id])
-    permit 'site_admin or (self of owner)' do
+    permit @profile.owned_by?(current_user) do
       @profile.destroy
   
       respond_to do |format|

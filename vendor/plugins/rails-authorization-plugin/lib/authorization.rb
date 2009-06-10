@@ -76,6 +76,9 @@ module Authorization
       private
 
       def has_permission?( authorization_expression )
+        # If we're passed a non-String, just treat it as a direct value
+        return authorization_expression unless authorization_expression.is_a? String
+        
         @railsauth_current_user = get_user
         unless @railsauth_options[:allow_guests] or authorization_expression =~ /guest/ or defined? AnonUser
           # We aren't logged in, or an exception has already been raised.

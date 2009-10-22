@@ -8,7 +8,7 @@ module UsersHelper
       end
     else
        'anonymous_avatar.jpg'
-    end), :class => "avatar #{size}"
+    end), :class => "avatar #{size}", :title => user.try(:name)
   end
   
   #
@@ -54,7 +54,7 @@ module UsersHelper
   #   link_to_user @user, :content_text => 'Your user page'
   #   # => <a href="/users/3" title="barmy" class="nickname">Your user page</a>
   #
-  # By default this will link to a user's *profile*, rather than the *user* per se. Pass :user => true to override.
+  # By default this will link to a user's *page*, rather than the *user* per se. Pass :user => true to override.
   
   def link_to_user(user, options={})
     return 'Anonymous' unless user and user != AnonUser
@@ -65,8 +65,8 @@ module UsersHelper
     if options[:user]
       link_to h(content_text),  user_path(user), options
     else
-      if user.profile
-        link_to h(content_text), profile_path(user.profile), options
+      if user.page
+        link_to h(content_text), page_path(user.page), options
       else
         h(content_text)
       end

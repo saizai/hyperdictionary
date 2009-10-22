@@ -1,0 +1,6 @@
+<% if logged_in? 
+ subscribed = current_user.is_subscriber_of?(page) %>
+	<%= link_to_remote image_tag("email_#{ subscribed ? 'link' : 'gray' }.png"), 
+		{:url  => subscribe_page_path(page), :method => :put, :update => "page_#{page.id}_subscribe"},
+		 :title => "#{'un' if subscribed}subscribe".capitalize %>
+ <% end %>

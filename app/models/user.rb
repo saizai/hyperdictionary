@@ -6,23 +6,33 @@ class User < ActiveRecord::Base
   include Authentication::ByCookieToken
   include Authorization::AasmRolesWithOpenId
   
-  has_many :comments, :foreign_key => 'creator_id'
-  has_one :profile, :autosave => true, :dependent => :destroy
+  has_many :comments, :foreign_key => 'creator_id', :dependent => :destroy
+  has_one :page, :autosave => true, :dependent => :destroy
   
   # This is suboptimal. See http://stackoverflow.com/questions/958676/change-a-finder-method-w-parameters-to-an-association
-  has_many :assets, :foreign_key => 'creator_id' do
+  has_many :assets, :foreign_key => 'creator_id', :dependent => :destroy do
     def avatar size = :thumb
       find :first, :conditions => ["thumbnail = ? and filename LIKE ?", size.to_s, proxy_owner.login + "_#{size}.%"]
     end
   end
-    
+  
+  has_many :contacts, :autosave => true, :dependent => :destroy
+  has_many :public_contacts, :class_name => "Contact", :conditions => {:state => 'active', :public => true}
+  
   has_many :identities, :autosave => true, :dependent => :destroy
+  
   has_many :sessions, :foreign_key => 'updater_id', :autosave => true
   has_many :multi_sessions, :foreign_key => 'updater_id', :conditions => 'sessions.updater_id != sessions.creator_id', :class_name => 'Session'
-  has_many :multi_users, :through => :multi_sessions, :source =>  'creator', :class_name => 'User'
+  has_many :multi_session_users, :through => :multi_sessions, :source =>  'creator', :class_name => 'User'
+    
+  has_many :relationships, :foreign_key => 'from_user_id', :dependent => :destroy
+  has_many :incoming_relationships, :foreign_key => 'to_user_id', :dependent => :destroy, :class_name => 'Relationship'
+  has_many :fans_of, :through => :relationships, :source => 'to_user', :order => "login", :conditions => "relationships.state IN ('pending', 'denied')" # denied is still a one-way friendship
+  has_many :fans, :through => :incoming_relationships, :source => 'from_user', :order => "login", :conditions => "relationships.state IN ('pending', 'denied')" # denied is still a one-way friendship
+  has_many :friends, :through => :relationships, :source => 'to_user', :order => "login", :conditions => "relationships.state = 'active'"
+  has_many :friends_and_fans_of, :through => :relationships, :source => 'to_user', :order => "login", :conditions => "relationships.state IN ('pending', 'denied', 'active')"
   
-  has_many :friendships
-  has_many :friends, :through => :friendships, :foreign_key => 'from_user_id', :class_name => 'User'
+  has_many :multis, :through => :relationships, :source => 'to_user', :conditions => "relationships.multi = 1"
   
   acts_as_authorized_user
   acts_as_preferenced
@@ -41,38 +51,38 @@ class User < ActiveRecord::Base
   validates_uniqueness_of   :login
   validates_format_of       :login,    :with => Authentication.login_regex, :message => Authentication.bad_login_message
   validates_exclusion_of    :login,    :in => %w( anonymous anonuser admin )
-
+  
   validates_format_of       :name,     :with => Authentication.name_regex,  :message => Authentication.bad_name_message, :allow_nil => true
   validates_length_of       :name,     :maximum => 100
   
-  
-  validates_presence_of     :email
-  validates_uniqueness_of   :email
-  validates_email_veracity_of :email # Actually checks if the server exists, the format is correct, etc
-#  validates_length_of       :email,    :within => 6..100 #r@a.wk
-#  validates_format_of       :email,    :with => Authentication.email_regex, :message => Authentication.bad_email_message
-  
-  
   named_scope :active, :conditions => ['activated_at IS NOT NULL AND state = "active"']
-  default_scope :order => 'login'
   
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
   attr_accessible :login, :email, :name, :password, :password_confirmation
+  attr_accessor :email # pseudo-attribute that's used to make contacts
+  
+  def before_validation
+    login = login.downcase.trim if login
+    login = nil if login.blank?
+    email = email.downcase.trim if email
+    email = nil if email.blank?
+  end
   
   def before_save
-    # not before_create; this catches the case of a deleted profile
-    unless self.profile
-      self.build_profile :profile_type_id => ProfileType.find_or_create_by_name('person'), :url => self.identities.first.try(:url), :name => self.login, 
+    # not before_create; this catches the case of a deleted page
+    unless self.page
+      self.build_page :page_type_id => PageType.find_or_create_by_name('person'), :url => self.identities.first.try(:url), :name => self.login, 
         :body => "Hi, my name is #{self.name}; I'm new here. Say hello!"
     end
+    self.email ||= self.contacts.emails.active.first
   end
   
   def after_create
-    # Profile wasn't able to set this itself, 'cause user didn't yet exist (ish)
-    # TODO: could probably be made to work automatically w/ profile.after_create somehow...
-    self.has_role 'owner', profile
-    self.has_role 'subscriber', profile
+    # Page wasn't able to set this itself, 'cause user didn't yet exist (ish)
+    # TODO: could probably be made to work automatically w/ page.after_create somehow...
+    self.has_role 'owner', page
+    self.has_role 'subscriber', page
   end
   
   def last_active
@@ -83,20 +93,12 @@ class User < ActiveRecord::Base
     sessions.find(:all, :select => 'DISTINCT ip').map(&:ip)
   end
   
-  # Returns an array of User objects that have overlapped sessions w/ this user
-  # WARNING: This is not a cheap query. Don't run it often.
-  # TODO: make this a has_many association
-  def multis
-    return [] if self.new_record?
-# NOTE: as is this completely ignores scoping (e.g. paranoia). That's bad. How can this be rewritten to play nice?
-#    User.find_by_sql "SELECT DISTINCT users.* FROM users \
-#                      INNER JOIN sessions \
-#                        ON (sessions.updater_id = #{self.id} XOR sessions.creator_id = #{self.id}) AND \
-#                           (sessions.updater_id = users.id XOR sessions.creator_id = users.id) \
-#                      WHERE users.id !=  #{self.id}"
-    # It's roughly equal to this; which is really more efficient?
-    User.find(:all, :conditions => ['id in (?)', sessions.find(:all, :conditions => 'creator_id != updater_id', 
-      :select => 'DISTINCT creator_id, updater_id').map{|x| [x.creator_id, x.updater_id]}.flatten.uniq - [self.id]])
+  # TODO: make this a has_many
+  def users_on_same_ip
+    user_ids = Session.find(:all, :conditions => ["sessions.ip IN (?)", ips],
+                                  :select => 'DISTINCT updater_id, creator_id').inject([]){
+                                    |memo, sess| memo << sess.updater_id; memo << sess.creator_id }.uniq
+    User.find(user_ids)
   end
   
   # for use with RPX Now gem
@@ -116,11 +118,6 @@ class User < ActiveRecord::Base
     end
     
     return user
-  end
-  
-  def email_verified_by_open_id?
-    # Must use select here, not find, so it's compatible w/ new records
-    identities.select{|id| id.email_verified}.map(&:email).include? email
   end
   
   def add_identity_with_rpx token
@@ -161,16 +158,12 @@ class User < ActiveRecord::Base
     write_attribute :login, (!value.blank? ? value.downcase : nil)
   end
   
-  def email=(value)
-    write_attribute :email, (!value.blank? ? value.downcase : nil)
-  end
-  
   # Not the same as active? - e.g. someone could be suspended, but still have activated their email
   # Or someone could be active, change their email, and not have activated it yet
   def activated?
     !self.activated_at.blank?
   end
-    
+  
   protected
     # Triggers validation on password & confirmation
     def password_required?

@@ -4,11 +4,14 @@
 	<td><%= h user.email %></td>
 	<td><%= user.ips.join(', ') %></td>
 	<td><%= user.multis.map{|multi| link_to multi.login, user_path(multi) }.join(', ') %>
-	<td><%= user.activated_at.to_s :short %>
-		<% if !user.activated? %>
+<% if false %>
+	<td>
+		<% if !contact.activated? %>
 			<%= link_to_remote image_tag('accept.png'), {:url => admin_user_path(user), :method => :put}, :title => 'Force activation' %>
 		<% end %>
 	</td> 
+<% end %>
+<td/>
 	<td>
 		<%= check_box_only user.crypted_password? %>
 		<%= link_to_remote image_tag("email#{ '_open' if user.password_reset_code?}.png"), {:url => reset_admin_user_path(user), :method => :put}, 

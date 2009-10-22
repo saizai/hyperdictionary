@@ -1,0 +1,20 @@
+<% current_user.contacts.pending.each do |contact| %>
+	<div class="flash info" id='contact_verification_<%= contact.id %>' >
+		Please verify your <%= contact.data %> contact. 
+		(<%= link_to_remote "Resend", 
+			{:url  => verify_user_contact_path(contact.user, contact), :method => :put, 
+			 :success => update_page do |page|
+				page["contact_verification_#{contact.id}"].replace_html "Verification code sent! Please check your #{contact.data} email and click the activation link."
+			 end 
+			} %> 
+		verification code or 
+		<%= link_to_remote 'ignore', 
+			{:url  => suspend_user_contact_path(contact.user, contact), :method => :put, 
+			 :success => update_page do |page|
+				page["contact_verification_#{contact.id}"].replace_html "Contact ignored!"
+				page.delay(3) { page["contact_verification_#{contact.id}"].visual_effect :fade }
+			 end 
+			} %>
+		this contact?)
+	</div>
+<% end if logged_in? %>

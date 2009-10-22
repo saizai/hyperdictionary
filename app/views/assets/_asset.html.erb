@@ -1,11 +1,11 @@
 <li id="asset_<%= asset.id %>">
 	<%= icon asset %>
-	<%= link_to_remote "X", {:url => asset_path(asset), :method => :delete, :confirm => "Are you sure?",
+	<%= link_to_remote "X", {:url => user_asset_path(asset.creator, asset), :method => :delete, :confirm => "Are you sure?",
 			:success => update_page {|page| 
 				page.visual_effect :blind_up, "asset_#{asset.id}"
 				page.delay 2 do
 					page.remove "asset_#{asset.id}"
 				end
 			}}, :class => 'close' %>
-	<%= link_to asset.filename, download_asset_path(asset) %>
+	<%= link_to asset.filename, download_user_asset_path(asset.creator, asset) %>
 </li>

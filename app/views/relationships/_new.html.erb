@@ -1,0 +1,8 @@
+<div id="add_friend_<%= @user.id %>">
+	<%= link_to_remote "Add as friend",
+		{:url  => user_relationships_path(current_user, :relationship => {:to_user_id => @user.id}), :method => :post, 
+		 :success => update_page do |page|
+			page["add_friend_#{@user.id}"].replace_html "Friend added! (We'll let you know if they reciprocate.)"
+		 end 
+		} -%>
+</div>

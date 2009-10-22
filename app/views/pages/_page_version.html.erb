@@ -1,0 +1,8 @@
+<div>
+	<%= link_to "Version #{page.lock_version}", page_path(page.page_id, :version => page.lock_version)  %>,
+<% if false # Blows up: https://rails.lighthouseapp.com/projects/8994-ruby-on-rails/tickets/1339-arbase-should-not-be-nuking-its-children-just-because-it-lost-interest
+# This isn't fixed yet. :(
+%>	updated by <%= link_to_user page.updater %>
+	<span class='time'><%= time_ago_in_words page.updated_at %> ago</span>
+<% end %>
+</div>

@@ -1,0 +1,19 @@
+<% remote_form_for( [current_user, current_user.contacts.build],
+	:html => {:id => "new_contact_form", :class => 'form' },
+	:loading => "$('new_contact_form_indicator').show(); Form.disable('new_contact_form');",
+    :success => "$('new_contact_form_data').value = ''; $('new_contact_form_indicator').hide(); 
+					Form.enable('new_contact_form'); Field.focus('new_contact_form_data');",
+	:update => "contacts",
+	:position => :top ) do |f| %>
+	<%= f.error_messages %>
+	
+    <div>
+    	<%= select_tag "contact[contact_type_id]", # unfortunately f.select doesn't allow for grouped options 
+			grouped_options_for_select(ContactType.to_dropdown, 1), # 1 is the ID of the email ContactType
+			 :id => "contact_contact_type_id" %>
+		<%= f.text_field :data, :id => "new_contact_form_data", :size => 15 %>
+		<%= f.submit "Add", :class => 'submit' %>
+		<%= image_tag 'ajax-spinner.gif', :id => "new_contact_form_indicator", :style => 'display:none;' %>
+    </div>
+<% end %>
+<%= javascript_tag update_page {|page| page[:new_contact_form].hide } %>

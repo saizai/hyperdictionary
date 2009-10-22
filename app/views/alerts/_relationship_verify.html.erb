@@ -1,0 +1,20 @@
+<% current_user.incoming_relationships.pending.each do |relationship| %>
+	<div class="flash info" id='relationship_verification_<%= relationship.id %>' >
+		<%= link_to_user relationship.from_user %> added you as a friend.  
+		<%= link_to_remote "Add them back", 
+			{:url  => confirm_user_relationship_path(relationship.from_user, relationship, :response => 'approve'), :method => :put, 
+			 :success => update_page do |page|
+				page["relationship_verification_#{relationship.id}"].replace_html "Added #{link_to_user relationship.from_user} as a friend!"
+			 end 
+			} %> 
+		or 
+		<%= link_to_remote "ignore", 
+			{:url  => confirm_user_relationship_path(relationship.from_user, relationship, :response => 'deny'), :method => :put, 
+			 :success => update_page do |page|
+				page["relationship_verification_#{relationship.id}"].replace_html "Ignored #{link_to_user relationship.from_user}'s friendship request. (Visit their profile if you change your mind.)"
+				page.delay(3) { page["relationship_verification_#{relationship.id}"].fade }
+			 end 
+			} %> 
+		them?
+	</div>
+<% end if logged_in? %>

@@ -26,7 +26,7 @@ module DeLynnBerry
     end
 
     module ClassMethods
-      attr_accessor :dropdown_text_attr, :dropdown_value_attr, :include_blank, :find_arguments
+      attr_accessor :dropdown_text_attr, :dropdown_value_attr, :include_blank, :find_arguments, :meta
 
       # Specify this act if you want to your model be used easily with the <tt>select</tt> form helper. By default the
       # plugin assumes you want to use the class' primary key for the option value and the <tt>name</tt> attribute for
@@ -90,6 +90,7 @@ module DeLynnBerry
         self.dropdown_text_attr   = options.delete(:text)
         self.dropdown_value_attr  = options.delete(:value)
         self.include_blank        = options.delete(:include_blank)
+        self.meta                 = options.delete(:meta)
         self.find_arguments       = options
       end
       
@@ -123,16 +124,19 @@ module DeLynnBerry
         text    = options.delete(:text)
         value   = options.delete(:value)
         blank   = options.delete(:include_blank)
+        meta    = options.delete(:meta)
         options.merge!(:order => value) if (!value.nil? && self.dropdown_value_attr != value) && options.has_key?(:order) == false
 
         items = find(:all, options.empty? ? self.find_arguments : options).to_dropdown(text   || self.dropdown_text_attr,
-                                                                                       value  || self.dropdown_value_attr)
+                                                                                       value  || self.dropdown_value_attr,
+                                                                                       blank  || self.include_blank,
+                                                                                       meta   || self.meta)
 
-        if args.empty? && self.include_blank
-          items.insert(0, self.include_blank.kind_of?(String) ? [self.include_blank, ""] : ["", ""])
-        elsif blank
-          items.insert(0, blank.kind_of?(String) ? [blank, ""] : ["", ""])
-        end
+#        if args.empty? && self.include_blank
+#          items.insert(0, self.include_blank.kind_of?(String) ? [self.include_blank, ""] : ["", ""])
+#        elsif blank
+#          items.insert(0, blank.kind_of?(String) ? [blank, ""] : ["", ""])
+#        end
         items
       end
       alias :to_dropdown :to_options_for_select

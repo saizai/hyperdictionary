@@ -7,9 +7,9 @@
 	  <meta name='title' content='<%= full_title %>' />
 	  <meta name="description" content=<%= @description %> />
 	  <title><%= full_title %></title>
-	  <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.7.0/build/reset-fonts-grids/reset-fonts-grids.css&2.7.0/build/base/base-min.css">
 	  <%= stylesheet_link_tag :all, :cache => true %>
 	  <%= javascript_include_tag :all, :cache => true %>
+	  <%= javascript_include_tag "#{ request.ssl? ? 'https://secure.addthis.com' : 'http://s7.addthis.com' }/js/250/addthis_widget.js?pub=#{ ADDTHIS_USER }" %>
 	</head>
 
 	<body class="<%= body_class %>"> 
@@ -27,7 +27,8 @@
 					<div class="yui-b" id="content"  role="main"><!--primary-->
 						<%= render :partial => '/layouts/flashes' -%>
 						<%= render :partial => '/alerts/welcome' %>
-						<%= render :partial => '/layouts/addthis' %>
+						<%= render :partial => '/alerts/contact_verify' %>
+						<%= render :partial => '/alerts/relationship_verify' %>
 						<%= yield %>
 					</div> 
 				</div> 
@@ -35,7 +36,6 @@
 					<ul class='menu' role="complementary navigation">
 						<li><%= link_to 'Main', root_path %></li>
 						<li><%= link_to 'About', about_path %>
-						<li><%= link_to 'Profiles', profiles_path %></li>
 						<li><a href="#" onclick="UserVoice.Popin.show(); return false;">Feedback</a></li>
 						<% if logged_in? %>
 							<li class='first'><%= link_to 'Home', home_path %></li>

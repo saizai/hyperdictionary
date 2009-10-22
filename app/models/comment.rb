@@ -32,5 +32,15 @@ class Comment < ActiveRecord::Base
     # The fancy method_missing 'has_subscribers' fails on polymorphic associations for some reason
     (commentable.has_roles('subscriber') - [creator]).each {|subscriber| CommentMailer.deliver_new self, subscriber }
   end
+    
+  def children comments
+    if comments
+puts "children: local"
+      comments.select{|x| x.parent_id == self.id}
+    else
+puts "children: DB"
+      super()
+    end || []
+  end
   
 end

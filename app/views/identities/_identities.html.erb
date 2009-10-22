@@ -1,0 +1,12 @@
+<%= render :partial => '/identities/new' if current_user == @user or logged_in_as_admin? %>
+<div id="identities" class="identities">	
+	<table style="margin-bottom: 0;">
+		<% identities.each do |identity| %>
+			<% # The container is a workaround for the fact that Ajax.Updater doesn't support replace (only replace_html) 
+				%>
+			<tr id="identity_container_<%= identity.id %>" >
+				<%= render :partial => '/identities/identity', :locals => {:identity => identity} %>
+			</tr>
+		<% end %>
+	</table>
+</div>

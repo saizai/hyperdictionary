@@ -1,0 +1,165 @@
+<%= render :partial => '/alerts/preferences_intro' %>
+
+<h1><%= link_to_user @user %></h1>
+
+<div class="yui-g"> 
+	<table>
+		<tr>
+			<td>
+				<%- if current_user == @user or logged_in_as_admin? -%>
+				<span class="tooltip highlight">Avatar 
+					<span>To replace this with a custom avatar, you can either:
+						 <ol type='a'>
+						 	<li>Get a <a href="http://gravatar.com/site/signup" target="_blank">Gravatar</a> (using <%= h @user.email %>)</li>
+							<li>Upload a picture below called <%= @user.login %>.png, .jpg, or .gif.<br/>For best results, make it 80x80 pixels on transparent background.</li>
+						 </ol>
+						 Your avatar is your public face, so please make it something nice.
+					</span></span>
+				<%- else -%>
+					Avatar
+				<%- end -%></td>
+			<td><%= avatar @user %></td>
+		</tr>
+		<tr>
+			<td>Joined on</td>
+			<td><%=h @user.created_at.to_date.to_s(:long) %></td>
+		</tr>
+		<tr>
+			<td>Name</td>
+			<td><%- if current_user == @user or logged_in_as_admin? -%>
+					<%= in_place_editor_field :user, 'name' %>
+				<%- else -%>
+					<%= h @user.name %>
+				<%- end -%>
+			</td>
+		</tr>
+		<tr>
+			<td>Username</td>
+			<td><%=h @user.login %></td>
+		</tr>
+		<% if !@contacts.blank? or (current_user == @user or logged_in_as_admin?) %>
+			<tr>
+				<td>
+					<%- if current_user == @user or logged_in_as_admin? -%>
+						<span class="tooltip highlight">Contacts<span>Click the eye to make a contact public. 
+							Private contacts are only visible to <%= APP_NAME %> admins.<br/>Click the trash can to have the system (un)ignore a contact.</span></span>
+						
+						<%= link_to_function( image_tag('add.png'), :id => "add_contact_link") {|page| 
+							page[:add_contact_link].hide
+							page[:new_contact_form].visual_effect :appear, :duration => 0.2
+						} %>
+					<%- else -%>
+						Contacts
+					<%- end -%>
+				</td>
+				<td><%= render :partial => '/contacts/contacts', :locals => {:contacts => @contacts } %></td>
+			</tr>
+		<% end %>
+		<% if !@identities.blank? or (current_user == @user or logged_in_as_admin?) %>
+			<tr>
+				<td>Identities
+					<%= link_to_function(image_tag('add.png'), :id => "add_identity_link"){|page| 
+						page[:add_identity_link].hide
+						page[:new_identity_form].visual_effect :appear, :duration => 0.2
+					} if current_user == @user or logged_in_as_admin? %>
+				</td>
+				<td><%= render :partial => '/identities/identities', :locals => {:identities => @identities} %></td>
+			</tr>
+		<% end %>
+		<% if current_user == @user %>
+			<tr>
+				<td>Password</td>
+				<td><%= link_to_function("#{@user.crypted_password? ? 'change' : 'add'} password", :id => "password_change_link", :style=> "display: #{@user.errors.empty? ? 'block' : 'none'};" ) {|page| 
+						page[:password_change_link].hide
+						page[:password_change_form].visual_effect :appear, :duration => 0.2
+					} %>
+					<% form_for @user, :url => change_password_user_path(@user), 
+						:html => {:id=>"password_change_form", :style=> "display: #{@user.errors.empty? ? 'none' : 'block'};" }  do |f| %>
+						<%= error_messages_for :user, :header_message => nil, :message => nil %>
+						<table >
+								<% if @user.crypted_password? %>
+									<tr>
+										<td><%= label_tag "old_password" %></td>
+										<td><%= password_field_tag :old_password, @old_password, :size => 20 %></td>
+									</tr>
+								<% end %>
+							  	<tr>
+							  		<td><%= f.label "password", 'New password' %></td>
+							  		<td><%= f.password_field :password, :size => 20 %></td>
+								</tr>
+							  	<tr>
+							  		<td><%= f.label 'password_confirmation', 'Confirm new' %></td>
+							  		<td><%= f.password_field :password_confirmation, :size => 20 %></td>
+								</tr>
+								
+								<tr>
+									<td><%= link_to_function("cancel") {|page|
+											page[:password_change_link].visual_effect :appear, :duration => 0.2
+											page[:password_change_form].hide
+										}	%></td>
+									<td><%= submit_tag 'Change Password', :disable_with => "Changing..." %></td>
+								</tr>
+						</table>
+					<% end %>
+				</td>
+			</tr>
+		<% end %>
+		<% if logged_in_as_admin? or (current_user == @user and !@roles.blank?) %>
+			<tr>
+				<td>Roles</td>
+				<% if logged_in_as_admin? %>
+					<%= render :partial => '/admin/users/user_roles', :locals => {:user => @user} %>
+				<% else %>
+					<td><%= (@roles || []).map(&:to_s).join(', ') %></td>
+				<% end %>
+			</tr>
+		<% end %>
+		<% if (current_user == @user or logged_in_as_admin?) and !@preferences.blank? %>
+			<tr>
+				<td>
+					Preferences
+				</td>
+				<td id='user_preferences_<%= @user.id %>'>
+					<%= render :partial => 'preferences', :locals => {:user => @user} %>
+				</td>
+			</tr>
+		<% end %>
+		<% if !@friends.blank? or @can_add_friend  %>
+			<tr>
+				<td>Friends</td>
+				<td><%= render :partial => '/relationships/new' if @can_add_friend %>
+					<%= render :partial => '/relationships/relationships', :locals => {:friends => @friends} %></td>
+			</tr>
+		<% end %>
+		<% if !@fans_of.blank? %>
+			<tr>
+				<td>Fan of</td>
+				<td><%= render :partial => '/relationships/relationships', :locals => {:friends => @fans_of} %></td>
+			</tr>
+		<% end %>
+		<% if !@fans.blank? %>
+			<tr>
+				<td>Fans</td>
+				<td><%= render :partial => '/relationships/relationships', :locals => {:friends => @fans} %></td>
+			</tr>
+		<% end %>
+		<% if logged_in_as_admin? and !@multis.blank? %>
+			<tr>
+				<td>Multis</td>
+				<td><%= render :partial => '/relationships/relationships', :locals => {:friends => @multis} %></td>
+			</tr>
+		<% end %>
+		<% if logged_in_as_admin? and !@ips.blank? %>
+			<tr>
+				<td>IPs</td>
+				<td><%= @ips.join(', ') %></td>
+			</tr>
+		<% end %>
+		<% if current_user == @user or logged_in_as_admin? %>
+			<tr>
+				<td><span class="tooltip highlight">Files <span>You can also just email your files to upload@<%= APP_HOST %> from <%= @emails.to_sentence(:two_words_connector => ' or ', :last_word_connector => ', or ') %></span></span></td>
+				<td><%= render :partial => '/assets/assets', :locals => {:assets => @assets} %></td>
+			</tr>
+		<% end %>
+	</table>
+</div> 

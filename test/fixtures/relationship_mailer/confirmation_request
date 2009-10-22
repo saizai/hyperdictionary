@@ -1,0 +1,3 @@
+RelationshipMailer#confirmation_request
+
+Find me in app/views/relationship_mailer/confirmation_request.erb

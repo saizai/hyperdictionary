@@ -1,0 +1,26 @@
+<% if current_user == @user or logged_in_as_admin? %>
+<td>
+	<% unless contact.suspended? %>
+		<%= link_to_remote image_tag("eye#{ '_gray' unless contact.public }.png"), 
+			{:url  => screen_user_contact_path(contact.user, contact), :method => :put, :update => "contact_container_#{contact.id}"},
+				:title => "#{'un' if contact.public}screen contact".capitalize %>
+	<% end %>
+</td>
+<td>
+	<%= link_to_remote image_tag("bin#{'_closed' unless contact.suspended?}.png"), 
+		{:url  => suspend_user_contact_path(contact.user, contact), :method => :put, :update => "contact_container_#{contact.id}"},
+			:title => "#{contact.suspended? ? 'reactivate' : 'ignore'} contact".capitalize %>
+</td>
+<td>
+	<% if contact.verifiable and (contact.passive? or contact.pending?) %>
+		<%= link_to_remote image_tag("error.png"), 
+			{:url  => verify_user_contact_path(contact.user, contact), :method => :put, :update => "contact_container_#{contact.id}"},
+ 			:title => "verify contact".capitalize %>
+	<% end %>
+</td>
+<% end %>
+<td><%= contact_icon contact.contact_type %></td>
+<td><span <%= 'style = "color: gray;"' if contact.suspended? %>><%= h contact.data %></span></td>
+<% if current_user == @user or logged_in_as_admin? %>
+	<td><%= "Activation message sent." if contact.recently_registered %></td>
+<% end %>

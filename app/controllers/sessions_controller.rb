@@ -12,11 +12,7 @@ class SessionsController < ApplicationController
     logout_keeping_session!
     user = User.authenticate(params[:login], params[:password])
     if user
-      if user.pending?
-        flash[:error] = "Please click the URL in your email from us to activate your account."
-        UserMailer.deliver_activation(user)
-        redirect_back_or_default('/login')
-      elsif user.active?
+      if user.active?
         # Protects against session fixation attacks, causes request forgery
         # protection if user resubmits an earlier form using back
         # button. Uncomment if you understand the tradeoffs.

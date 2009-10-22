@@ -5,8 +5,6 @@
 		<% end %>
   		<%= r.to_s %><%= ', ' unless r == user.roles.last %>
 	<% end %>
-</td>
-<td>
 	<%= link_to_function(image_tag('add.png'), :id => "add_link_#{user.id}") do |page|
 			page["add_link_#{user.id}"].hide
 			page["add_#{user.id}"].visual_effect :appear, :duration => 0.2

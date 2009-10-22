@@ -12,19 +12,12 @@ module Authorization
         aasm_column :state
         aasm_initial_state :initial => :pending
         aasm_state :passive
-        aasm_state :pending, :enter => :make_activation_code
         aasm_state :active,  :enter => :do_activate
         aasm_state :suspended
         aasm_state :deleted, :enter => :do_delete
         
-        # Override a couple things to handle OpenID flow
-        aasm_event :register do
-          transitions :from => :passive, :to => :pending, :guard => Proc.new {|u| !(u.crypted_password.blank? && u.password.blank?) or !u.identities.empty? } # password OR url
-        end
-        
         aasm_event :activate do
-          transitions :from => :passive, :to => :active, :guard => Proc.new {|u| u.email_verified_by_open_id? } # Skip registration (email confirm) if OpenID says it's good
-          transitions :from => :pending, :to => :active 
+          transitions :from => :passive, :to => :active # No registration step 
         end
         
         aasm_event :suspend do
@@ -76,8 +69,7 @@ module Authorization
       
       def do_activate
         @activated = true
-        self.activated_at = Time.now.utc
-        self.deleted_at = self.activation_code = nil
+        self.deleted_at = nil
       end
     end # instance methods
   end

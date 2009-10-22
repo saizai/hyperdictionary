@@ -1,9 +1,10 @@
 class CreateFriendships < ActiveRecord::Migration
   def self.up
     create_table :friendships do |t|
-      t.references  :from_user, :to_user, :from_identity, :to_identity
-      t.string      :state
-      
+      t.references  :from_user, :to_user, :null => false, :default => nil
+      t.references  :from_identity, :to_identity, :default => nil
+      t.string      :state, :default => 'passive', :null => false
+            
       t.userstamps 
       t.timestamps
     end

@@ -1,0 +1,5 @@
+<h1>Listing pages</h1>
+
+<%= link_to 'New page', new_page_path %>
+
+<%= render :partial => 'page_mini', :collection => @pages, :as => :page %>

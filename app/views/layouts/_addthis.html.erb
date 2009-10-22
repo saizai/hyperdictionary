@@ -1,10 +1,8 @@
-<span style="float:right;">
-	<script type="text/javascript">
-		var addthis_brand = '<%= APP_NAME.humanize %>';
-		var addthis_language = '<%= I18n.locale %>';
-	</script>
-	<a href="http://www.addthis.com/bookmark.php?v=250" style="text-decoration:none;"  onmouseover="return addthis_open(this, '', '<%= request.url %>', '<%= full_title %>');" onmouseout="addthis_close();" onclick="return addthis_sendto();">
-		<img src="http://s7.addthis.com/static/btn/sm-plus.gif"width="16" height="16" border="0" alt="Share / Bookmark" />
-	</a>
-	<script type="text/javascript" src="<%= request.ssl? ? 'https://secure.addthis.com' : 'http://s7.addthis.com' %>/js/250/addthis_widget.js?pub=<%= ADDTHIS_USER %>"></script>
-</span>
+<script type="text/javascript">
+	var addthis_brand = '<%= APP_NAME.humanize %>';
+	var addthis_language = '<%= I18n.locale %>';
+</script>
+<a href="http://www.addthis.com/bookmark.php?v=250" style="text-decoration:none;"  
+	onmouseover="return addthis_open(this, '', '<%= url %>', '<%= full_title %>');" onmouseout="addthis_close();" onclick="return addthis_sendto();">
+	<img src="http://s7.addthis.com/static/btn/sm-plus.gif"width="16" height="16" border="0" alt="Share / Bookmark" />
+</a>

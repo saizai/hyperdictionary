@@ -14,8 +14,12 @@ module DeLynnBerry
     #   >> @states = State.find(:all, :order => "id")
     #   >> @states.to_dropdown 
     #   => [["Alabama", 1], ["Alaska", 2], ["Arizona", 3], ["California", 4], ["Colorado", 5]]
-    def to_options_for_select(text = :name, value = :id, include_blank = false)
-      items = self.collect { |x| [x.send(text.to_sym), x.send(value.to_sym)] }
+    def to_options_for_select(text = :name, value = :id, include_blank = false, meta = nil)
+      if meta
+        items = self.group_by{|x| x.send(meta.to_sym)}.collect { |x,y| [x, y.map{|x,y| [x.send(text.to_sym), x.send(value.to_sym)] }] }
+      else
+        items = self.collect { |x| [x.send(text.to_sym), x.send(value.to_sym)] }
+      end
 
       if include_blank
         items.insert(0, include_blank.kind_of?(String) ? [include_blank, ""] : ["", ""])

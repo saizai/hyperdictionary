@@ -119,7 +119,7 @@ module Authorization
           format.json { head :forbidden }
         end
       end
-
+      
       # Try to find current user by checking options hash and instance method in that order.
       def get_user
         if @railsauth_options[:user]

@@ -1,4 +1,4 @@
-<% remote_form_for( Comment.new,
+<% remote_form_for( [commentable, commentable.comments.new],
 	:html => {:id => "new_comment_form_#{commentable.id}", :class => 'form' },
 	:loading => "$('new_comment_form_indicator_#{ commentable.id }').show(); Form.disable('new_comment_form_#{ commentable.id }');",
     :success => "$('new_comment_form_body_#{commentable.id}').value = ''; $('new_comment_form_indicator_#{ commentable.id }').hide(); 
@@ -6,10 +6,12 @@
 	:update => "comments_#{commentable.id}",
 	:position => :top ) do |f| %>
 	<%= f.error_messages %>
-	<div>
+	
+    <div>
 		<%= f.text_area :body, :id => "new_comment_form_body_#{commentable.id}" %>
-			<div class="wmd-preview"></div>
-		</div>
+    </div>
+	<!-- TODO: insert observer here to spit back formatted output -->    
+
 	<%= f.hidden_field :commentable_type, :value => commentable.class.to_s %>
 	<%= f.hidden_field :commentable_id, :value => commentable.id %>
 	<div id="new_comment_form_submit_<%= commentable.id %>">

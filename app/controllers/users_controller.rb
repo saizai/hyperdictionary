@@ -6,12 +6,47 @@ class UsersController < ApplicationController
   def index
     @users = User.active.paginate :all, :per_page => 50, :page => params[:page]
   end
-
-  def show   
-    @user = User.find(params[:id], :include => [:roles, :preferences, :assets]) # _by_login
-    permit 'site_admin or (self of user)' do
-      @assets = @user.assets.original
+  
+  def show
+    @user = User.find(params[:id], :include => [:public_contacts, :identities]) # _by_login
+    if permit? 'site_admin or (self of user)'
+      @multis = @user.multis
+      @ips = @user.ips
     end
+    @contacts = @user.public_contacts
+    @identities = @user.identities # TODO: add public flag?
+    @friends = @user.friends
+    @fans_of = @user.fans_of
+    @fans = @user.fans
+    @current_user_friends = current_user.friends_and_fans_of
+    @can_add_friend = (logged_in? and current_user != @user and !@current_user_friends.include?(@user))
+  end
+  
+  def edit
+    @user = User.find(params[:id], :include => [:public_contacts, :identities]) # _by_login
+    if permit? 'site_admin or (self of user)'
+      @assets = @user.assets.original
+      @contacts = @user.contacts
+      @roles = @user.roles
+      @preferences = @user.preferences
+      @emails = @user.contacts.emails.map(&:data)
+      @multis = @user.multis
+      @ips = @user.ips
+    else
+      @contacts = @user.public_contacts
+    end
+    @identities = @user.identities # TODO: add public flag?
+    @friends = @user.friends
+    @fans_of = @user.fans_of
+    @fans = @user.fans
+    @current_user_friends = current_user.friends_and_fans_of
+    @can_add_friend = (logged_in? and current_user != @user and !@current_user_friends.include?(@user))
+  end
+  
+  def set_user_name
+    @user = User.find(params[:id])
+    @user.update_attribute(:name, params[:value])
+    render :text => CGI::escapeHTML(@user.name)
   end
   
   # Note: Users can set any preferences on themselves. Do not use this for anything that needs to be secure; that's what Roles are for.
@@ -34,12 +69,11 @@ class UsersController < ApplicationController
   def rpx_login
     logout_keeping_session!
     @user = User.find_or_initialize_with_rpx(params[:token])
-    if @user.new_record?
+    if @user.nil?
+      flash[:error] = "Login token expired. Please try again."
+      redirect_back_or_default('/login')
+    elsif @user.new_record? # first pass of signing up w/ a new identity; the next one will call #create
       render :action => "new_openid"
-    elsif @user.pending?
-      flash[:error] = "Please click the URL in your email from us to activate your account."
-      UserMailer.deliver_activation(@user)
-      redirect_back_or_default('/')
     elsif @user.active?
       self.current_user = @user
       flash[:notice] = "Logged in successfully"
@@ -51,8 +85,8 @@ class UsersController < ApplicationController
   end
   
   def rpx_add
-    current_user.identities << Identity.find_or_initialize_with_rpx(params[:token])
-    current_user.save
+    new_identity = current_user.identities.find_or_initialize_with_rpx(params[:token])
+    new_identity.save
     
     redirect_back_or_default user_path(current_user)
   end
@@ -65,6 +99,8 @@ class UsersController < ApplicationController
  
   def create
     logout_keeping_session!
+    email = params[:user].delete(:email)
+    
     if params[:rpx_token]
       @user = User.find_or_initialize_with_rpx params[:rpx_token]
       if @user.nil? # RPX returned nil. Probably the user took too long and token expired.
@@ -77,25 +113,21 @@ class UsersController < ApplicationController
     end
     
     success = if @user and @user.valid?
-      if @user.email_verified_by_open_id?
+      User.transaction do
         @user.activate!
-      else
-        @user.register!
+        contact = @user.contacts.build(:contact_type_id => ContactType.find_by_name('email').id, :data => email)
+        contact.register!
       end
     end
     
     if success and @user.errors.empty?
       flash[:notice] = "Thanks for signing up!"
-      if @user.pending?
-        flash[:notice] += " We're sending you an email with your activation code." 
-      else
-        self.current_user = @user
-      end
+      self.current_user = @user
       redirect_back_or_default('/home')
     elsif !@user.identities.blank?
       render :action => 'new_openid'
     else
-      flash[:error]  = "We couldn't set up that account, sorry.  Please try again, or contact an admin (link is above)."
+      flash[:error]  = "We couldn't set up that account, sorry.  Please try again, or contact an admin."
       render :action => 'new'
     end
   end

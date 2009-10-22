@@ -1,0 +1,3 @@
+RelationshipMailer#reciprocation_notice
+
+Find me in app/views/relationship_mailer/reciprocation_notice.erb

@@ -1,16 +1,19 @@
 class CommentsController < ApplicationController
   permit 'site_admin', :only => :moderate
   
-  # GET /comments
-  # GET /comments.xml
-#  def index
-#    @comments = Comment.all
-#
-#    respond_to do |format|
-#      format.html # index.html.erb
-#      format.xml  { render :xml => @comments }
-#    end
-#  end
+  before_filter :get_commentable
+  
+#   GET /comments
+#   GET /comments.xml
+  def index
+    @comments = @commentable.comments.all
+
+    respond_to do |format|
+      format.js   { render :layout => false }
+      format.html # index.html.erb
+      format.xml  { render :xml => @comments }
+    end
+  end
 
   # GET /comments/1
   # GET /comments/1.xml
@@ -147,5 +150,12 @@ class CommentsController < ApplicationController
         format.xml  { head :ok }
       end
     end
+  end
+  
+  protected
+  
+  def get_commentable
+    @commentable = params[:commentable_type].constantize.find(params[:commentable_id]) if params[:commentable_type] and params[:commentable_id]
+    @commentable ||= Page.find(params[:page_id]) if params[:page_id]
   end
 end

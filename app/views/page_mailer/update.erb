@@ -1,0 +1,9 @@
+<%= @user.name%>, <%= @page.name %> has been updated by <%= @page.updater.try :name || 'Anonymous' %>.
+
+New version:
+<%= @page.body %>
+
+Visit <%= @url %> to change your subscription settings.
+
+- <%= APP_NAME %>
+

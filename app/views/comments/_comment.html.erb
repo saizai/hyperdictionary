@@ -39,7 +39,7 @@
 		<%= comment.moderated ? 'Moderated' : 'Private' %> comment
 	<% end %>
 </div>
-<% comment.children.each do |subcomment| %>
+<% comment.children(@comments).each do |subcomment| %>
 	<div  id="comment_post_container_<%= subcomment.id %>" >
 		<%= render :partial => '/comments/comment', :locals => {:comment => subcomment} %>
 	</div>

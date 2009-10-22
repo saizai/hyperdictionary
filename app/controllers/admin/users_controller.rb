@@ -5,7 +5,7 @@ class Admin::UsersController < ApplicationController
   after_filter :refresh_user, :except => [:index, :spoof]
   
   def index
-    @users = User.paginate :all, :per_page => 50, :page => params[:page], :include => [{:roles_users => :role}, :identities, {:profile => :slugs}]
+    @users = User.paginate :all, :per_page => 50, :page => params[:page], :include => [{:roles_users => :role}, :identities, :page]
     @anon_roles = AnonUser.roles
   end
   

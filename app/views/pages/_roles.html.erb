@@ -1,0 +1,57 @@
+<% if page.edited_by? current_user %>
+	<span id='page_roles_container_<%= page.id %>'>
+		<%= link_to_function(image_tag('user_edit.png'), :id => "page_roles_link_#{page.id}", :title => "Show / edit roles") do |page_local| # in ruby 1.8 this 'page' would conflict with the above one. :(
+			page_local.visual_effect :toggle_blind, "page_roles_#{page.id}"
+		end %>
+		<div id='page_roles_<%= page.id %>' <%= 'style="display: none;"' unless defined? shown and shown %>>
+			<table>
+				<tr>
+					<th><span class="tooltip highlight">Role 
+						<span><dl>
+							<dt>Reader</dt><dd>can read the page & public comments</dd>
+							<dt>Commenter</dt><dd>can also leave comments & read own screened comments (unless anonymous)</dd>
+							<dt>Tagger</dt><dd>can also edit tags</dd>
+							<dt>Editor</dt><dd>can also edit the page, attach files, and see these roles</dd>
+							<dt>Member</dt><dd>can also screen comments and edit without review required</dd>
+							<dt>Moderator</dt><dd>can also moderate comments</dd>
+							<dt>Owner</dt><dd>can also set these roles and delete comments</dd>
+						</dl></span></span>
+					</th>
+					<th>User</th>
+				</tr>
+				
+				<% page.users_by_roles.each do |role, users| %>
+					<tr>
+						<td><%= role.capitalize %></td>
+						<td><%= users.map{|user| link_to_user user}.join(', ') %></td>
+					</tr>
+				<% end %>
+				
+				<% if page.owned_by? current_user 
+					# Unfortunately, we can't use a normal form_remote_tag here, because the form breaks on the row.
+					# Instead, we use a link_to_remote to submit the row itself as if it were a form (which it is).
+					# submit_to_remote is similar, but lacks the ability to take an image tag.
+					%>
+					<tr id='page_new_role_<%= page.id %>'>
+						<td><%= select_tag :role, options_for_select([nil] + Page::ROLES.map(&:capitalize)) %></td>
+						<td><%= text_field_tag :login, nil, :size => 10 %></td>
+						<td><%= link_to_remote image_tag('add.png'), :submit => "page_new_role_#{page.id}", 
+									:url => change_role_page_path(:authenticity_token => form_authenticity_token), :method => :put %>
+							<span class="tooltip highlight">What's this? 
+								<span>
+									To add OR change a role, just select the role, type the user's name, and press the <%= image_tag('add.png')%>.<br/>
+									To remove a role (i.e. remove all special permissions a user has), select the top (empty) choice from the roles list.<br/>
+									To change the default permissions, type 'anonymous' for the user (or leave it blank).<br/>
+									Please note: you can't set special permissions for logged in users vs truly anonymous users.<br/>
+									<br/>
+									Hover over 'Role' above to see what all the roles mean.<br/>
+									By default, Anonymous is a Commenter.
+								</span>
+							</span>			
+						</td>
+					</tr>
+				<% end %>
+			</table>
+		</div>
+	</span>
+<% end %>

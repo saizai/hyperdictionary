@@ -1,0 +1,2 @@
+<td><%= image_tag identity.provider.downcase + '.png', :title => identity.provider %></td>
+<td><%= link_to(identity.login, identity.profile_url || identity.url) %></td>

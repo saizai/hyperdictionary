@@ -1,7 +1,7 @@
 <noscript>
 	<h4>Please turn on JavaScript + Flash to use our fancier file uploader</h4>
 	<%= error_messages_for :asset %>
-	<% form_for(Asset.new, :html => { :multipart => true }) do |f| %>
+	<% form_for([current_user, current_user.assets.new], :html => { :multipart => true }) do |f| %>
 	  <p>
 	    <label for="uploaded_data">Upload a file:</label>
 	    <%= f.file_field :uploaded_data %>
@@ -38,11 +38,13 @@
 				upload_target : "divFileProgressContainer"
 			},
 			debug: <%= (RAILS_ENV == 'development') or logged_in_as_admin? %>,
-			// Create the custom swfupload_assets_path in the routes.rb file
-			upload_url : '<%= swfupload_assets_path :authenticity_token => form_authenticity_token, SESSION_KEY.to_sym => request.session_options[:id], :attachable_type => (attachable.class.to_s if defined? attachable), :attachable_id => (attachable.id if defined? attachable) -%>',
+			upload_url : '<%= swfupload_user_assets_path current_user, :authenticity_token => form_authenticity_token,
+							 SESSION_KEY.to_sym => request.session_options[:id], 
+							 :attachable_type => (attachable.class.to_s if defined? attachable), 
+							 :attachable_id => (attachable.id if defined? attachable) -%>',
 			// flash_url : '/assets/swfupload_f9.swf',
 			
-			file_size_limit : '3 MB',
+			file_size_limit : '100 MB',
 			file_types : '*.*',
 			file_types_description : 'Any file',
 			file_upload_limit : '0',
@@ -57,13 +59,13 @@
 			custom_settings : { 
 				upload_target : 'divFileProgressContainer'
 			},
-
+			
 			// Button Settings
 			button_image_url : "/images/spyglass.png",
 			button_placeholder_id : "spanButtonPlaceholder",
 			button_width: 180,
 			button_height: 18,
-			button_text : '<span class="button">Select any files <span class="buttonSmall">(3 MB Max)</span></span>',
+			button_text : '<span class="button">Select any files <span class="buttonSmall">(100 MB max)</span></span>',
 			button_text_style : '.button { font-family: Helvetica, Arial, sans-serif; font-size: 12pt; } .buttonSmall { font-size: 10pt; }',
 			button_text_top_padding: 0,
 			button_text_left_padding: 18,

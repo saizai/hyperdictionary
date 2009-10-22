@@ -1,0 +1,12 @@
+<%= render :partial => '/contacts/new' if current_user == @user or logged_in_as_admin? %>
+<div id="contacts" class="contacts">	
+	<table style="margin-bottom: 0;">
+		<% contacts.each do |contact| %>
+			<% # The container is a workaround for the fact that Ajax.Updater doesn't support replace (only replace_html) 
+				%>
+			<tr id="contact_container_<%= contact.id %>" >
+				<%= render :partial => '/contacts/contact', :locals => {:contact => contact} %>
+			</tr>
+		<% end %>
+	</table>
+</div>

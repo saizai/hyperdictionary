@@ -1,24 +1,38 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :identities
-
-  map.resources :assets, :collection => { :swfupload => :post }, :member => {:download => :get}
+  map.resource :session # For the unitary session, i.e. the current one
+  map.resources :users, :member => { :forgot_password => :get, :change_password => :put, :set_preference => :put, :set_user_name => :post } do |user|
+    user.resources :contacts, :member => { :activate => :get, :screen => :put, :verify => :put, :suspend => :put } # technically activate should be a put, but accessed via get... oh well
+    user.resources :relationships, :member => {:confirm => :put} 
+    user.resources :sessions # For all the user's sessions
+    user.resource :page, :member => {:change_role => :put, :subscribe => :put} do |page|
+      page.resources :comments, :member => {:moderate => :put, :screen => :put }
+      page.resources :versions, :member => {:compare => :get, :revert => :put}
+    end
+    user.resources :tags
+    user.resources :assets, :collection => { :swfupload => :post }, :member => {:download => :get}
+    user.resources :identities
+  end
+  
+  # For global ones:
   map.resources :tags
-  map.resources :profiles, :member => {:change_role => :put, :subscribe => :put}
-
+  map.resources :pages, :member => {:change_role => :put, :subscribe => :put} do |page|
+    page.resources :comments, :member => {:moderate => :put, :screen => :put }
+    page.resources :versions, :member => {:compare => :get, :revert => :put}
+  end
+  # only used because polymorphic parent URLs are a pain in the ass (e.g. moderate_???_comment_url)
   map.resources :comments, :member => {:moderate => :put, :screen => :put }
-
+  
   map.rpx_login '/rpx_login', :controller => 'users', :action => 'rpx_login'
   map.rpx_add '/rpx_add', :controller => 'users', :action => 'rpx_add'
-  map.resources :users, :member => { :forgot_password => :get, :change_password => :put, :set_preference => :put }
   map.logout '/logout', :controller => 'sessions', :action => 'destroy'
   map.login  '/login',  :controller => 'sessions', :action => 'new'
   map.signup  '/signup', :controller => 'users',   :action => 'new'
   map.register '/register', :controller => 'users', :action => 'create'
   map.forgot_password '/forgot_password', :controller => 'users', :action => 'forgot_password'
-  map.activate '/activate/:activation_code', :controller => 'users', :action => 'activate', :activation_code => nil
   map.reset_password '/reset_password/:password_reset_code', :controller => 'users', :action => 'reset_password', :password_reset_code => nil
-  map.resource :session
-
+# Deprecated for contact verification
+#  map.activate '/activate/:activation_code', :controller => 'users', :action => 'activate', :activation_code => nil
+  
   map.namespace :admin do |admin|
     admin.root :controller => 'main'
     admin.preferences 'preferences', :controller => 'main', :action => 'preferences'
@@ -30,51 +44,14 @@ ActionController::Routing::Routes.draw do |map|
                             :collection => {:spoof => :put} do |users|
       users.resources :roles
     end
+     admin.logged_exceptions "/logged_exceptions/:action/:id", :controller => "logged_exceptions"
   end
-  map.admin_logged_exceptions "/admin/logged_exceptions/:action/:id", :controller => "logged_exceptions"
   
-  # The priority is based upon order of creation: first created -> highest priority.
-
-  # Sample of regular route:
-  #   map.connect 'products/:id', :controller => 'catalog', :action => 'view'
-  # Keep in mind you can assign values other than :controller and :action
-
-  # Sample of named route:
-  #   map.purchase 'products/:id/purchase', :controller => 'catalog', :action => 'purchase'
-  # This route can be invoked with purchase_url(:id => product.id)
-
-  # Sample resource route (maps HTTP verbs to controller actions automatically):
-  #   map.resources :products
-
-  # Sample resource route with options:
-  #   map.resources :products, :member => { :short => :get, :toggle => :post }, :collection => { :sold => :get }
-
-  # Sample resource route with sub-resources:
-  #   map.resources :products, :has_many => [ :comments, :sales ], :has_one => :seller
-  
-  # Sample resource route with more complex sub-resources
-  #   map.resources :products do |products|
-  #     products.resources :comments
-  #     products.resources :sales, :collection => { :recent => :get }
-  #   end
-
-  # Sample resource route within a namespace:
-  #   map.namespace :admin do |admin|
-  #     # Directs /admin/products/* to Admin::ProductsController (app/controllers/admin/products_controller.rb)
-  #     admin.resources :products
-  #   end
-
-  # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-  # map.root :controller => "welcome"
   map.home '/home', :controller => 'main', :action => 'home'
   map.about '/about', :controller => 'main', :action => 'about'
   map.root :controller => "main"
 
-  # See how all your routes lay out with "rake routes"
-
-  # Install the default routes as the lowest priority.
-  # Note: These default routes make all actions in every controller accessible via GET requests. You should
-  # consider removing the them or commenting them out if you're using named routes and resources.
+# Don't allow wildcard routes - log 'em as 404s instead
 #  map.connect ':controller/:id/:action'
 #  map.connect ':controller/:id/:action.:format'
   map.connect '*path' , :controller => 'four_oh_fours', :action => 'log'

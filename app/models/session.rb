@@ -1,38 +1,25 @@
-# Note: This class will NOT get autoreloaded in dev mode; you'll have to restart the server to see changes.
+# This class is mostly just a placeholder; it exposes sessions (which are in the DB anyway) to us as a normal-ish model.
+# Note that the +data+ field is magic; behind the scenes its actually base 64 encoded marshalled data, but on access it's unpacked into the familiar session hash.
+# Also note that this means we can do really hackish (but potentially useful?) things like directly editing a logged in user's session
+
+# Note that data['flash'] is not a Hash, it's a ActionController::Flash::FlashHash; they are not interchangeable. 
+# You must access it through the class methods (e.g. data['flash'][:notice] = 'Hello from the spooky admin!') or it will make the user's session crash.
+
+# Another thing this allows is direct lookup of sessions, in case (for usually hackish reasons) we need to bind a session in an unusual way.
+# Be careful about security (e.g. CSRF) when doing this! E.g. use :authenticity_token => form_authenticity_token + protect_from_forgery (on by default for non-GET requests).
 class Session < ActiveRecord::SessionStore::Session
-  # Not using stampable here 'cause its injection method is a bit complicated for session usage
-  attr_accessor :skip_setters
+  # Note: This class will NOT get autoreloaded in dev mode; you'll have to restart the server to see changes.
   
+  # fixes 'can't dup NilClass' error introduced in rails 2.3.3 - see https://rails.lighthouseapp.com/projects/8994/tickets/2441-activerecordsessionstore-breaks-with-custom-model
+  unloadable
+  
+  # This just moves some fields from the session data to the session itself.
+  # It lets us then do indexed lookups on the sessions.
+  # e.g. Session.find_all_by_ip('1.2.3.4').map(&:updater_id).uniq gets us all the users from a particular IP :-)
   before_save :set_ip
-  before_save :set_user
-  
-  def set_user
-    return true if self.skip_setters
-    self.creator_id ||= self.data[:user_id] # First user on this session
-    self.updater_id = self.data[:user_id] if self.data[:user_id] # Last user on this session
-    if self.creator and self.updater and self.creator_id != self.updater_id
-      # TODO: put this in the database somewhere; logged_exceptions perhaps?
-      logger.error "MULTI LOGIN: User #{self.creator.login} and #{self.updater.login} from #{self.ip}"
-      
-      # Save a copy for later inspection
-      backup = self.class.new {|dup_session| 
-        dup_session.attributes = self.attributes
-        dup_session.session_id = ActiveSupport::SecureRandom.hex(16) # overwrite the session_id so we don't conflict with the current one & it can't be used to log in
-        dup_session.skip_setters = true
-      }
-      backup.save
-      
-      # Set this session to be single user again. Updater is what the user looks for; creator is the one that's there to trigger this.
-      self.creator_id = self.updater_id
-    end
-  end
-  
   def set_ip
-    return true if self.skip_setters
     self.ip = self.data[:ip] if self.data[:ip]
-  end
-  
-  def logged_in?
-    !! self.data[:user_id]
+    self.creator_id ||= self.data[:last_user_id]
+    self.updater_id = self.data[:last_user_id]
   end
 end 

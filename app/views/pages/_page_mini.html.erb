@@ -1,0 +1,5 @@
+<div>
+    <%= link_to 'X', page, :confirm => 'Are you sure?', :method => :delete, :class => 'close' if logged_in_as_admin? %>
+	<%= type_icon page %>
+	<%= avatar page.owner, :icon %> <%= link_to h(page.name), page_path(page) %>
+</div>

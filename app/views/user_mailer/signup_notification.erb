@@ -1,7 +1,5 @@
-<%= h @user.name %>, your account has been created.
+Hi, <%= h @user.name %>!
 
-  Username: <%=h @user.login %>
+Your <%= APP_NAME %> account <%= h @user.login %> has been created. Welcome aboard!
 
-Visit this url to activate your account:
-
-  <%=h @url %>
+Visit <%=h @url %> to log in.

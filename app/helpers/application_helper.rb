@@ -21,7 +21,7 @@ module ApplicationHelper
   def full_title
     APP_NAME.humanize + (@title ? ": #{@title}" : '')
   end
- 
+  
 #  def markdowwn text
 #    BlueCloth.new(h(text)).to_html
 #  end

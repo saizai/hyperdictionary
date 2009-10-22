@@ -1,0 +1,32 @@
+<div style="margin-bottom: 10px;">
+	<%= image_tag 'eye.png', :title => 'This page is private. Only specified users may read it.' unless page.read_by? AnonUser %>
+	<h2 style="display: inline;"><%=h page.friendly_id %></h2>
+	
+	<% content_tag :span, link_to(h(page.url), page.url), :class => 'url' if page.url %>
+	
+	<% if page.edited_by? current_user %>
+		<span><%= link_to image_tag('page_edit.png'), edit_page_path(page), :title => 'Edit page' %></span>
+	<% end %>
+	<%= render :partial => '/pages/roles', :locals => {:page => page} %>
+	<%= render :partial => '/pages/subscribe', :locals => {:page => page} %>
+	<%= render :partial => '/layouts/addthis', :locals => {:url => page_url(page) } %>
+	<%= link_to image_tag('date.png'), page_versions_url(page), :title => "Revision history" %>
+</div>
+
+<div>
+	<%= markdown page.body %>
+</div>
+
+<% page.tags.each do |tag| -%>
+	<%= link_to_tag(tag) %>
+<% end -%>
+<% if page.commented_by? current_user %>
+	<%= image_tag 'tag_edit.png', :title => 'Edit tags' %>
+<% end %>
+  
+<%= render :partial => '/assets/assets', :locals => {:assets => page.assets, :attachable => page, :upload => page.edited_by?(current_user) } %>
+
+<div id="page_<%= page.id %>_comments" style="clear:both;">
+	Loading comments... <%= image_tag 'ajax-spinner.gif', :id => "page_#{page.id}_comments_preload_indicator" %>
+	<%= javascript_tag remote_function(:update => "page_#{page.id}_comments", :url => page_comments_url(page), :method => :get) %>
+</div>

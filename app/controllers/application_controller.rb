@@ -43,12 +43,13 @@ class ApplicationController < ActionController::Base
   before_filter :set_locale
   def set_locale 
     # request.compatible_language_from(array)
-    I18n.locale = params[:locale] || current_user.get_preference('locale') || request.user_preferred_languages.first || GEO_COUNTRY(request.remote_ip)
+    session[:locale] ||= current_user.get_preference('locale') || request.user_preferred_languages.first || GEO_COUNTRY(request.remote_ip)
+    I18n.locale = params[:locale] || session[:locale] || I18n.default_locale
     logger.info "Locale: #{I18n.locale}"
   end
   
   def default_url_options options={}
-    options.merge({ :locale => params[:locale] }) if params[:locale] # propagate intentional locale 
+    params[:locale] ? options.merge({ :locale => params[:locale] }) : options # propagate intentional locale 
   end 
   
 #  # Hack to show what requests a process is handling in top (if it's in short mode)

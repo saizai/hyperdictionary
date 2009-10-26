@@ -43,6 +43,7 @@ class AssetsController < ApplicationController
   # POST /assets.xml
   def create
     @asset = Asset.new(params[:asset])
+    @asset.creator_id = @asset.updater_id = current_user.id
 
     respond_to do |format|
       if @asset.save
@@ -70,6 +71,7 @@ class AssetsController < ApplicationController
   def swfupload
     # swfupload action set in routes.rb
     @asset = Asset.new :uploaded_data => params[:Filedata], :attachable_type => params[:attachable_type], :attachable_id => params[:attachable_id]
+    @asset.creator_id = @asset.updater_id = current_user.id
     @asset.save!
     
     # This returns the thumbnail url for handlers.js to use to display the thumbnail

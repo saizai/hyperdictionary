@@ -20,8 +20,8 @@ class Asset < ActiveRecord::Base
   
   def before_validation
     self.updater_id ||= self.creator_id
-    self.creator_id ||= self.parent.creator_id
-    self.updater_id ||= self.parent.updater_id
+    self.creator_id ||= self.parent.creator_id if self.parent
+    self.updater_id ||= self.parent.updater_id if self.parent
   end
   
   def self.width size

@@ -1,5 +1,5 @@
 <li id="asset_<%= asset.id %>">
-	<%= icon asset %>
+	<%= asset_icon asset %>
 	<%= link_to_remote "X", {:url => user_asset_path(asset.creator, asset), :method => :delete, :confirm => "Are you sure?",
 			:success => update_page {|page| 
 				page.visual_effect :blind_up, "asset_#{asset.id}"

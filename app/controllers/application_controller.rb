@@ -42,11 +42,15 @@ class ApplicationController < ActionController::Base
 
   before_filter :set_locale
   def set_locale 
-    # if params[:locale] is nil then I18n.default_locale will be used  
-    # GEO_COUNTRY(request.remote_ip)
-    I18n.locale = params[:locale] || request.user_preferred_languages.first # request.compatible_language_from(array)
+    # request.compatible_language_from(array)
+    I18n.locale = params[:locale] || current_user.get_preference('locale') || request.user_preferred_languages.first || GEO_COUNTRY(request.remote_ip)
+    logger.info "Locale: #{I18n.locale}"
   end
-
+  
+  def default_url_options options={}
+    options.merge({ :locale => params[:locale] }) if params[:locale] # propagate intentional locale 
+  end 
+  
 #  # Hack to show what requests a process is handling in top (if it's in short mode)
 #  $PROC_NAME ||= "#{$0} #{$*.join(' ')}" # keep the original. Note that this isn't really what ps thinks it was to start; ruby's $0 isn't very smart, it seems
 #  

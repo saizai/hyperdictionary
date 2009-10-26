@@ -35,10 +35,8 @@ class Comment < ActiveRecord::Base
     
   def children comments
     if comments
-puts "children: local"
       comments.select{|x| x.parent_id == self.id}
     else
-puts "children: DB"
       super()
     end || []
   end

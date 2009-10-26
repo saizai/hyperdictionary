@@ -40,6 +40,13 @@ class ApplicationController < ActionController::Base
   end
   helper_method :is_tor_node?
 
+  before_filter :set_locale
+  def set_locale 
+    # if params[:locale] is nil then I18n.default_locale will be used  
+    # GEO_COUNTRY(request.remote_ip)
+    I18n.locale = params[:locale] || request.user_preferred_languages.first # request.compatible_language_from(array)
+  end
+
 #  # Hack to show what requests a process is handling in top (if it's in short mode)
 #  $PROC_NAME ||= "#{$0} #{$*.join(' ')}" # keep the original. Note that this isn't really what ps thinks it was to start; ruby's $0 isn't very smart, it seems
 #  

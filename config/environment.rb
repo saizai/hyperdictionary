@@ -51,6 +51,7 @@ Rails::Initializer.run do |config|
 #  config.gem 'RedCloth', :lib => 'redcloth'
   config.gem 'bluecloth' # lowercase is 2.x, camelcase is 1.x
   config.gem 'utf8proc'
+  config.gem 'geoip'
   # config.gem 'fiveruns_tuneup', :version => '>= 0.8.20'
   
   # Add additional load paths for your own custom dirs

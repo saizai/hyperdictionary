@@ -27,11 +27,11 @@ class Relationship < ActiveRecord::Base
   end
   
   aasm_event :request_confirmation do
-    transitions :from => [:pending, :passive], :to => :pending  # (re)send activation code
+    transitions :from => [:pending, :passive, :suspended], :to => :pending  # (re)send activation code
   end
   
   aasm_event :confirm do
-    transitions :from => :pending, :to => :active
+    transitions :from => [:passive, :pending, :suspended], :to => :active
   end
   
   aasm_event :deny do
@@ -72,5 +72,9 @@ class Relationship < ActiveRecord::Base
   
   def do_suspend
     self.suspended_at = Time.now.utc
+    r = reciprocal
+    r.state = 'suspend'
+    r.suspended_at = Time.now.utc
+    r.save
   end
 end

@@ -1,3 +1,3 @@
-<%= friends.map{|x| mine_too = (x == current_user or @current_user_friends.include?(x))
+<%= friends.map{|x| mine_too = (logged_in? ? (x == current_user or @current_user_friends.include?(x)) : false)
 					c = link_to_user(x)
 					mine_too ? '<b>' + c + '</b>' : c}.join(', ') %>

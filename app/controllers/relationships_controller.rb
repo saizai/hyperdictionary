@@ -3,7 +3,7 @@ class RelationshipsController < ApplicationController
   
   def create
     # @user is the SOURCE user
-    @relationship = @user.relationships.new(params[:relationship])
+    @relationship = @user.relationships.find_or_initialize_by_to_user_id(params[:relationship][:to_user_id])
     
     permit 'site_admin or (self of user)' do
       success = @relationship.request_confirmation! if @relationship and @relationship.valid?
@@ -11,7 +11,7 @@ class RelationshipsController < ApplicationController
         respond_to do |format|
           format.js   { head :ok  }
           format.html {
-            flash[:notice] = "Friend added! (We'll let you know if they reciprocate.)" 
+            flash[:notice] = "Friend added!" 
             redirect_back_or_default @relationship.to_user
           }
           format.xml { head :ok }

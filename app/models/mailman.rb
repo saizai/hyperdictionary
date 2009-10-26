@@ -8,6 +8,7 @@ class Mailman < ActionMailer::Base
     
     if contact = Contact.find_by_data(mail.from, :conditions => {:state => 'active'}, :include => :user) # no need for .first, this'll get the first one
       user = contact.user
+      I18n.locale = user.get_preference('locale') || 'en-US' 
       domain = Regexp.new YAML.load_file("#{RAILS_ROOT}/config/mail.yml")[RAILS_ENV]['domain']
 p "Got mail from #{user.login} to #{((mail.to || []) + (mail.cc || []))}"      
       case addressee = ((mail.to || []) + (mail.cc || [])).select{|x| x=~domain}.map{|x| x.sub domain, ''}.map{|x| x.sub /@.*/, ''}.first

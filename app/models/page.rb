@@ -30,14 +30,15 @@ class Page < ActiveRecord::Base
   
   EXTRA_ROLES = %w(subscriber)
   
-  def self.find_one name_or_id, options
-    return super name_or_id, options if name_or_id.is_a?(Integer)
-    split_name = name_or_id.split(':')
-    raise "Invalid name" if split_name.size > 2
-    scope = split_name.size == 2 ? split_name[0] : ''
-    name = split_name.size == 2 ? split_name[1] : split_name[0]
-    super name, options.merge(:scope => scope)
-  end
+  # TODO: Come up with a clever way to handle multiple.
+#  def self.find_one name_or_id, options
+#    return super name_or_id, options if name_or_id.is_a?(Integer)
+#    split_name = name_or_id.split(':')
+#    raise "Invalid name" if split_name.size > 2
+#    scope = split_name.size == 2 ? split_name[0] : ''
+#    name = split_name.size == 2 ? split_name[1] : split_name[0]
+#    super name, options.merge(:scope => scope)
+#  end
   
   def after_create
     if creator

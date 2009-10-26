@@ -1,6 +1,0 @@
-<% if logged_in? 
- subscribed = current_user.is_subscriber_of?(profile) %>
-	<%= link_to_remote image_tag("email_#{ subscribed ? 'link' : 'gray' }.png"), 
-		{:url  => subscribe_profile_path(profile), :method => :put, :update => "profile_#{profile.id}_subscribe"},
-		 :title => "#{'un' if subscribed}subscribe".capitalize %>
- <% end %>

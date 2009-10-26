@@ -1,16 +1,16 @@
 ActionController::Routing::Routes.draw do |map|
   map.resource :session # For the unitary session, i.e. the current one
-  map.resources :users, :member => { :forgot_password => :get, :change_password => :put, :set_preference => :put, :set_user_name => :post } do |user|
-    user.resources :contacts, :member => { :activate => :get, :screen => :put, :verify => :put, :suspend => :put } # technically activate should be a put, but accessed via get... oh well
+  map.resources :users, :member => {:forgot_password => :get, :change_password => :put, :set_preference => :put, :set_user_name => :post} do |user|
+    user.resources :contacts, :member => {:activate => :get, :screen => :put, :verify => :put, :suspend => :put} # technically activate should be a put, but accessed via get... oh well
     user.resources :relationships, :member => {:confirm => :put} 
     user.resources :sessions # For all the user's sessions
     user.resource :page, :member => {:change_role => :put, :subscribe => :put} do |page|
-      page.resources :comments, :member => {:moderate => :put, :screen => :put }
+      page.resources :comments, :member => {:moderate => :put, :screen => :put}
       page.resources :versions, :member => {:compare => :get, :revert => :put}
     end
     user.resources :tags
-    user.resources :assets, :collection => { :swfupload => :post }, :member => {:download => :get}
-    user.resources :identities
+    user.resources :assets, :collection => {:swfupload => :post}, :member => {:download => :get}
+    user.resources :identities, :member => {:screen => :put}
   end
   
   # For global ones:
@@ -39,8 +39,8 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :four_oh_fours
     admin.resources :users, :member => {:suspend => :put, :unsuspend => :put, :purge => :delete, :activate => :put, 
                                         :add_role => :put, :remove_role => :delete, :unmap => :delete, :map => :put,
-                                        :reset => :put },
-                            # This is really a member function, but we don't know which member until after runtime, so we can't require ID
+                                        :reset => :put,  :same_ip => :get },
+                            # Spoof is really a member function, but we don't know which member until after runtime, so we can't require ID
                             :collection => {:spoof => :put} do |users|
       users.resources :roles
     end

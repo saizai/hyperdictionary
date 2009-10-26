@@ -1,5 +1,0 @@
-<div>
-	<%= link_to "Version #{profile.lock_version}", profile_path(profile.profile_id, :version => profile.lock_version)  %>,
-	updated by <%= link_to_user profile.updater %>
-	<span class='time'><%= time_ago_in_words profile.updated_at %> ago</span>
-</div>

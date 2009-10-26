@@ -53,13 +53,13 @@ class ContactsController < ApplicationController
           format.js   { render :partial => 'contact'  }
           format.html {
             flash[:notice] = 'Contact was successfully screened.'
-            redirect_to user 
+            redirect_to @user 
           }
           format.xml  { head :ok }
         else
           format.html { 
             flash[:notice] = 'Error screening contact.'
-            redirect_to user
+            redirect_to @user
           }
           format.xml  { render :xml => @comment.errors, :status => :unprocessable_entity }
         end
@@ -77,13 +77,13 @@ class ContactsController < ApplicationController
           format.js   { render :partial => 'contact'  }
           format.html {
             flash[:notice] = "Contact was successfully #{'un' if !@contact.suspended?}suspended."
-            redirect_to user 
+            redirect_to @user 
           }
           format.xml  { head :ok }
         else
           format.html { 
             flash[:notice] = 'Error suspending contact.'
-            redirect_to user
+            redirect_to @user
           }
           format.xml  { render :xml => @comment.errors, :status => :unprocessable_entity }
         end

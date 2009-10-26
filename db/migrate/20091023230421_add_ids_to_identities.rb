@@ -1,15 +1,16 @@
 class AddIdsToIdentities < ActiveRecord::Migration
   def self.up
-    raise "don't run me yet"
-    
-    add_column :identities, :vendor_id, :bigint, :default => nil
-    add_column :identities, :session_key, :string, :default => nil
-    add_column :identities, :session_key_expires, :int, :default => nil
-    add_column :identities, :oauth_token, :string, :default => nil
-    add_column :identities, :oauth_secret, :string, :default => nil
-    add_column :identities, :public, :boolean, :default => false, :null => false
+    change_table :identities do |t|
+      t.integer :vendor_id, :default => nil, :limit => 8 # 8 bytes = bigint
+      t.string :session_key, :oauth_token, :oauth_secret, :default => nil
+      t.datetime :session_key_expires_at, :default => nil
+      t.boolean :public, :default => true, :null => false
+    end
   end
-
+  
   def self.down
+    change_table :identities do |t|
+      t.remove :vendor_id, :session_key, :oauth_token, :oauth_secret, :session_key_expires_at, :public
+    end
   end
 end

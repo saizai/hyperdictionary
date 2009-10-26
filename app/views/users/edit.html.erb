@@ -42,8 +42,8 @@
 				<td>
 					<%- if current_user == @user or logged_in_as_admin? -%>
 						<span class="tooltip highlight">Contacts<span>Click the eye to make a contact public. 
-							Private contacts are only visible to <%= APP_NAME %> admins.<br/>Click the trash can to have the system (un)ignore a contact.</span></span>
-						
+							Private contacts are only visible to <%= APP_NAME %> admins.<br/>
+							Click the trash can to have the system (un)ignore a contact.</span></span>
 						<%= link_to_function( image_tag('add.png'), :id => "add_contact_link") {|page| 
 							page[:add_contact_link].hide
 							page[:new_contact_form].visual_effect :appear, :duration => 0.2
@@ -57,7 +57,10 @@
 		<% end %>
 		<% if !@identities.blank? or (current_user == @user or logged_in_as_admin?) %>
 			<tr>
-				<td>Identities
+				<td><span class="tooltip highlight">Identities<span>Click the eye to make an identity public. 
+							Private contacts are only visible to <%= APP_NAME %> admins.<br/><br/>
+							You can also add new identities to your account by clicking the green plus.<br/>
+							This allows you to log in using multiple external accounts, as well as connect automatically with your friends from there.</span></span>
 					<%= link_to_function(image_tag('add.png'), :id => "add_identity_link"){|page| 
 						page[:add_identity_link].hide
 						page[:new_identity_form].visual_effect :appear, :duration => 0.2
@@ -152,7 +155,14 @@
 		<% if logged_in_as_admin? and !@ips.blank? %>
 			<tr>
 				<td>IPs</td>
-				<td><%= @ips.join(', ') %></td>
+					<td>
+						<% @ips.map do |ip| %>
+							<%= image_tag "tor.png" if is_tor_node? ip %>
+							<%= link_to_remote ip[0], {:url  => same_ip_admin_user_path(@user), :method => :get, :update => "users_on_same_ip_as_#{@user.id}"},
+									:title => ip[1] %>
+						<% end.join(', ') %>
+						<div id="users_on_same_ip_as_<%= @user.id%>"></div>
+					</td>
 			</tr>
 		<% end %>
 		<% if current_user == @user or logged_in_as_admin? %>

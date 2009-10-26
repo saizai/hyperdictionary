@@ -2,7 +2,7 @@ class Admin::UsersController < ApplicationController
   permit 'site_admin', :except => :spoof
 
   before_filter :find_user, :except => [:index, :spoof]
-  after_filter :refresh_user, :except => [:index, :spoof]
+  after_filter :refresh_user, :except => [:index, :spoof, :same_ip]
   
   def index
     @users = User.paginate :all, :per_page => 50, :page => params[:page], :include => [{:roles_users => :role}, :identities, :page]
@@ -23,6 +23,12 @@ class Admin::UsersController < ApplicationController
     end
     rescue ActiveRecord::RecordNotFound
       render :inline => "#{params[:id]} not found", :status => 404
+  end
+  
+  def same_ip
+    # TODO: handle non-js usage
+    @users = @user.users_on_same_ip
+    render :partial => '/users/list', :locals => {:users => @users}, :status => :ok
   end
   
   def activate

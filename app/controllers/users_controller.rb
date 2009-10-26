@@ -9,37 +9,42 @@ class UsersController < ApplicationController
   
   def show
     @user = User.find(params[:id], :include => [:public_contacts, :identities]) # _by_login
-    if permit? 'site_admin or (self of user)'
+    if permit? 'site_admin'
       @multis = @user.multis
-      @ips = @user.ips
+      @ips = @user.ips_with_names
+      @identities = @user.identities
+    else
+      @identities = @user.identities.public
     end
     @contacts = @user.public_contacts
-    @identities = @user.identities # TODO: add public flag?
     @friends = @user.friends
     @fans_of = @user.fans_of
     @fans = @user.fans
-    @current_user_friends = current_user.friends_and_fans_of
+    @current_user_friends = current_user.friends_and_fans_of if logged_in?
     @can_add_friend = (logged_in? and current_user != @user and !@current_user_friends.include?(@user))
   end
   
   def edit
     @user = User.find(params[:id], :include => [:public_contacts, :identities]) # _by_login
+    if permit? 'site_admin'
+      @multis = @user.multis
+      @ips = @user.ips_with_names
+    end
     if permit? 'site_admin or (self of user)'
       @assets = @user.assets.original
       @contacts = @user.contacts
       @roles = @user.roles
       @preferences = @user.preferences
       @emails = @user.contacts.emails.map(&:data)
-      @multis = @user.multis
-      @ips = @user.ips
+      @identities = @user.identities
     else
+      @identities = @user.identities.public
       @contacts = @user.public_contacts
     end
-    @identities = @user.identities # TODO: add public flag?
     @friends = @user.friends
     @fans_of = @user.fans_of
     @fans = @user.fans
-    @current_user_friends = current_user.friends_and_fans_of
+    @current_user_friends = current_user.friends_and_fans_of if logged_in?
     @can_add_friend = (logged_in? and current_user != @user and !@current_user_friends.include?(@user))
   end
   

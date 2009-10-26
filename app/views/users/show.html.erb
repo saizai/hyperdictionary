@@ -1,8 +1,5 @@
 <div class="yui-g" id="page_<%= @user.page.id %>"> 
 	<div style="float:right"> 
-		<div style="text-align: right;">
-			<%= link_to 'See details & edit preferences', user_url(@user) if logged_in_as_admin? or current_user == @user %>
-		</div>
 		<table>
 			<tr>
 				<td>Avatar</td>
@@ -62,9 +59,20 @@
 			<% if logged_in_as_admin? and !@ips.blank? %>
 				<tr>
 					<td>IPs</td>
-					<td><%= @ips.join(', ') %></td>
+					<td>
+						<% @ips.map do |ip| %>
+							<%= image_tag "tor.png" if is_tor_node? ip %>
+							<%= link_to_remote ip[0], {:url  => same_ip_admin_user_path(@user), :method => :get, :update => "users_on_same_ip_as_#{@user.id}"},
+									:title => ip[1] %>
+						<% end.join(', ') %>
+						<div id="users_on_same_ip_as_<%= @user.id%>"></div>
+					</td>
 				</tr>
 			<% end %>
+			<tr>
+				<td></td>
+				<td><%= link_to 'See details', edit_user_url(@user) if logged_in_as_admin? or current_user == @user %></td>
+			</tr>
 		</table>
 	</div> 
 	

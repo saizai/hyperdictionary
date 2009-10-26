@@ -26,9 +26,7 @@
 				<div id="yui-main"> 
 					<div class="yui-b" id="content"  role="main"><!--primary-->
 						<%= render :partial => '/layouts/flashes' -%>
-						<%= render :partial => '/alerts/welcome' %>
-						<%= render :partial => '/alerts/contact_verify' %>
-						<%= render :partial => '/alerts/relationship_verify' %>
+						<%= render :partial => '/alerts/banners' %>
 						<%= yield %>
 					</div> 
 				</div> 
@@ -38,8 +36,8 @@
 						<li><%= link_to 'About', about_path %>
 						<li><a href="#" onclick="UserVoice.Popin.show(); return false;">Feedback</a></li>
 						<% if logged_in? %>
-							<li class='first'><%= link_to 'Home', home_path %></li>
-							<li><%= link_to 'Preferences', user_path(current_user) %></li>
+							<li class='first'><%= link_to 'Home', user_path(current_user) %></li>
+							<li><%= link_to 'Preferences', edit_user_path(current_user) %></li>
 						<% end %>
 						<% if logged_in_as_admin? %>
 							<li class='first'><%= link_to 'Admin', admin_root_path %></li>

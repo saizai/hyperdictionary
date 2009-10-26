@@ -1,0 +1,3 @@
+<% %w(welcome contact_verify relationship_verify tor).each do |alert| %>
+	<%= render :partial => "/alerts/#{alert}" %>
+<% end %>

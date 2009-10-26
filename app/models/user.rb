@@ -73,7 +73,7 @@ class User < ActiveRecord::Base
     # not before_create; this catches the case of a deleted page
     unless self.page
       self.build_page :page_type_id => PageType.find_or_create_by_name('person'), :url => self.identities.first.try(:url), :name => self.login, 
-        :body => "Hi, my name is #{self.name}; I'm new here. Say hello!"
+        :body => "Hi, my name is #{self.name}; I'm new here. Say hello!", :namespace => 'User'
     end
     self.email ||= self.contacts.emails.active.first
   end
@@ -90,15 +90,23 @@ class User < ActiveRecord::Base
   end
   
   def ips
-    sessions.find(:all, :select => 'DISTINCT ip').map(&:ip)
+    sessions.find(:all, :select => 'DISTINCT ip').map(&:ip) - [nil]
+  end
+  
+  def ips_with_names
+    ips.map{|x| [x, Socket.getaddrinfo(x,  0, Socket::AF_UNSPEC, Socket::SOCK_STREAM, nil, Socket::AI_CANONNAME)[0][2]] }
+  end
+  
+  def self.users_on_ip ips
+    user_ids = Session.find(:all, :conditions => ["sessions.ip IN (?)", ips],
+                                  :select => 'DISTINCT updater_id, creator_id').inject([]){
+                                    |memo, sess| memo << sess.updater_id; memo << sess.creator_id }.uniq - [nil]
+    User.find(user_ids)
   end
   
   # TODO: make this a has_many
   def users_on_same_ip
-    user_ids = Session.find(:all, :conditions => ["sessions.ip IN (?)", ips],
-                                  :select => 'DISTINCT updater_id, creator_id').inject([]){
-                                    |memo, sess| memo << sess.updater_id; memo << sess.creator_id }.uniq
-    User.find(user_ids)
+    User.users_on_ip(self.ips) - [self]
   end
   
   # for use with RPX Now gem

@@ -1,0 +1,7 @@
+<%= h @contact.user.name %>, <%= APP_NAME %> received your file, but there was an error:
+
+<%= @asset.errors.each_full{|msg| msg}.join("\n") %>
+
+Sorry. :(
+
+- <%= APP_NAME %> email bot

@@ -1,0 +1,11 @@
+<%= h @contact.user.name %>, <%= APP_NAME %> received your file.
+
+It's now located at:
+ <%= h "http://#{APP_HOST}#{@asset.public_filename}" %>
+
+... and linked to on your detailed profile page:
+ <%= h edit_user_url(@contact.user, :host => APP_HOST) %>
+
+Enjoy!
+
+- <%= APP_NAME %> email bot

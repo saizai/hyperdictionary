@@ -1,0 +1,11 @@
+<%=h @user.name %>, you just tried to use <%= APP_NAME %>'s email interface.
+
+However, you haven't yet verified that <%= h @contact.data %> belongs to you.
+
+Please visit this url to verify your contact:
+
+  <%=h @url %>
+  
+Thanks!
+
+- <%= APP_NAME %> email bot

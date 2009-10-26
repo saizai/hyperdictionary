@@ -5,3 +5,4 @@ else
   APP_HOST = 'dictionary.conlang.org'
 end
 ADMIN_EMAIL = 'kura2-admin@conlang.org'
+EMAIL_DOMAIN = 'dictionary.conlang.org'

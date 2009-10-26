@@ -15,6 +15,7 @@ module FriendlyId
     :cache_column => nil,
     :scope => nil,
     :separator => ':', # like Wikipedia, e.g. UserTalk:Foo
+    :assume_scope => true, # if we get just "Foo", and scope is on, assume it really means ":Foo", i.e. scope is ''. Only used for find_one.
     :strip_diacritics => false,
     :strip_non_ascii => false,
     :use_slug => false }.freeze
@@ -27,6 +28,7 @@ module FriendlyId
     :cache_column,
     :scope,
     :separator,
+    :assume_scope,
     :strip_diacritics,
     :strip_non_ascii,
     :use_slug ].freeze

@@ -1,37 +1,38 @@
-dir = File.dirname( __FILE__ )
+require "pathname"
 
-require 'rubygems'
-if version=ENV["AR_VERSION"]
-  gem 'activerecord', version
+DIR = Pathname.new(File.dirname(__FILE__))
+
+require "rubygems"
+
+if version = ENV["AR_VERSION"]
+  gem "activerecord", version
 else
-  gem 'activerecord'
+  gem "activerecord"
 end
-require 'active_record'
-require 'active_record/version'
 
-require File.join( dir, 'connections', "native_#{ENV["ARE_DB"]}", 'connection.rb' )
-require File.expand_path( File.join( dir, 'boot' ) )
+require "active_record"
+require "active_record/version"
+require "mocha"
+require "test/unit"
+require "fileutils"
+require "active_record/fixtures"
 
-require File.expand_path( File.join( dir, '..', 'db', 'migrate', 'version' ) )
-require 'mocha'
-require 'test/unit'
-require 'fileutils'
-require 'active_record/fixtures'
+require DIR.join("boot").expand_path
+require DIR.join("..", "db", "migrate", "version").expand_path
 
-# Load Generic Models
-models_dir = File.join( dir, 'models' )
-$: << models_dir
-Dir[ models_dir + '/*.rb'].each { |m| require m }
+## Load Generic Models
+models_dir = DIR.join("models")
+$:.unshift(models_dir)
 
-# Load Connection Adapter Specific Models
-models_dir = File.join( dir, 'models', ENV['ARE_DB'].downcase )
-Dir[ models_dir + '/*.rb' ].each{ |m| require m }
+Dir[models_dir.join("*.rb")].each { |m| require(m) }
 
+## Load Connection Adapter Specific Models
+Dir[models_dir.join(ENV["ARE_DB"].downcase, "*.rb")].each { |m| require(m) }
 
 # ActiveRecord 1.14.4 (and earlier supported accessor methods for
 # fixture_path as class singleton methods. These tests rely on fixture_path
 # being a class instance methods. This is to fix that.
-if Test::Unit::TestCase.class_variables.include?( '@@fixture_path' )
+if Test::Unit::TestCase.class_variables.include?("@@fixture_path")
   class Test::Unit::TestCase
     class << self 
       remove_method :fixture_path 
@@ -41,7 +42,7 @@ if Test::Unit::TestCase.class_variables.include?( '@@fixture_path' )
   end
 end
 
-# FIXME: stop using rails fixtures and we won't have to do things like this
+# FIXME stop using Rails fixtures and we won't have to do things like this
 class Fixtures
   def self.cache_for_connection(connection)
     {}
@@ -52,30 +53,18 @@ class Fixtures
   end
 end
 
-if ActiveRecord::VERSION::STRING < '2.3.1'
-  TestCaseSuperClass = Test::Unit::TestCase
-  class Test::Unit::TestCase #:nodoc:
-    self.use_transactional_fixtures = true
-    self.use_instantiated_fixtures = false
-  end
-  Test::Unit::TestCase.fixture_path = File.dirname(__FILE__) + "/fixtures/"
+TestCaseSuperClass = if ActiveRecord::VERSION::STRING < "2.3.1"
+  Test::Unit::TestCase
 else
-  TestCaseSuperClass = ActiveRecord::TestCase
-  class ActiveRecord::TestCase #:nodoc:
-    include ActiveRecord::TestFixtures
-    self.use_transactional_fixtures = true
-    self.use_instantiated_fixtures = false
-  end
-  ActiveRecord::TestCase.fixture_path = File.dirname(__FILE__) + "/fixtures/"
+  ActiveRecord::TestCase
 end
 
-module ActiveRecord # :nodoc:
-  module ConnectionAdapters # :nodoc:
-    class PostgreSQLAdapter # :nodoc:
-      def default_sequence_name(table_name, pk = nil)
-        default_pk, default_seq = pk_and_sequence_for(table_name)
-        default_seq || "#{table_name}_#{pk || default_pk || 'id'}_seq"
-      end 
-    end
+class TestCaseSuperClass #:nodoc:
+  if ActiveRecord::TestCase == TestCaseSuperClass
+    include ActiveRecord::TestFixtures
   end
+
+  self.use_transactional_fixtures = true
+  self.use_instantiated_fixtures = false
+  self.fixture_path = DIR.join("fixtures")
 end

@@ -1,0 +1,16 @@
+<% if @is_tor_node and !(logged_in? and current_user.get_preference('Skip Tor info')) %>
+	<div class="flash info" id='tor_alert' >
+			<span class='close' title='close'>
+				<% if logged_in? %>
+					<%= link_to_remote 'X', :url => set_preference_user_path(current_user, :preference => 'Skip Tor info', :value => true), :method => :put,
+						:success => update_page {|page| page.remove 'tor_alert' }
+					 %>
+				<% else %>
+					<span title='Log in to enable alert hiding.'>X</span>
+				<% end %>
+			</span>
+		<h4>Welcome, <%= image_tag "tor.png" %> Tor user!</h4>
+		Maybe someday we'll have a true hidden service available for you.<br/>
+		If you care about this, please vote for it on our feedback page!
+	</div>
+<% end %>

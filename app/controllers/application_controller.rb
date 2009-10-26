@@ -21,7 +21,25 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  before_filter :detect_tor
+  def detect_tor
+    @is_tor_node ||=  is_tor_node? request.remote_ip # just to save on repeat calls
+    session[:tor] = true
+  end
   
+  # Uses TorDNSEL - http://www.torproject.org/tordnsel/index.html.en
+  # note that this uses the *current* request port & host, which is only 100% accurate if we're looking at the live request
+  # so if doing this after the fact the answer might be wrong... oh well, close enough
+  # also note that this could be slightly faster if we didn't query our own IP address, so if it's known and constant, that'd probably be a better method
+  def is_tor_node? ip
+    reversed_exit_node_ip = ip.split('.').reverse.join('.') # reversed IP of possible exit node
+    reversed_server_ip = `dig #{request.host} +short`.strip.split('.').reverse.join('.') # reversed IP we're serving on - gotten by resolving what the requester used
+    # all sent to TorDNSEL - the answer is "\n" if no, "127.0.0.2\n" if yes
+    tordnsel = `dig #{reversed_exit_node_ip}.#{request.port}.#{reversed_server_ip}.ip-port.exitlist.torproject.org +short`.strip
+    !tordnsel.blank? # AFAIK it's just a boolean response, so may as well scrub it to a bool
+  end
+  helper_method :is_tor_node?
+
 #  # Hack to show what requests a process is handling in top (if it's in short mode)
 #  $PROC_NAME ||= "#{$0} #{$*.join(' ')}" # keep the original. Note that this isn't really what ps thinks it was to start; ruby's $0 isn't very smart, it seems
 #  

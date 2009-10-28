@@ -1,6 +1,6 @@
 <div class="yui-g" id="page_<%= @user.page.id %>"> 
 	<div style="float:right"> 
-		<table>
+		<table style="max-width: 240px;">
 			<tr>
 				<td>Avatar</td>
 				<td><%= avatar @user %></td>
@@ -18,6 +18,10 @@
 			<tr>
 				<td>Joined on</td>
 				<td><%=h @user.created_at.to_date.to_s(:long) %></td>
+			</tr>
+			<tr>
+				<td>Time in app</td>
+				<td>~<%=h (@user.total_time_in_app.to_f / 1.hour).round(1) %> hours</td>
 			</tr>
 			<% if !@contacts.blank? %>
 				<tr>
@@ -48,6 +52,12 @@
 				<tr>
 					<td>Fans</td>
 					<td><%= render :partial => '/relationships/relationships', :locals => {:friends => @fans} %></td>
+				</tr>
+			<% end %>
+			<% if @badges %>
+				<tr>
+					<td>Badges</td>
+					<td><%= render :partial => '/badges/badges', :locals => {:badges => @badges} %></td>
 				</tr>
 			<% end %>
 			<% if logged_in_as_admin? and !@multis.blank? %>

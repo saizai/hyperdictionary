@@ -11,10 +11,13 @@ ActionController::Routing::Routes.draw do |map|
     user.resources :tags
     user.resources :assets, :collection => {:swfupload => :post}, :member => {:download => :get}
     user.resources :identities, :member => {:screen => :put}
+    user.resources :badges
   end
   
   # For global ones:
   map.resources :tags
+  map.resources :badge_sets
+  map.resources :badges
   map.resources :pages, :member => {:change_role => :put, :subscribe => :put} do |page|
     page.resources :comments, :member => {:moderate => :put, :screen => :put }
     page.resources :versions, :member => {:compare => :get, :revert => :put}

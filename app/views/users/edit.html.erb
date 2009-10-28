@@ -25,6 +25,10 @@
 			<td><%=h @user.created_at.to_date.to_s(:long) %></td>
 		</tr>
 		<tr>
+			<td>Time in app</td>
+			<td>~<%=h (@user.total_time_in_app.to_f / 1.hour).round(1) %> hours</td>
+		</tr>
+		<tr>
 			<td>Name</td>
 			<td><%- if current_user == @user or logged_in_as_admin? -%>
 					<%= in_place_editor_field :user, 'name' %>

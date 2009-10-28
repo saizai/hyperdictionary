@@ -255,3 +255,52 @@ textarea {
 	float: left;
 }
 
+.badge {
+/*	-moz-border-radius-bottomleft:6px;
+	-moz-border-radius-bottomright:6px;
+	-moz-border-radius-topleft:6px;
+	-moz-border-radius-topright:6px;
+	background-color:#333333;
+	border:1px solid #333333;
+	color:#FFFFFF !important;
+	line-height:1.9;
+	margin:0 3px 3px 0;
+	padding:4px 8px 4px 3px;
+*/	color: #000000 !important;
+	text-decoration:none;
+}
+
+.badge:hover {
+/*	background-color:#555555;
+	border:1px solid #555555;
+*/	text-decoration:none;
+}
+
+.badge1 {
+	color:#CC9966;
+	font-size:120%;
+	margin-left:3px;
+}
+
+.badge2 {
+	color:#C0C0C0;
+	font-size:120%;
+	margin-left:3px;
+}
+
+.badge3 {
+	color:#FFCC00;
+	font-size:120%;
+	margin-left:3px;
+}
+
+.badge4 {
+	color:#119820;
+	font-size:120%;
+	margin-left:3px;
+}
+
+.badgecount {
+	color:#808185;
+	padding-left:1px;
+}

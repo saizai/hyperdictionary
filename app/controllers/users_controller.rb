@@ -22,30 +22,32 @@ class UsersController < ApplicationController
     @fans = @user.fans
     @current_user_friends = current_user.friends_and_fans_of if logged_in?
     @can_add_friend = (logged_in? and current_user != @user and !@current_user_friends.include?(@user))
+    @badges = @user.badges
   end
   
   def edit
     @user = User.find(params[:id], :include => [:public_contacts, :identities]) # _by_login
-    if permit? 'site_admin'
-      @multis = @user.multis
-      @ips = @user.ips_with_names
-    end
     if permit? 'site_admin or (self of user)'
+      if permit? 'site_admin'
+        @multis = @user.multis
+        @ips = @user.ips_with_names
+      end
       @assets = @user.assets.original
       @contacts = @user.contacts
       @roles = @user.roles
       @preferences = @user.preferences
       @emails = @user.contacts.emails.map(&:data)
       @identities = @user.identities
+      @friends = @user.friends
+      @fans_of = @user.fans_of
+      @fans = @user.fans
+      @current_user_friends = current_user.friends_and_fans_of
+      @can_add_friend = (current_user != @user and !@current_user_friends.include?(@user))
+      @badges = @user.badges
     else
-      @identities = @user.identities.public
-      @contacts = @user.public_contacts
+      flash[:error] = 'You do not have permission to view that page.'
+      redirect_to @user
     end
-    @friends = @user.friends
-    @fans_of = @user.fans_of
-    @fans = @user.fans
-    @current_user_friends = current_user.friends_and_fans_of if logged_in?
-    @can_add_friend = (logged_in? and current_user != @user and !@current_user_friends.include?(@user))
   end
   
   def set_user_name
@@ -122,6 +124,7 @@ class UsersController < ApplicationController
         @user.activate!
         contact = @user.contacts.build(:contact_type_id => ContactType.find_by_name('email').id, :data => email)
         contact.register!
+        @user.badgings.grant 0, 2 # Grant alpha user status
       end
     end
     

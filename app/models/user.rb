@@ -16,6 +16,25 @@ class User < ActiveRecord::Base
     end
   end
   
+  has_many :badgings, :dependent => :destroy do
+    def grant! badgeset_id, level, badgeable = nil
+      b = self.with_badge_set(badgeset_id).first || 
+         Badging.new(
+            :badge_set_id => badgeset_id,
+            :badge => Badge.by_ids(badgeset_id, level), 
+            :badgeable => badgeable,
+            :user => proxy_owner
+         )
+      b.level_up(level) unless b.new_record?
+      b.save
+    end
+    def ungrant! badgeset_id, badgeable = nil
+      Badging.destroy_all({:user_id => proxy_owner.id, :badge_set_id => badgeset_id,
+        :badgeable_id => badgeable.try(:id), :badgeable_type => badgeable.try(:class)})
+    end
+  end
+  has_many :badges, :through => :badgings, :uniq => true
+  
   has_many :contacts, :autosave => true, :dependent => :destroy
   has_many :public_contacts, :class_name => "Contact", :conditions => {:state => 'active', :public => true}
   
@@ -107,6 +126,27 @@ class User < ActiveRecord::Base
   # TODO: make this a has_many
   def users_on_same_ip
     User.users_on_ip(self.ips) - [self]
+  end
+  
+  def total_time_in_app
+    sessions.last.duration + time_in_app
+  end
+  
+  def update_time_in_app!
+    old_time_in_app = time_in_app
+    self.update_attribute :time_in_app, self.time_in_app + self.sessions.last(:offset => 1).duration rescue return
+    case time_in_app
+      when 0..20.hours
+        # do nothing
+      when 20.hours...60.hours
+        badgings.grant 1, 0 if old_time_in_app < 20.hours
+      when 60.hours..180.hours
+        badgings.grant 1, 1 if old_time_in_app < 60.hours
+      when 180.hours..540.hours
+        badgings.grant 1, 2 if old_time_in_app < 180.hours
+      else
+        badgings.grant 1, 3 if old_time_in_app < 540.hours
+    end
   end
   
   # for use with RPX Now gem

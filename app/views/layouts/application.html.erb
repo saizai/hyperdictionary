@@ -33,7 +33,8 @@
 				<div class="yui-b"><!--secondary-->
 					<ul class='menu' role="complementary navigation">
 						<li><%= link_to 'Main', root_path %></li>
-						<li><%= link_to 'About', about_path %>
+						<li><%= link_to 'About', about_path %></li>
+						<li><%= link_to 'Badges', badges_path %></li>
 						<li><a href="#" onclick="UserVoice.Popin.show(); return false;">Feedback</a></li>
 						<% if logged_in? %>
 							<li class='first'><%= link_to 'Home', user_path(current_user) %></li>

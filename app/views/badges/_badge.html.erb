@@ -1,0 +1,2 @@
+<%= link_to "<span class='badge#{badge.level}'>●</span>&nbsp;#{badge.name.sub(' ', '&nbsp;')}", badge_url(badge.id), :class => 'badge',
+		:title => "#{ badge.level_name.capitalize } badge: #{badge.description}" %>

@@ -1,0 +1,5 @@
+<div id="badges" class="badges">
+	<% badges.sort{|x,y| x.level == y.level ? x.name <=> y.name : y.level <=> x.level }.each do |badge| %>
+		<%= render :partial => '/badges/badge', :locals => {:badge => badge} %>
+	<% end %>
+</div>

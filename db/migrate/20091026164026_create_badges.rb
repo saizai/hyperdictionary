@@ -5,6 +5,8 @@ class CreateBadges < ActiveRecord::Migration
       t.boolean :public, :default => true, :null => false
     end
     
+    add_index :badge_sets, :name, :unique => true
+    
     BadgeSet.import [:name], [
       ["Early adopters"],
       ["Fans"],
@@ -15,6 +17,8 @@ class CreateBadges < ActiveRecord::Migration
       ["Recruiters"]
     ]
     
+    BadgeSet.create :public => false, :name => "Easter egg finders"
+    
     create_table :badges do |t|
       t.string :name, :description, :default => nil, :null => false
       t.integer :badge_set_id, :level, :default => nil, :null => false
@@ -24,7 +28,9 @@ class CreateBadges < ActiveRecord::Migration
       t.timestamps
     end
     
-    Badge.import [:badgeset_id, :level, :name, :description], [
+    add_index :badges, [:badge_set_id, :level], :unique => true
+    
+    Badge.import [:badge_set_id, :level, :name, :description], [
       [1, 3, 'Alpha user', "Started using #{APP_NAME} from the very beginning"],
       [1, 2, 'Beta user', "Started using #{APP_NAME} during the beta test"],
       [1, 1, 'Early adopter', "Started using #{APP_NAME} within the first 4 months"], # TODO: make this time period be sensible
@@ -37,9 +43,9 @@ class CreateBadges < ActiveRecord::Migration
       [3, 2, 'Steward', "Helps #{APP_NAME} moderators and moderates across groups"],
       [3, 1, 'Moderator', "Helps guide at least one group on #{APP_NAME}"],
       [4, 4, 'Sponsor', "Provided major financial support to #{APP_NAME}"],
-      [4, 3, 'Supporter', ""],
-      [4, 2, 'Patron', ""],
-      [4, 1, 'Subscriber', ""],
+      [4, 3, 'Supporter', "Provided significant financial support to #{APP_NAME}"],
+      [4, 2, 'Patron', "Subscribed for plus membership with #{APP_NAME}"],
+      [4, 1, 'Subscriber', "Subscribed for basic membership with #{APP_NAME}"],
       [5, 4, 'White hat', "Helped #{APP_NAME} admins fix at least 30 bugs"],
       [5, 3, 'QA team leader', "Helped #{APP_NAME} admins fix at least 20 bugs"],
       [5, 2, 'QA team member', "Helped #{APP_NAME} admins fix at least 10 bugs"],
@@ -51,7 +57,10 @@ class CreateBadges < ActiveRecord::Migration
       [7, 3, 'Sr. recruiter', "Got at least 20 new people to join #{APP_NAME}"],
       [7, 2, 'Recruiter', "Got at least 10 new people to join #{APP_NAME}"],
       [7, 1, 'Jr. recruiter', "Got at least 2 new people to join #{APP_NAME}"],
-      
+    ]
+    
+    Badge.import [:public, :badge_set_id, :level, :name, :description], [
+      [false, 8, 1, 'Easter egg finder', "Found an easter egg in #{APP_NAME}"]
     ]
   end
 

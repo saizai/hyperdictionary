@@ -5,7 +5,7 @@
 		@badges.each do |badge| %>
 		<% if last_badge_set != badge.badge_set_id %><tr><td style="line-height: 0.3;">&nbsp;</td></tr><% end %>
 		<tr>
-			<td><%= image_tag 'accept.png', :title => "You've earned this badge!" if @user_badges.include? badge %></td>
+			<td><%= image_tag 'accept.png', :title => "You've earned this badge!" if @user_badge_ids.include? badge.id %></td>
 			<td><%= render :partial => badge %> &#215;<%= badge.badgings_count %></td>
 			<td><%= h badge.description %></td>
 		</tr>

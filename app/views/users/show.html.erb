@@ -8,7 +8,7 @@
 			<tr>
 				<td>Username</td>
 				<td>
-					<%= h @user.login %>
+					<%= render :partial => '/users/minimal', :locals => {:user => @user} %>
 				</td>
 			</tr>
 			<tr>

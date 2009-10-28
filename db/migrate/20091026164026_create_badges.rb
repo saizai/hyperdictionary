@@ -62,6 +62,10 @@ class CreateBadges < ActiveRecord::Migration
     Badge.import [:public, :badge_set_id, :level, :name, :description], [
       [false, 8, 1, 'Easter egg finder', "Found an easter egg in #{APP_NAME}"]
     ]
+    
+    change_table :users do |t|
+      t.integer :badge1_count, :badge2_count, :badge3_count, :badge4_count, :default => 0, :null => false
+    end
   end
 
   def self.down

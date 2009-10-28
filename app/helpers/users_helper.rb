@@ -58,18 +58,14 @@ module UsersHelper
   
   def link_to_user(user, options={})
     return 'Anonymous' unless user and user != AnonUser
-    options.reverse_merge! :content_method => :login, :title_method => :login, :class => :nickname, :user => false
+    options.reverse_merge! :content_method => :login, :title_method => :name, :class => :nickname, :user => false
     content_text      = options.delete(:content_text)
     content_text    ||= user.send(options.delete(:content_method))
     options[:title] ||= user.send(options.delete(:title_method))
     if options[:user]
-      link_to h(content_text),  user_path(user), options
+      link_to_unless_current h(content_text),  edit_user_path(user), options
     else
-      if user.page
-        link_to h(content_text), page_path(user.page), options
-      else
-        h(content_text)
-      end
+      link_to_unless_current h(content_text), user_path(user), options
     end
   end
 

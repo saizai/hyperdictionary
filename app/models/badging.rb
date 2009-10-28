@@ -11,6 +11,18 @@ class Badging < ActiveRecord::Base
     {:conditions => {:badge_set_id => badge_set} }
   }
   
+  def before_destroy
+    User.decrement_counter("badge#{badge.level}_count", user_id)
+  end
+  
+  def before_save
+    if changed.include? 'badge_id'
+      counters = {"badge#{Badge.find(changes['badge_id'][1]).level}_count" => 1}
+      counters["badge#{Badge.find(changes['badge_id'][0]).level}_count"] = -1  unless new_record?
+      User.update_counters  user_id, counters
+    end
+  end
+  
   def level_up level = nil
     self.badge = level ? badge_set.badges.with_level(level).first : badge.next_level
   end

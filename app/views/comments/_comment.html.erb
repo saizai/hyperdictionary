@@ -4,7 +4,7 @@
 			<%= avatar comment.creator %>
 		</div>
 		<div class='content'>
-			<span class="name"><%= link_to_user comment.creator %> wrote
+			<span class="name"><%= render :partial => '/users/minimal', :locals => {:user => comment.creator} %> wrote
 				<span class="time"><%= time_ago_in_words comment.created_at %> ago</span>
 			</span>
 			<div class="body">

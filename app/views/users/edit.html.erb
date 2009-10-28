@@ -1,7 +1,5 @@
 <%= render :partial => '/alerts/preferences_intro' %>
 
-<h1><%= link_to_user @user %></h1>
-
 <div class="yui-g"> 
 	<table>
 		<tr>
@@ -39,7 +37,7 @@
 		</tr>
 		<tr>
 			<td>Username</td>
-			<td><%=h @user.login %></td>
+			<td><%= render :partial => '/users/minimal', :locals => {:user => @user} %></td>
 		</tr>
 		<% if !@contacts.blank? or (current_user == @user or logged_in_as_admin?) %>
 			<tr>

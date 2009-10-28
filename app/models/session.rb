@@ -11,15 +11,21 @@ class Session < ActiveRecord::SessionStore::Session
   # Note: This class will NOT get autoreloaded in dev mode; you'll have to restart the server to see changes.
   
   # fixes 'can't dup NilClass' error introduced in rails 2.3.3 - see https://rails.lighthouseapp.com/projects/8994/tickets/2441-activerecordsessionstore-breaks-with-custom-model
-  unloadable
+#  unloadable
   
   # This just moves some fields from the session data to the session itself.
   # It lets us then do indexed lookups on the sessions.
   # e.g. Session.find_all_by_ip('1.2.3.4').map(&:updater_id).uniq gets us all the users from a particular IP :-)
   before_save :set_ip
   def set_ip
-    self.ip = self.data[:ip] if self.data[:ip]
+    self.ip = self.data[:last_ip] if self.data[:last_ip]
     self.creator_id ||= self.data[:last_user_id]
     self.updater_id = self.data[:last_user_id]
   end
+  
+  before_save :set_duration
+  def set_duration
+    self.duration += [5.minutes, Time.now - (updated_at || 1.minute.ago)].min.to_i
+  end
+  
 end 

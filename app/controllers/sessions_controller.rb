@@ -18,6 +18,7 @@ class SessionsController < ApplicationController
         # button. Uncomment if you understand the tradeoffs.
         # reset_session
         self.current_user = user
+        user.update_time_in_app!
         new_cookie_flag = (params[:remember_me] == "1")
         handle_remember_cookie! new_cookie_flag
         flash[:notice] = "Logged in successfully"
@@ -33,7 +34,7 @@ class SessionsController < ApplicationController
       render :action => 'new'
     end
   end
-
+  
   def destroy
     logout_keeping_session!
     flash[:notice] = "You have been logged out."

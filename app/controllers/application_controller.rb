@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
   before_filter :detect_tor
   def detect_tor
     @is_tor_node ||=  is_tor_node? request.remote_ip # just to save on repeat calls
-    session[:tor] = true
+    session[:tor] = @is_tor_node if session
   end
   
   # Uses TorDNSEL - http://www.torproject.org/tordnsel/index.html.en
@@ -43,7 +43,8 @@ class ApplicationController < ActionController::Base
   before_filter :set_locale
   def set_locale 
     # request.compatible_language_from(array)
-    session[:locale] ||= current_user.get_preference('locale') || request.user_preferred_languages.first || GEO_COUNTRY(request.remote_ip)
+    session[:locale] ||= current_user.get_preference('locale') if logged_in?
+    session[:locale] ||= request.user_preferred_languages.first || GEO_COUNTRY(request.remote_ip) if session
     I18n.locale = params[:locale] || session[:locale] || I18n.default_locale
     logger.info "Locale: #{I18n.locale}"
   end
@@ -78,10 +79,10 @@ class ApplicationController < ActionController::Base
   # Maybe e.g. require extra auth if they're coming from a new IP, or use it for tracking suspicious behavior
   before_filter :inject_ip
   def inject_ip
-    if logged_in?
-      session[:last_user_id] ||= current_user.id
+    if session
+      session[:last_user_id] ||= current_user.id if logged_in?
       session[:last_ip] ||= request.remote_ip
-      if current_user.id != session[:last_user_id] 
+      if logged_in? and current_user.id != session[:last_user_id] 
         # Multi caught. Log it as a relationship; leave it passive.
         r = Relationship.find_or_initialize_by_from_user_id_and_to_user_id(session[:last_user_id], current_user.id)
         r.multi = true
@@ -93,7 +94,7 @@ class ApplicationController < ActionController::Base
         session[:last_user_id] = current_user.id
       end
       if request.remote_ip != session[:last_ip]
-        logger.info "IP CHANGED: User #{current_user.login} from #{session[:first_ip]} and #{request.remote_ip}"
+        logger.info "IP CHANGED: User #{current_user.login} from #{session[:first_ip]} and #{request.remote_ip}" if logged_in?
         session[:last_ip] = request.remote_ip
       end
     end

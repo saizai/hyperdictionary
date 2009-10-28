@@ -9,6 +9,8 @@ class Badge < ActiveRecord::Base
   named_scope :with_level, lambda {|level| { :conditions => {:level => level}, :limit => 1 } }
   named_scope :public, :conditions => {:public => true}
   
+  acts_as_dropdown :order => "badges.badge_set_id, badges.level DESC"
+  
   def self.by_ids badge_set_id, level
     first :conditions => {:badge_set_id => badge_set_id, :level => level} 
   end

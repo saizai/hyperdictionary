@@ -1,0 +1,15 @@
+<% remote_form_for( [@user, @user.badgings.build],
+	:html => {:id => "new_badging_form", :class => 'form' },
+	:loading => "$('new_badging_form_indicator').show(); Form.disable('new_badging_form');",
+    :success => "$('new_badging_form_indicator').hide(); Form.enable('new_badging_form');",
+	:update => "badges",
+	:position => :top ) do |f| %>
+	<%= f.error_messages %>
+	
+    <div>
+    	<%= f.select :badge_id, Badge.to_dropdown %>
+		<%= f.submit "Add", :class => 'submit' %>
+		<%= image_tag 'ajax-spinner.gif', :id => "new_badging_form_indicator", :style => 'display:none;' %>
+    </div>
+<% end %>
+<%= javascript_tag update_page {|page| page[:new_badging_form].hide } %>

@@ -2,13 +2,13 @@
 <td>
 	<% unless contact.suspended? %>
 		<%= link_to_remote image_tag("eye#{ '_gray' unless contact.public }.png"), 
-			{:url  => screen_user_contact_path(contact.user, contact), :method => :put, :update => "contact_container_#{contact.id}"},
+			{:url  => screen_user_contact_path([contact.user, contact]), :method => :put, :update => "contact_container_#{contact.id}"},
 				:title => "#{'un' if contact.public}screen contact".capitalize %>
 	<% end %>
 </td>
 <td>
 	<%= link_to_remote image_tag("bin#{'_closed' unless contact.suspended?}.png"), 
-		{:url  => suspend_user_contact_path(contact.user, contact), :method => :put, :update => "contact_container_#{contact.id}"},
+		{:url  => suspend_user_contact_path([contact.user, contact]), :method => :put, :update => "contact_container_#{contact.id}"},
 			:title => "#{contact.suspended? ? 'reactivate' : 'ignore'} contact".capitalize %>
 </td>
 <td>

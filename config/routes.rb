@@ -11,7 +11,7 @@ ActionController::Routing::Routes.draw do |map|
     user.resources :tags
     user.resources :assets, :collection => {:swfupload => :post}, :member => {:download => :get}
     user.resources :identities, :member => {:screen => :put}
-    user.resources :badges
+    user.resources :badgings
   end
   
   # For global ones:

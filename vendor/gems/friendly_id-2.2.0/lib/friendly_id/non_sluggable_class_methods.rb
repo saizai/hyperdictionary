@@ -7,8 +7,8 @@ module FriendlyId::NonSluggableClassMethods
   protected
 
   def find_one(id_or_name, options) #:nodoc:#
-    if id_or_name.is_a?(String)
-      has_scope = friendly_id_options[:assume_scope] or options.has_key?(:scope) or id.include?(friendly_id_options[:separator])
+    if id_or_name.is_a?(String) and id_or_name.to_i.to_s != id_or_name # checks for string integers (e.g. find('33'))
+      has_scope = (friendly_id_options[:assume_scope] or options.has_key?(:scope) or id.include?(friendly_id_options[:separator]))
       if has_scope # if it's not sluggable, we assume that the scope is a column name (and not something fancy like a method or association)
         scope = options.delete(:scope)
         scope, name = get_scoped_name(id_or_name) if !scope # derive it from the scoped ID
@@ -25,18 +25,18 @@ module FriendlyId::NonSluggableClassMethods
   end
 
   def find_some(ids_and_names, options) #:nodoc:#
-    return super(ids_and_names, options) if ids_and_names.select{|x| x.is_a? String}.blank?
+    return super(ids_and_names, options) if ids_and_names.select{|x| x.is_a?(String) and x.to_i.to_s != x}.blank?
     
     scopable = friendly_id_options.has_key? :scope
     # if there's no scope specified... we don't assume it, because it's too ambiguous. Instead we don't select for scope. Can be made specific by using the prefix (e.g. ':Foo')
-    has_scope = (options.has_key?(:scope) or ids_and_names.find{|x| x.is_a?(String) and x.include?(friendly_id_options[:separator])})
+    has_scope = (options.has_key?(:scope) or ids_and_names.find{|x| x.is_a?(String) and x.to_i.to_s != x and x.include?(friendly_id_options[:separator])})
     scoped_find_options = {}
     if has_scope
       scope = options.delete(:scope) # if you pass :scope, you can't also use delimited names like 'Foo:Bar' ('cause that'd be a potential contradiction)
       if !scope
         # if at least one item has a scope, we use it
-        scoped_names = ids_and_names.select{|x| x.is_a? String}.map{|x| get_scoped_name(x)}
-        ids = ids_and_names.select{|x| !x.is_a? String }
+        scoped_names = ids_and_names.select{|x| x.is_a?(String) and x.to_i.to_s != x }.map{|x| get_scoped_name(x)}
+        ids = ids_and_names.select{|x| !x.is_a?(String) or x.to_i.to_s == x }
         scopes = scoped_names.map{|x,y| x}.uniq
         names = scoped_names.map{|x,y| y}.uniq
         ids_and_names = names

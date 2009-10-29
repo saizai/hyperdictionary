@@ -10,7 +10,7 @@ else
     http://www.maxmind.com/download/geoip/database/GeoIP.dat.gz # gives country data only, but is smaller"
 end
 
-GEOIP = GeoIP.new(f)
+# GEOIP = GeoIP.new(f)
 
 # Note that the country version returns:
 # g.country('4.2.2.2')
@@ -31,9 +31,9 @@ end
 
 if File.exists?  File.join(RAILS_ROOT, 'db', 'GeoIPASNum.dat')
   # note that the GeoIP ASN database kinda sucks. Not as good as whois or Team Cymru's database :-/
-  GEOIP_ASN = GeoIP.new(File.join(RAILS_ROOT, 'db', 'GeoIPASNum.dat'))
+#  GEOIP_ASN = GeoIP.new(File.join(RAILS_ROOT, 'db', 'GeoIPASNum.dat'))
 else
-  p "Couldn't find GeoIP ASN database in db/. Download it from http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz if you care."  
+#  p "Couldn't find GeoIP ASN database in db/. Download it from http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz if you care."  
 end
 
 # Note other useful DBs:

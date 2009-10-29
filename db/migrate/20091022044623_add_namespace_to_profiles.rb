@@ -4,10 +4,10 @@ class AddNamespaceToProfiles < ActiveRecord::Migration
     add_column :profile_versions, :namespace, :string, :default => '', :null => false
     
     User.find_each {|user|
-      page = user.page
-      page.namespace = 'User'
-      page.name = user.login
-      page.save
+      profile = user.profile
+      profile.namespace = 'User'
+      profile.name = user.login
+      profile.save
     }
   end
   

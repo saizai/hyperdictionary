@@ -49,7 +49,7 @@ class Identity < ActiveRecord::Base
   # This is read only for now
   def data
     yaml = ActiveSupport::Gzip.decompress(Base64.decode64(data_blob)) rescue ActiveSupport::Gzip.decompress(data_blob) rescue data_blob # handles both compressed and not
-    YAML.load yaml
+    YAML.load yaml rescue {} # just in case we really can't get anything, otherwise yaml will barf
   end
   
   def self.find_or_initialize_with_rpx token

@@ -50,7 +50,7 @@ namespace (:deploy) do
     run "cd #{release_path} && RAILS_ENV=#{fetch(:rails_env, "production")} script/mail_fetcher restart"
   end
   
-  after "deploy:update_code", "deploy:install_gems"
+#  after "deploy:update_code", "deploy:install_gems"
   task :install_gems, :roles => :app do
     cmd = "cd #{release_path} && RAILS_ENV=#{fetch(:rails_env, "production")} rake gems:install"
     use_sudo ? sudo(cmd) : run(cmd)

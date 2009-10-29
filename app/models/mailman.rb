@@ -17,12 +17,12 @@ p "Got mail from #{user.login} to #{((mail.to || []) + (mail.cc || []))}"
       when /^comments/ then
         CommentMailer.upload mail, contact, addressee.split('+')[1]
         else
-        return Mailman.deliver_unknown mail, contact
+        return Mailman.deliver_unknown(mail, contact)
       end # case
     elsif contact = Contact.find_by_data(mail.from, :include => :user) # not active
-      return Mailman.deliver_verification mail, contact
+      return Mailman.deliver_verification(mail, contact)
     else
-      return Mailman.deliver_bounce mail
+      return Mailman.deliver_bounce(mail)
     end
   end
   

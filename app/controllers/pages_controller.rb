@@ -58,13 +58,12 @@ class PagesController < ApplicationController
   
   def subscribe
     @page = Page.find(params[:id])
-    permit @page.read_by?(current_user) or current_user.is_subscriber_of?(@page) do
+    permit (@page.read_by?(current_user) or current_user.is_subscriber_of?(@page)) do
       if subscribed = current_user.has_role?('subscriber', @page)
         current_user.has_no_role 'subscriber', @page
       else
         current_user.has_role 'subscriber', @page
       end
-      
       respond_to do |format|
         format.js   { render :partial => '/pages/subscribe', :locals => {:page => @page}  }
         format.html {

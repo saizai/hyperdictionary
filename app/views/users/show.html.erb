@@ -73,7 +73,7 @@
 					</td>
 				</tr>
 			<% end %>
-			<% if @badges %>
+			<% if !@badges.blank? %>
 				<tr>
 					<td>Badges</td>
 					<td><%= render :partial => '/badges/badges', :locals => {:badges => @badges} %></td>

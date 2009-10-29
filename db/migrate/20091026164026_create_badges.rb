@@ -66,10 +66,19 @@ class CreateBadges < ActiveRecord::Migration
     change_table :users do |t|
       t.integer :badge1_count, :badge2_count, :badge3_count, :badge4_count, :default => 0, :null => false
     end
+    change_table :user_versions do |t|
+      t.integer :badge1_count, :badge2_count, :badge3_count, :badge4_count, :default => 0, :null => false
+    end
   end
 
   def self.down
     drop_table :badges
     drop_talbe :badge_sets
+    change_table :users do |t|
+      t.remove :badge1_count, :badge2_count, :badge3_count, :badge4_count
+    end
+    change_table :user_versions do |t|
+      t.remove :badge1_count, :badge2_count, :badge3_count, :badge4_count
+    end
   end
 end

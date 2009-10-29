@@ -102,6 +102,7 @@ class User < ActiveRecord::Base
     # TODO: could probably be made to work automatically w/ page.after_create somehow...
     self.has_role 'owner', page
     self.has_role 'subscriber', page
+    badgings.grant! 1, 3 # Grant alpha user status
   end
   
   def last_active
@@ -129,7 +130,7 @@ class User < ActiveRecord::Base
   end
   
   def total_time_in_app
-    sessions.last.duration + time_in_app
+    (sessions.last.try(:duration) || 0) + time_in_app
   end
   
   def update_time_in_app!

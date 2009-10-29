@@ -124,7 +124,6 @@ class UsersController < ApplicationController
         @user.activate!
         contact = @user.contacts.build(:contact_type_id => ContactType.find_by_name('email').id, :data => email)
         contact.register!
-        @user.badgings.grant 0, 2 # Grant alpha user status
       end
     end
     

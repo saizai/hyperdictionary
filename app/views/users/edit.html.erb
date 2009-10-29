@@ -167,7 +167,7 @@
 					</td>
 			</tr>
 		<% end %>
-		<% if @badges or logged_in_as_admin? %>
+		<% if !@badges.blank? or logged_in_as_admin? %>
 			<tr>
 				<td>Badges
 					<%= link_to_function(image_tag('add.png'), :id => "add_badging_link"){|page| 

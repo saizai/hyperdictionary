@@ -23,7 +23,7 @@ class PagesController < ApplicationController
     
     @page = Page.find(params[:id], :include => :assets)
     
-    if @page.namespace = 'User' and !request.xhr? # only load user pages within users
+    if @page.namespace == 'User' and !request.xhr? # only load user pages within users
       redirect_to user_path(@page.owner)
       return
     end

@@ -1,7 +1,7 @@
 <td>
 	<%= link_to_remote image_tag("eye#{ '_gray' unless identity.public }.png"), 
 		{:url  => screen_user_identity_path(identity.user, identity), :method => :put, :update => "identity_container_#{identity.id}"},
-			:title => "#{'un' if !identity.public}screen identity".capitalize %>
+			:title => "#{contact.public ? 'screen' : 'unscreen'} identity".capitalize %>
 </td>
 <td><%= image_tag identity.provider.downcase + '.png', :title => identity.provider %></td>
 <td><%= link_to(identity.login, identity.profile_url || identity.url) %></td>

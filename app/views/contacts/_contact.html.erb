@@ -3,7 +3,7 @@
 	<% unless contact.suspended? %>
 		<%= link_to_remote image_tag("eye#{ '_gray' unless contact.public }.png"), 
 			{:url  => screen_user_contact_path([contact.user, contact]), :method => :put, :update => "contact_container_#{contact.id}"},
-				:title => "#{'un' if contact.public}screen contact".capitalize %>
+				:title => "#{contact.public ? 'screen' : 'unscreen'} contact".capitalize %>
 	<% end %>
 </td>
 <td>

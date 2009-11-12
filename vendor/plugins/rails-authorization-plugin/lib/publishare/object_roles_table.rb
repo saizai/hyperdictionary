@@ -264,6 +264,7 @@ class AnonUser
   # Use the normal stuff an authorized user would have
   extend Authorization::ObjectRolesTable::UserExtensions::InstanceMethods
   extend Authorization::Identity::UserExtensions::InstanceMethods
+  extend Authorization::ObjectRolesTable::ModelExtensions::InstanceMethods
   
   class << self 
     # And override the ones that call self, 'cause getting a fake self.roles that works like a real association is a major pain

@@ -211,14 +211,18 @@ module WillPaginate
         # merge the hash found in :count
         # this allows you to specify :select, :order, or anything else just for the count query
         count_options.update options[:count] if options[:count]
-
+        
+        # remove polymorphic associations from the count ('cause references_eager_loaded_tables? doesn't work with e.g. polymorphic_include)
+        # note that polymorphic associations will still cause the main finder to error unless a plugin like polymorphic_include overrides it
+        count_options[:include] -= reflections.select{|x,y| y.options[:polymorphic]}.map{|x,y| x}
+        
         # forget about includes if they are irrelevant (Rails 2.1)
         if count_options[:include] and
             klass.private_methods.include_method?(:references_eager_loaded_tables?) and
             !klass.send(:references_eager_loaded_tables?, count_options)
           count_options.delete :include
         end
-
+        
         # we may have to scope ...
         counter = Proc.new { count(count_options) }
 

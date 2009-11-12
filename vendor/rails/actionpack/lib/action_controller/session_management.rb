@@ -29,7 +29,7 @@ module ActionController #:nodoc:
           Session::CookieStore
         end
       end
-
+      
       def session=(options = {})
         self.session_store = nil if options.delete(:disabled)
         session_options.merge!(options)

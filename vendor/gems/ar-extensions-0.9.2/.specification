@@ -80,8 +80,6 @@ files:
 - lib/ar-extensions.rb
 has_rdoc: true
 homepage: http://www.continuousthinking.com/tags/arext
-licenses: []
-
 post_install_message: 
 rdoc_options: 
 - --main
@@ -103,7 +101,7 @@ required_rubygems_version: !ruby/object:Gem::Requirement
 requirements: []
 
 rubyforge_project: arext
-rubygems_version: 1.3.5
+rubygems_version: 1.3.1
 signing_key: 
 specification_version: 2
 summary: Extends ActiveRecord functionality.

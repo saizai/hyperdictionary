@@ -1,0 +1,6 @@
+<span class="time">
+	<%= time_ago_in_words message.created_at %> ago
+	<% if message.created_at != message.updated_at %>
+		(updated <%= time_ago_in_words message.updated_at %> ago<%= " by #{link_to_user message.updater}" if message.updater != message.creator %>)
+	<% end %>
+</span>

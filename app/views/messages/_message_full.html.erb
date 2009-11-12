@@ -1,0 +1,22 @@
+<div id="message_post_<%= message.id %>" class="post full <%= ' private' if message.private %><%= ' moderated' if message.moderated %> level_<%= [4, message.level].min %>">
+	<% if message.visible_to? current_user %>
+		<%= avatar message.creator %>
+		<div class='content'>
+			<div class='header <%= "new" if message.index == "1" %>'>
+				<span class="actions"><%= render :partial => '/messages/message_actions', :locals => {:message => message} %></span>
+				<% if message.index == '1' and !message.title.blank? %>
+					<div class='title'>
+						<%= message.title %>
+					</div>
+				<% end %>
+				<%= render :partial => '/users/minimal', :locals => {:user => message.creator} %> wrote
+				<%= render :partial => '/messages/message_time', :locals => {:message => message} %>
+			</div>
+			<div class="body">
+				<%= markdown message.body %>
+			</div>
+		</div>
+	<% else %>
+		<%= message.moderated ? 'Moderated' : 'Private' %> message
+	<% end %>
+</div>

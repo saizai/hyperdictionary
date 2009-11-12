@@ -1,9 +1,0 @@
-<%= h @contact.user.name %>, <%= APP_NAME %> received your comment response, but there was an error:
-
-<%= @comment.errors.each_full{|msg| msg}.join("\n") %>
-
-<%= "No valid parent comment ID was found in the to: address of your email." unless @parent %>
-
-Sorry. :(
-
-- <%= APP_NAME %> email bot

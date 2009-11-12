@@ -1,0 +1,9 @@
+<%= h @contact.user.name %>, <%= APP_NAME %> received your response, but there was an error:
+
+<%= @message.errors.each_full{|msg| msg}.join("\n") %>
+
+<%= "No valid parent message ID was found in the to: address of your email." unless @parent %>
+
+Sorry. :(
+
+- <%= APP_NAME %> email bot

@@ -1,0 +1,21 @@
+<div class="messages" id="messages_<%=context.id%>">	
+	<div class='title'>Comments</div>
+	<div id="messages_container_<%= context.id %>" >
+		<% paginated_section messages, :remote => {:update => "messages_#{context.id}",
+			 :loading => update_page {|page| page["messages_container_#{ context.id }"].remove;
+									 		 page["messages_indicator_#{ context.id }"].show }  } do %>
+			<% messages.each do |message| 
+				next unless message.visible_to?(current_user) %>
+				<% # The container is a workaround for the fact that Ajax.Updater doesn't support replace (only replace_html) 
+					%>
+				<div  id="message_post_container_<%= message.id %>" >
+					<%= render :partial => '/messages/message_slim', :locals => {:message => message} %>
+				</div>
+			<% end %>
+		<% end %>
+	</div>
+	<div id="messages_indicator_<%=context.id%>" style="display:none; text-align: center;"><%= image_tag 'ajax-spinner-large.gif' %></div>
+	<%= render :partial => '/messages/new', :locals => {:context => context} if context.commented_by? current_user %>
+</div>
+
+ 

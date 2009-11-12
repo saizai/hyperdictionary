@@ -1,0 +1,14 @@
+~~~
+<%= @user.name%>, <%= @message.creator.try(:name) || 'Anonymous' %> left a new comment<%- if @context_name %> on <%= @context_name %><% end -%>:
+
+<%= @message.body %>
+
+Visit <%= @url %> to change your subscription settings.
+
+You can also reply by email; just add your response above the ~~~. Anything below it will be ignored.
+
+Please do NOT include a signature - just the text of your message. Your post will be attributed to you just like any normal comment.
+
+Thanks,
+
+- <%= APP_NAME %> email bot

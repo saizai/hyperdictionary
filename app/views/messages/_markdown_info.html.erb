@@ -1,0 +1,32 @@
+<% text = <<-END 
+**bold text**
+
+*italicized text*
+
+>This text is blockquoted
+>>This text is a nested blockquote
+
+* This is an unordered list (ul) item
+1. This is an ordered list (ol) item
+2. [This is a link](http://www.example.com/)
+3. [This is a link](http://www.example.com/ "with a title attribute")
+1. We can also be lazy about numbering
+
+`some programming code`
+
+END
+ %>
+
+<table>
+	<tr>
+		<td width="50%">
+			<%= simple_format text %>
+		</td>
+		<td width="50%">
+			<%= markdown text %>
+		</td>
+	</tr>
+</table>
+
+
+See full details at the Markdown <%= link_to "syntax page", "http://daringfireball.net/projects/markdown/syntax" %>.

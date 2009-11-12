@@ -1,2 +1,7 @@
-<h1>Main#index</h1>
-<p>Find me in app/views/main/index.html.erb</p>
+<h1>Welcome to <%= APP_NAME %>!</h1>
+
+<div id="main_events">
+	Loading events... <%= image_tag 'ajax-spinner.gif', :id => "main_events_preload_indicator" %>
+	<%= javascript_tag remote_function(:update => "main_events", 
+		:url => events_url, :method => :get ) %>
+</div>

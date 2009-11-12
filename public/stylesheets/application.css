@@ -2,6 +2,10 @@ body {
 	font-family: georgia,arial,helvetica,clean,sans-serif;
 }
 
+table {
+	margin-bottom: 0;
+}
+
 th, td {
 	border: none;
 	padding: 0.1em;
@@ -24,6 +28,10 @@ ul li.first {
 	border-top: thin solid #d3d3d3;
 }
 
+ol {
+	list-style: decimal;
+}
+
 #header {
 	text-align: right;
 	margin: 1em;
@@ -36,8 +44,30 @@ textarea {
 	padding: 0.75%;
 	width: 98%;
 	border: 1px solid #BDC7D8;
-	height: 10em;
+	height: 5em;
 }
+
+blockquote {
+  border-left: 2px solid #ccc;
+  margin: 0;
+  padding: 0 0.3em;
+}
+/*
+blockquote { quotes: "\201C" "\201D"; } 
+blockquote:before { content: open-quote; font-weight: bold; } 
+blockquote:after { content: close-quote; font-weight: bold; } 
+*/
+
+/*blockquote {
+  background: url(/images/close-quote.gif) no-repeat right bottom;
+  padding-left: 18px;
+  text-indent: -18px;	
+}
+
+blockquote:first-letter {
+  background: url(/images/open-quote.gif) no-repeat left top;
+  padding-left: 18px;
+}*/
 
 .flash {
 	text-align: center;
@@ -112,22 +142,26 @@ textarea {
 	margin-right:	5px;
 }
 
-.comments {
+.messages {
 	display: block;
 	padding-top: 10px;
 }
 
-.comments .title {
+.messages .pagination {
+	clear: both;
+	text-align: center;
+}
+
+.messages .title {
 	color: #333333;
 	font-size: 13px;
-	margin: 0px;
-	padding: 0px;
-	background-color: #CFD7E4;
-	border-top: 1px solid #3B5998;
+	margin: 0 0 2px;
 	font-weight: bold;
 }
 
-.comments .subtitle {
+
+
+.messages .subtitle {
 	background-color: #EEEEEE;
 	border-bottom: 1px solid #CCCCCC;
 	border-top: 1px solid #CCCCCC;
@@ -137,11 +171,22 @@ textarea {
 	padding: 3px 5px 2px;
 }
 
-.comments .post {
+.messages .post.full {
 	float: right;
 	width: 100%;
 /*	margin-bottom: 5px; */
 	margin-top: 10px;
+}
+
+.messages .post.slim {
+	width: 100%;
+	margin: 0;
+	clear: both;
+	float: right;
+}
+
+.messages .post.slim p {
+	margin-bottom: 0.4em;
 }
 
 .avatar {
@@ -158,88 +203,102 @@ textarea {
 	margin: 0 2px 0 0;
 }
 
-.comments .post .content {
+.messages .post.full .content {
 	margin-left: 80px;
 	padding-left: 5px;
 }
 
-.comments .post .name {
+.messages .post.full .content .header {
 	background: #F7F7F7;
 	border-bottom: 1px solid #D8DFEA;
-	border-top: 1px solid #3B5998;
+	border-top: 1px solid #D8DFEA;
 	padding: 3px 5px;
 	font-size: 11px;
 	display:	block;
 }
 
-.comments .post .name .time {
+
+.messages .post.slim .title {
+	border-bottom: 1px solid #D8DFEA;
+	padding: 0 5px;
+	font-size: 1em;
+}
+
+.messages .post.full .content .header.new {
+	border-top: 1px solid #3B5998;
+}
+
+.messages .post.full .name .time {
 	font-size: 9px;
 	padding-top: 2px;
 }
 
-.comments .post .body {
+.messages .post.slim .time {
+	font-size: 9px;
+}
+
+.messages .post.full .body {
 	padding: 5px;
 }
 
-.comments .post.private {
+.messages .post.private {
 	background: #EEEEFF;
 }
 
-.comments .post.private .name {
+.messages .post.private .name {
 	background: #E1E1FF;
 }
 
-.comments .post.moderated {
+.messages .post.moderated {
 	background: #FFCCCC;
 }
 
-.comments .post.moderated .name {
+.messages .post.moderated .name {
 	background: #FFAAAA;
 }
 
-.comments .post.level_1 {
+.messages .post.level_1 {
 	width:	98%;
 }
 
-.comments .post.level_2 {
+.messages .post.level_2 {
 	width:	96%;
 }
 
-.comments .post.level_3 {
+.messages .post.level_3 {
 	width:	94%;
 }
 
-.comments .post.level_4 {
+.messages .post.level_4 {
 	width:	92%;
 }
 
-.comments .post.level_5 {
+.messages .post.level_5 {
 	width:	90%;
 }
 
-.comments .post .actions {
-	border-bottom: 1px solid #D8DFEA;
+.messages .post.full .actions {
 	font-size: 9px;
-	padding-bottom: 3px;
+	float: right;
 }
 
-.comments .post .history {
+.messages .post.full .history {
 	font-size: 9px;
 }
 
-.comments .form {
+.messages .form {
 	background: #F7F7F7;
-	border-bottom: 1px solid #CCCCCC;
+	border: 1px solid #CCCCCC;
 	padding: 10px;
 }
 
-.comments .form form {
+.messages .form form {
 	width: 100%;
 	margin: 0px;
 	padding: 0px;
 }
 
-.comments .form .submit {
+.messages .form .submit {
 	margin-left: 10px;
 	background-color: #3B5998;
 	border-color: #D9DFEA rgb(14, 31, 91) rgb(14, 31, 91) rgb(217, 223, 234);
@@ -251,7 +310,7 @@ textarea {
 	text-align: center;
 }
 
-.comments .form .options {
+.messages .form .options {
 	float: left;
 }
 

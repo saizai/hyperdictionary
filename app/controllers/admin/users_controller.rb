@@ -11,18 +11,20 @@ class Admin::UsersController < ApplicationController
   
   # Pretend to be a user for all purposes EXCEPT for spoofing, session, and logout
   def spoof
-    if logged_in_as_admin?(true) # Note that permit is acting as the spoofed user, so we need to undercut it
+    permit logged_in_as_admin?(true) do # Note that permit is acting as the spoofed user, so we need to undercut it
       id = params[:id].try :downcase
-      new_user = (id == 'anonymous' || id.blank? ? AnonUser : User.find(id))
-      session[:spoofed_user] = new_user.id # convert login to ID #
-      session[:spoofing_user?] = params[:spoof_user?]
-      logger.info "AUDIT: Admin #{current_user(true).login} #{ params[:spoof_user?] ? 'started' : 'stopped'} spoofing user #{new_user.login}"
-      render :partial => '/admin/users/spoof'
-    else
-      render :inline => "You're not a site admin. Stop trying to spoof users.", :status => :unauthorized
+      begin
+        unless id == current_user(true).login
+          new_user = (id == 'anonymous' || id.blank? ? AnonUser : User.find(id))
+          session[:spoofed_user] = new_user.id # convert login to ID #
+          session[:spoofing_user?] = params[:spoof_user?]
+          Event.event! current_user(true), (params[:spoof_user?] ? 'started' : 'stopped') + ' spoofing', new_user
+        end
+        render :partial => '/admin/users/spoof'
+      rescue ActiveRecord::RecordNotFound
+        render :inline => "#{params[:id]} not found", :status => 404
+      end
     end
-    rescue ActiveRecord::RecordNotFound
-      render :inline => "#{params[:id]} not found", :status => 404
   end
   
   def same_ip

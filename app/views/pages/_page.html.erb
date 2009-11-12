@@ -26,7 +26,13 @@
   
 <%= render :partial => '/assets/assets', :locals => {:assets => page.assets, :attachable => page, :upload => page.edited_by?(current_user) }  if logged_in? %>
 
-<div id="page_<%= page.id %>_comments" style="clear:both;">
-	Loading comments... <%= image_tag 'ajax-spinner.gif', :id => "page_#{page.id}_comments_preload_indicator" %>
-	<%= javascript_tag remote_function(:update => "page_#{page.id}_comments", :url => page_comments_url(page), :method => :get) %>
+<div id="page_<%= @page.id %>_events">
+	Loading events... <%= image_tag 'ajax-spinner.gif', :id => "events_#{page.id}_preload_indicator" %>
+	<%= javascript_tag remote_function(:update => "page_#{page.id}_events", 
+		:url => events_url(:eventable_id => page.id, :eventable_type => page.class), :method => :get ) %>
+</div>
+	
+<div id="page_<%= page.id %>_messages" style="clear:both;">
+	Loading messages... <%= image_tag 'ajax-spinner.gif', :id => "page_#{page.id}_messages_preload_indicator" %>
+	<%= javascript_tag remote_function(:update => "page_#{page.id}_messages", :url => page_messages_url(page), :method => :get) %>
 </div>

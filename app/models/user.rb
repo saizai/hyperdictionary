@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   include Authentication::ByCookieToken
   include Authorization::AasmRolesWithOpenId
   
-  has_many :comments, :foreign_key => 'creator_id', :dependent => :destroy
+  has_many :messages, :foreign_key => 'creator_id', :dependent => :destroy
   has_one :page, :autosave => true, :dependent => :destroy
   
   # This is suboptimal. See http://stackoverflow.com/questions/958676/change-a-finder-method-w-parameters-to-an-association
@@ -130,23 +130,21 @@ class User < ActiveRecord::Base
   end
   
   def total_time_in_app
-    (sessions.last.try(:duration) || 0) + time_in_app
+    sessions.sum(:duration) + time_in_app
   end
   
   def update_time_in_app!
-    old_time_in_app = time_in_app
-    self.update_attribute :time_in_app, self.time_in_app + self.sessions.last(:offset => 1).duration rescue return
-    case time_in_app
+    case total_time_in_app
       when 0..20.hours
-        # do nothing
+        badgings.ungrant! 2
       when 20.hours...60.hours
-        badgings.grant 1, 0 if old_time_in_app < 20.hours
+        badgings.grant! 2, 1
       when 60.hours..180.hours
-        badgings.grant 1, 1 if old_time_in_app < 60.hours
+        badgings.grant! 2, 2
       when 180.hours..540.hours
-        badgings.grant 1, 2 if old_time_in_app < 180.hours
+        badgings.grant! 2, 3
       else
-        badgings.grant 1, 3 if old_time_in_app < 540.hours
+        badgings.grant! 2, 4
     end
   end
   

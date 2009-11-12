@@ -52,8 +52,10 @@ class UsersController < ApplicationController
   
   def set_user_name
     @user = User.find(params[:id])
-    @user.update_attribute(:name, params[:value])
-    render :text => CGI::escapeHTML(@user.name)
+    permit 'site_admin or (self of user)' do
+      @user.update_attribute(:name, params[:value])
+      render :text => CGI::escapeHTML(@user.name)
+    end
   end
   
   # Note: Users can set any preferences on themselves. Do not use this for anything that needs to be secure; that's what Roles are for.
@@ -74,17 +76,21 @@ class UsersController < ApplicationController
   
   # Technically, this breaks REST and is un-DRY, because it handles both user and session creation. Oh well, APIs.
   def rpx_login
-    logout_keeping_session!
     @user = User.find_or_initialize_with_rpx(params[:token])
     if @user.nil?
       flash[:error] = "Login token expired. Please try again."
       redirect_back_or_default('/login')
     elsif @user.new_record? # first pass of signing up w/ a new identity; the next one will call #create
+      session[:rpx_user] = @user # stash it in the session 'cause we're just going to have to get it again in a sec, and it might expire in the meantime
       render :action => "new_openid"
     elsif @user.active?
+      # Note: this is duplicated @ sessions_controller#create. Maybe refactorable, but not worth it.
+      @user.sessions.stale.destroy_all 
+      logout_killing_session!
       self.current_user = @user
+      @user.update_time_in_app!
       flash[:notice] = "Logged in successfully"
-      redirect_back_or_default('/home')
+      redirect_back_or_default('/')#@user)
     else
       flash[:error] = "Your account is #{@user.state}. Please email an administrator to correct this."
       redirect_back_or_default('/')
@@ -109,7 +115,7 @@ class UsersController < ApplicationController
     email = params[:user].delete(:email)
     
     if params[:rpx_token]
-      @user = User.find_or_initialize_with_rpx params[:rpx_token]
+      @user = session[:rpx_user] || User.find_or_initialize_with_rpx(params[:rpx_token])
       if @user.nil? # RPX returned nil. Probably the user took too long and token expired.
         flash[:error] = "There was a problem authenticating your external account. Most likely you took too long to complete the process and the token expired. Please try again."
         redirect_to :action => 'new' and return
@@ -129,8 +135,9 @@ class UsersController < ApplicationController
     
     if success and @user.errors.empty?
       flash[:notice] = "Thanks for signing up!"
+      session.delete :rpx_user
       self.current_user = @user
-      redirect_back_or_default('/home')
+      redirect_back_or_default(@user)
     elsif !@user.identities.blank?
       render :action => 'new_openid'
     else

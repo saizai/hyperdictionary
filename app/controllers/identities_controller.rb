@@ -18,10 +18,10 @@ class IdentitiesController < ApplicationController
         else
           format.js   { render :partial => 'Identity'  }  # TODO: handle errors better
           format.html { 
-            flash[:notice] = 'Error screening contact.'
+            flash[:notice] = 'Error screening identity.'
             redirect_to @user
           }
-          format.xml  { render :xml => @comment.errors, :status => :unprocessable_entity }
+          format.xml  { render :xml => @identity.errors, :status => :unprocessable_entity }
         end
       end
     end

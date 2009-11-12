@@ -32,6 +32,7 @@ class ApplicationController < ActionController::Base
   # so if doing this after the fact the answer might be wrong... oh well, close enough
   # also note that this could be slightly faster if we didn't query our own IP address, so if it's known and constant, that'd probably be a better method
   def is_tor_node? ip
+    return false
     reversed_exit_node_ip = ip.split('.').reverse.join('.') # reversed IP of possible exit node
     reversed_server_ip = `dig #{request.host} +short`.strip.split('.').reverse.join('.') # reversed IP we're serving on - gotten by resolving what the requester used
     # all sent to TorDNSEL - the answer is "\n" if no, "127.0.0.2\n" if yes
@@ -77,24 +78,26 @@ class ApplicationController < ActionController::Base
   
   # Used to catch multis & record IPs
   # Maybe e.g. require extra auth if they're coming from a new IP, or use it for tracking suspicious behavior
+  # Currently we don't really track the actions of anonymous users, but we could do so if we wanted (ascribing them to the last logged in user)
   before_filter :inject_ip
   def inject_ip
     if session
-      session[:last_user_id] ||= current_user.id if logged_in?
+      session[:last_user_id] ||= current_user(true).id if logged_in?
       session[:last_ip] ||= request.remote_ip
-      if logged_in? and current_user.id != session[:last_user_id] 
+      if logged_in? and current_user(true).id != session[:last_user_id] 
         # Multi caught. Log it as a relationship; leave it passive.
-        r = Relationship.find_or_initialize_by_from_user_id_and_to_user_id(session[:last_user_id], current_user.id)
+        r = Relationship.find_or_initialize_by_from_user_id_and_to_user_id(session[:last_user_id], current_user(true).id)
         r.multi = true
         r.save
         rr = r.reciprocal
         rr.multi = true
         rr.save
+        Event.event! User.find(session[:last_user_id]), 'multi', current_user(true)
         
-        session[:last_user_id] = current_user.id
+        session[:last_user_id] = current_user(true).id
       end
       if request.remote_ip != session[:last_ip]
-        logger.info "IP CHANGED: User #{current_user.login} from #{session[:first_ip]} and #{request.remote_ip}" if logged_in?
+        logger.info "IP CHANGED: User #{current_user(true).login} from #{session[:first_ip]} and #{request.remote_ip}" if logged_in?
         session[:last_ip] = request.remote_ip
       end
     end

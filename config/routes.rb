@@ -5,7 +5,7 @@ ActionController::Routing::Routes.draw do |map|
     user.resources :relationships, :member => {:confirm => :put} 
     user.resources :sessions # For all the user's sessions
     user.resource :page, :member => {:change_role => :put, :subscribe => :put} do |page|
-      page.resources :comments, :member => {:moderate => :put, :screen => :put}
+      page.resources :messages, :member => {:moderate => :put, :screen => :put}
       page.resources :versions, :member => {:compare => :get, :revert => :put}
     end
     user.resources :tags
@@ -19,11 +19,12 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :badge_sets
   map.resources :badges
   map.resources :pages, :member => {:change_role => :put, :subscribe => :put} do |page|
-    page.resources :comments, :member => {:moderate => :put, :screen => :put }
+    page.resources :messages, :member => {:moderate => :put, :screen => :put }
     page.resources :versions, :member => {:compare => :get, :revert => :put}
   end
-  # only used because polymorphic parent URLs are a pain in the ass (e.g. moderate_???_comment_url)
-  map.resources :comments, :member => {:moderate => :put, :screen => :put }
+  # only used because polymorphic parent URLs are a pain in the ass (e.g. moderate_???_message_url)
+  map.resources :messages, :member => {:moderate => :put, :screen => :put}, :collection => { :render_markdown => :put }
+  map.resources :events
   
   map.rpx_login '/rpx_login', :controller => 'users', :action => 'rpx_login'
   map.rpx_add '/rpx_add', :controller => 'users', :action => 'rpx_add'

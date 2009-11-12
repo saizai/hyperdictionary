@@ -22,19 +22,22 @@ Rails::Initializer.run do |config|
   # Application configuration should go into files in config/initializers
   # -- all .rb files in that directory are automatically loaded.
   # Specify gems that this application depends on and have them installed with rake gems:install
-  config.gem 'rake'
-  config.gem 'ruby-openid', :lib => 'openid'
-  config.gem 'capistrano'
-  config.gem 'mperham-memcache-client', :lib => 'memcache', :source => 'http://gems.github.com'
-  config.gem 'rubaidh-google_analytics', :lib => 'rubaidh/google_analytics', :source => 'http://gems.github.com'
-  config.gem 'mislav-will_paginate', :lib => 'will_paginate'
-  config.gem 'uuidtools'
-  config.gem "grosser-rpx_now", :lib => "rpx_now", :source => "http://gems.github.com"
-  config.gem 'lockfile'
-  config.gem "friendly_id"
-  config.gem 'chrislloyd-gravtastic', :lib => 'gravtastic', :version => '>= 2.1.0'
-  config.gem 'sishen-rtranslate', :lib => 'rtranslate', :version => '>= 1.0'
-  config.gem 'ar-extensions', :version => '>= 0.9.2'
+  config.gem 'rake' # ruby make. Used by all scripts.
+  config.gem 'ruby-openid', :lib => 'openid' # lets us speak OpenID a bit easier
+  config.gem 'capistrano' # ye standard deployment tools
+  config.gem 'mperham-memcache-client', :lib => 'memcache', :source => 'http://gems.github.com' # bugfix tweak of standard memcache client
+  config.gem 'rubaidh-google_analytics', :lib => 'rubaidh/google_analytics', :source => 'http://gems.github.com' # adds google analytics' code to all pages
+  config.gem 'will_paginate', :version => '>= 2.3.11', :source => 'http://gemcutter.org' # the standard way to paginate things. We override it to use AJAX.
+  config.gem 'uuidtools' # generates universally unique IDs (UUIDs) with good randomness, plus some associated utilities 
+  config.gem "grosser-rpx_now", :lib => "rpx_now", :source => "http://gems.github.com" # handles and normalizes OpenID/Facebook/Twitter/etc logins
+  config.gem 'lockfile' # used by mail reader script, ensures only one copy is running at a time
+  config.gem "friendly_id" # allows "nice" urls, e.g. /users/saizai instead of /users/1
+  config.gem 'chrislloyd-gravtastic', :lib => 'gravtastic', :version => '>= 2.1.0' # displays Gravatar profile images; tied to a user's email address
+  config.gem 'sishen-rtranslate', :lib => 'rtranslate', :version => '>= 1.0' # interface to Google Translate
+  config.gem 'ar-extensions', :version => '>= 0.9.2' # adds more efficient bulk tools to ActiveRecord (e.g. import)
+  config.gem 'bullet', :source => 'http://gemcutter.org' # notifies dev of N+1 (aka eager loading) bugs
+  config.gem 'validation_reflection', :version => '>= 0.3.5' # required by Validatious
+  config.gem 'validatious-on-rails', :source => 'http://gemcutter.org' # hooks in Validatious client-side JS/AJAX validation
 #  config.gem 'tmtm-ruby-mysql', :lib => 'Mysql', :source => 'http://gems.github.com'
 #  config.gem "sqlite3-ruby", :lib => "sqlite3"
 #  config.gem 'rack'

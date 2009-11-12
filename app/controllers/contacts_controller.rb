@@ -61,7 +61,7 @@ class ContactsController < ApplicationController
             flash[:notice] = 'Error screening contact.'
             redirect_to @user
           }
-          format.xml  { render :xml => @comment.errors, :status => :unprocessable_entity }
+          format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
         end
       end
     end
@@ -85,7 +85,7 @@ class ContactsController < ApplicationController
             flash[:notice] = 'Error suspending contact.'
             redirect_to @user
           }
-          format.xml  { render :xml => @comment.errors, :status => :unprocessable_entity }
+          format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
         end
       end
     end

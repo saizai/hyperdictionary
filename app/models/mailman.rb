@@ -14,7 +14,7 @@ p "Got mail from #{user.login} to #{((mail.to || []) + (mail.cc || []))}"
       case addressee = ((mail.to || []) + (mail.cc || [])).select{|x| x=~domain}.map{|x| x.sub domain, ''}.map{|x| x.sub /@.*/, ''}.first
       when /^upload/ then
         AssetMailer.upload mail, contact
-      when /^comments/ then
+      when /^messages/ then
         CommentMailer.upload mail, contact, addressee.split('+')[1]
         else
         return Mailman.deliver_unknown(mail, contact)

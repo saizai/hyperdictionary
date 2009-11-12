@@ -7,7 +7,7 @@ module UsersHelper
         user.gravatar_url(:size => Asset.width(size))
       end
     else
-       'anonymous_avatar.jpg'
+       'anonymous_avatar.png'
     end), :class => "avatar #{size}", :title => user.try(:name)
   end
   

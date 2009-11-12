@@ -23,7 +23,19 @@ module ApplicationHelper
   end
   
   def markdowwn text
-    BlueCloth.new(h(text)).to_html
+    BlueCloth.new(text, :auto_links => true, :safe_links => true, :strict_mode => false, :fancypants => true).to_html
+  end
+  
+  def link_to_foo foo
+    if foo.is_a? User
+      link_to_user foo
+    elsif foo.is_a? Badge
+      render :partial => '/badges/badge', :locals => {:badge => foo}
+    elsif foo.is_a? Page
+      link_to_unless_current h(foo.friendly_id), page_path(foo)
+    else
+      link_to_unless_current h(foo.name), polymorphic_path(foo)
+    end
   end
   
 end

@@ -10,7 +10,7 @@ class Page < ActiveRecord::Base
   
   belongs_to :owner, :class_name => 'User', :foreign_key => 'user_id' # This is for *identity* only. Use proper roles for everything else.
   belongs_to :page_type
-  has_many :comments, :as => :commentable, :dependent => :destroy
+  has_many :messages, :as => :context, :dependent => :destroy
   has_many :assets, :as => :attachable
   
   # body # run through sanitization filter!
@@ -80,7 +80,12 @@ class Page < ActiveRecord::Base
   ROLE_VERBS.each_with_index do |verb, i| 
     # Whee metaprogramming
     define_method "#{verb}_by?".to_sym do |user|
-      Page::ROLES.index(highest_role_by(user)) || 0 >= i
+      (Page::ROLES.index(highest_role_by(user)) || 0) >= i
     end
+  end
+  
+  # Necessary to prevent spurious 'namespace is a private method' errors. Ironic.
+  def namespace
+    self.read_attribute :namespace
   end
 end

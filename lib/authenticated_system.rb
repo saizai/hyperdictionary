@@ -153,7 +153,7 @@ module AuthenticatedSystem
     # havoc with forgery protection, and is only strictly necessary on login.
     # However, **all session state variables should be unset here**.
     def logout_keeping_session!
-      logger.info "AUDIT: Admin #{@current_user.login} stopped spoofing user #{User.find(session[:spoofed_user]).login rescue 'not found'} (via logout)" if session[:spoofing_user?]
+      Event.event! @current_user, 'stopped spoofing', User.find(session[:spoofed_user]) if session[:spoofing_user?]
       
       # Kill server-side auth cookie
       @current_user.forget_me if @current_user.is_a? User
@@ -164,13 +164,22 @@ module AuthenticatedSystem
       session[:spoofed_user] = nil
       session[:spoofing_user?] = nil
     end
-
+    
+    def session_model
+      request.env['rack.session.record']
+    end
+    
     # The session should only be reset at the tail end of a form POST --
     # otherwise the request forgery protection fails. It's only really necessary
     # when you cross quarantine (logged-out to logged-in).
     def logout_killing_session!
-      logout_keeping_session!
+      luid = session[:last_user_id] # these two are secretly sticky; used to catch multis
+      lip = session[:last_ip]
+#      logout_keeping_session!
+      session_model.destroy # it's paranoid so this won't actually delete the row
       reset_session
+      session[:last_user_id] = luid
+      session[:last_ip] = lip
     end
     
     #

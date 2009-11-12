@@ -1,0 +1,19 @@
+<div style="margin: 10px 0 0;" id="events_<%= @eventable ? @eventable.id : 'main' %>">
+	<h4>Events</h4>
+	<table>
+		<% @aggregated_events.each do |ae| %>
+			<tr>
+				<td style="font-size: 9px;">
+					<%= time_ago_in_words ae[:updated_at] %> ago
+				</td>
+				<td class="event">
+					<%= render :partial => "/events/#{ae[:event_type].name.sub(' ', '_')}_event", :locals => ae[:roles] %>
+				</td%>
+			</tr>
+		<% end %>
+	</table>
+	<%= will_paginate @aggregated_events, :remote => {:update => "events_#{@eventable ? @eventable.id : 'main'}",
+			 :loading => update_page {|page| page["events_#{ @eventable ? @eventable.id : 'main' }"].remove;
+									 		 page["events_indicator_#{ @eventable ? @eventable.id : 'main' }"].show }} if false %>
+</div>
+<div id="events_indicator_<%= @eventable ? @eventable.id : 'main' %>" style="display:none; text-align: center;"><%= image_tag 'ajax-spinner-large.gif' %></div>

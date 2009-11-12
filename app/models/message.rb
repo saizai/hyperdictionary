@@ -44,7 +44,7 @@ class Message < ActiveRecord::Base
   end
   
   def before_destroy
-    Discussion.decrement_counter :message_count, discussion_id # next_foo is monotonic
+    Discussion.decrement_counter :messages_count, discussion_id # next_foo is monotonic
     Message.decrement_counter :children_count, parent_id
   end
   

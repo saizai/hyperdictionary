@@ -18,15 +18,17 @@ class User < ActiveRecord::Base
   
   has_many :badgings, :dependent => :destroy do
     def grant! badgeset_id, level, badgeable = nil
+      badge = Badge.by_ids(badgeset_id, level)
       b = self.with_badge_set(badgeset_id).first || 
          Badging.new(
             :badge_set_id => badgeset_id,
-            :badge => Badge.by_ids(badgeset_id, level), 
+            :badge => badge, 
             :badgeable => badgeable,
             :user => proxy_owner
          )
       b.level_up(level) unless b.new_record?
-      b.save
+      Event.event! proxy_owner, 'badge', badge if b.save
+      b
     end
     def ungrant! badgeset_id, badgeable = nil
       Badging.destroy_all({:user_id => proxy_owner.id, :badge_set_id => badgeset_id,

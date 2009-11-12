@@ -88,6 +88,7 @@ class UsersController < ApplicationController
       @user.sessions.stale.destroy_all 
       logout_killing_session!
       self.current_user = @user
+      Event.event! current_user, 'log in'
       @user.update_time_in_app!
       flash[:notice] = "Logged in successfully"
       redirect_back_or_default('/')#@user)

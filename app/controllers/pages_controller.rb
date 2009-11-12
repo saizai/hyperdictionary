@@ -63,6 +63,7 @@ class PagesController < ApplicationController
         current_user.has_no_role 'subscriber', @page
       else
         current_user.has_role 'subscriber', @page
+        Event.event! current_user, 'subscribe', @page
       end
       respond_to do |format|
         format.js   { render :partial => '/pages/subscribe', :locals => {:page => @page}  }
@@ -157,7 +158,7 @@ class PagesController < ApplicationController
     @page = Page.find(params[:id])
     permit @page.owned_by?(current_user) do
       @page.destroy
-  
+      
       respond_to do |format|
         format.html { redirect_to(pages_url) }
         format.xml  { head :ok }

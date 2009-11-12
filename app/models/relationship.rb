@@ -50,6 +50,7 @@ class Relationship < ActiveRecord::Base
   
   def send_confirmation_request
     self.confirmation_requested_at = Time.now.utc
+    Event.event! user, 'friend', to_user
     RelationshipMailer.deliver_confirmation_request(self)
   end
   
@@ -59,6 +60,7 @@ class Relationship < ActiveRecord::Base
     r.state = 'active'
     r.activated_at = Time.now.utc
     r.save
+    Event.event! to_user, 'friend', user
     RelationshipMailer.deliver_reciprocation_notice(self)
   end
   

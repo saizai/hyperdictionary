@@ -44,8 +44,8 @@ class Page < ActiveRecord::Base
     if creator
       creator.has_role 'owner', self
       creator.has_role 'subscriber', self
+      Event.event! creator, 'create', self
     end
-    
     AnonUser.has_role 'commenter', self
   end
   
@@ -54,6 +54,7 @@ class Page < ActiveRecord::Base
   def after_save
 #    expire_cache
     (self.has_subscribers - [updater]).each {|subscriber| PageMailer.deliver_update self, subscriber }
+    Event.event! updater, 'edit', self if updater  
   end
   
   # This is used by versioning; we don't want to version the translations table per se, just serialize it like this

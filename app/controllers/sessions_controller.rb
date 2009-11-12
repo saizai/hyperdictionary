@@ -20,6 +20,7 @@ class SessionsController < ApplicationController
         logout_killing_session! # vs. logout_keeping_session
         self.current_user = user
         user.update_time_in_app!
+        Event.event! current_user, 'log in'
         new_cookie_flag = (params[:remember_me] == "1")
         handle_remember_cookie! new_cookie_flag
         flash[:notice] = "Logged in successfully"
@@ -38,6 +39,7 @@ class SessionsController < ApplicationController
   
   def destroy
     logout_killing_session!
+    Event.event! current_user, 'log out'
     flash[:notice] = "You have been logged out."
     redirect_back_or_default('/')
   end

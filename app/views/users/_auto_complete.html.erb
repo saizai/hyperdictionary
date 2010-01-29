@@ -1,0 +1,10 @@
+<ul>
+	<% users.each do |user| %>
+		<li>
+			<%= avatar user, :icon %>
+			<span class='login'><%= defined?(query) ? highlight(user.login, query) : h(user.login) %></span>
+			(<%= defined?(query) ? highlight(user.name, query) : h(user.name) %>)
+			<%= render(:partial => '/users/badges', :locals => {:user => user}) %>
+		</li>
+	<% end %>
+</ul>

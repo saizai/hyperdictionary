@@ -1,0 +1,8 @@
+<% if logged_in_as_admin?(true) and !spoofing_user? %>
+	<span id="admin_mode_form">
+		<%= check_box_tag 'admin_mode', '1', session[:admin_mode], :id => 'admin_mode', 
+			:onclick => remote_function(:url => admin_admin_mode_url, :submit => 'admin_mode_form', :method => :put) %>
+		<%= image_tag 'ajax-spinner.gif', :id => "admin_mode_indicator", :style => 'display:none;' %>
+		<span class="tooltip">Admin mode <span>Activates all admin powertoys</span></span>
+	</span>
+<% end %>

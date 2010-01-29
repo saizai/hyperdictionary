@@ -1,0 +1,21 @@
+<table>
+	<tr>
+		<td>Participants:</td>
+		<td><%= content_tag :ul, discussion.participants.map{|participant| content_tag :li, link_to_user(participant)}, :class => :inline, :id => "participations_#{discussion.id}" %>
+			<%= render :partial => '/participations/new', :locals => {:discussion => discussion} %></td>
+	</tr>
+	<tr>
+		<td>Subject:</td>
+		<td><%= discussion.name.blank? ? '(no subject)' : discussion.name %></td>
+	</tr>
+	<tr>
+		<td>Updated:</td>
+		<td><%= discussion.updated_at.to_s(:short) %></td>
+	</tr>
+</table>
+
+<div id="discussion_<%= discussion.id %>_messages" style="clear:both;">
+	Loading messages... <%= image_tag 'ajax-spinner.gif', :id => "discussion_#{discussion.id}_messages_preload_indicator" %>
+	<%= javascript_tag remote_function(:update => "discussion_#{discussion.id}_messages", :url => discussion_messages_url(discussion),
+		 :method => :get) %>
+</div>

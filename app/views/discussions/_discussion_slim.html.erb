@@ -1,0 +1,39 @@
+<tr>
+	<td>
+		<% 
+		shown_participants = (discussion.participants - [current_user])	
+		simple_list = shown_participants.map(&:login)
+		full_list = shown_participants.map{|participant| content_tag :li, link_to_user(participant)}
+		full = content_tag :ul, full_list, :class => :inline
+		limit = 33 
+		if simple_list.join(', ').size > limit %>
+			<span class="tooltip"><%= content_tag :ul, chunked_truncate(simple_list, full_list, :length => limit), :class => :inline %><span><%= full %></span></span>
+		<% else %>
+			<%= full %>
+		<% end %>
+	</td>
+	<td style="padding-right: 0.25em;">
+		<% mc = discussion.messages_count
+		if logged_in?
+			lr = discussion.participation.last_read
+			ur = lr.nil? ? mc : discussion.messages.since(lr).count
+			if ur > 0 %>
+				<b><span class="tooltip"><%= ur %> <span><%= pluralize ur, 'unread message' %></span></span></b> /
+			<% end 
+		end %>
+	</td>
+	<td>
+		<span class="tooltip"><%= mc %><span><%= pluralize mc, 'message'%></span></span>
+	</td>
+	<td>
+		<div class="discussion_name_with_snippet <%= 'unread' if logged_in? and ur > 0%>"><% 
+			text = content_tag(:span, (discussion.name.blank? ? '(no subject)' : truncate(discussion.name, :length => 45)), :class => "discussion_name")
+			text += content_tag(:span, truncate(discussion.last_message.body, 50), :class => "discussion_snippet")
+			%>
+			<%= link_to text, polymorphic_url([@context, discussion]) %>
+		</div>
+	</td>
+	<td>
+		<%= discussion.updated_at.to_s(:short) %>
+	</td>
+</tr>

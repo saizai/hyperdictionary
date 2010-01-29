@@ -1,0 +1,26 @@
+<% displayed ||= false %>
+<% remote_form_for( [discussion, participation = discussion.participations.new],
+	:html => {:id => "new_participation_form_#{discussion.id}", :class => 'form', :style => "display: #{ displayed ? 'inline' : 'none' };" },
+	:loading => "$('new_participation_form_errors_#{discussion.id}').update();
+				 $('new_participation_form_indicator_#{ discussion.id }').show(); Form.disable('new_participation_form_#{ discussion.id }');",
+    :success => "$('new_participation_form_errors_#{discussion.id}').value = ''; $('participation_users').value = '';
+				 $('new_participation_form_indicator_#{ discussion.id }').hide(); Form.enable('new_participation_form_#{ discussion.id }');
+				 $('new_participation_form_#{discussion.id}').hide(); $('new_participation_link').show();",
+	:failure  => "$('new_participation_form_indicator_#{ discussion.id }').hide(); Form.enable('new_participation_form_#{ discussion.id }'); 
+				Field.focus('participation_users');",
+	:update => {:success => "participations_#{discussion.id}", :failure => "new_participation_form_errors_#{discussion.id}"} ) do |f| %>
+	
+	<%= f.error_messages %>
+	<span id="new_participation_form_errors_<%=discussion.id%>" style="color: red; margin-bottom: 5px; ">
+	</span>
+	
+	<%= users_autocomplete :participation, :users, :exclude => discussion.participants.map(&:id) %>
+	<%= image_submit_tag 'add.png', :class => 'submit' %>
+	<%= image_tag 'ajax-spinner.gif', :id => "participation_users_indicator", :style => 'display:none;' %>
+	<%= image_tag 'ajax-spinner.gif', :id => "new_participation_form_indicator_#{ discussion.id }", :style => 'display:none;' %>
+<% end %>
+
+<%= link_to_function( image_tag('add.png'), :id => "new_participation_link", :style => "display: #{display ? 'none' : 'inline' };") {|page| 
+	page[:new_participation_link].hide
+	page["new_participation_form_#{discussion.id}"].visual_effect :appear, :duration => 0.2
+} %>

@@ -1,0 +1,77 @@
+<% displayed ||= false
+to ||= (@context.login if @context.is_a?(User) and (@context != current_user)) %>
+<% remote_form_for( [@context, @discussion = @context.discussions.new],
+	:html => {:id => "new_discussion_form_#{@context.id}", :class => 'form validate', :style => "display: #{ displayed ? 'block' : 'none' };" },
+	:loading => "$('new_discussion_form_errors_#{@context.id}').update();
+				 $('new_discussion_form_indicator_#{ @context.id }').show(); Form.disable('new_discussion_form_#{ @context.id }');",
+    :success => "$('discussion_messages_attributes_0_body').value = ''; $('new_discussion_form_errors_#{@context.id}').value = '';
+				 $('new_discussion_form_title_#{@context.id}').value = ''; $('new_discussion_form_indicator_#{ @context.id }').hide(); 
+				 Form.enable('new_discussion_form_#{ @context.id }'); Field.focus('discussion_messages_attributes_0_body'); ",
+	:failure  => "$('new_discussion_form_indicator_#{ @context.id }').hide(); Form.enable('new_discussion_form_#{ @context.id }'); 
+				Field.focus('new_discussion_form_body_#{@context.id}');",
+	:update => {:success => "discussions_#{@context.id}", :failure => "new_discussion_form_errors_#{@context.id}"}, 
+	:position => :top ) do |f| %>
+	<%= f.error_messages %>
+	
+	<div id="new_discussion_form_errors_<%=@context.id%>" style="color: red; margin-bottom: 5px; ">
+	</div>
+	
+    <div style="margin-bottom: 5px;">
+		<table>
+			<tr>
+				<td>To:</td>
+				<td><%= users_autocomplete :discussion, :to_user, :value => to %></td>
+				<td width=16><%= image_tag 'ajax-spinner.gif', :id => "discussion_to_user_indicator", :style => 'display:none;' %></td>
+			</tr>
+			<tr>
+				<td></td><td><small>separate multiple people with ,</small></td>
+			</tr>
+			<tr>
+				<td>Subject:</td>
+				<td><%= f.text_field :name, :id => "new_discussion_form_title_#{@context.id}" %></td>
+			</tr>
+	    </table>
+		<span style="display: none;" id="new_discussion_form_threadsplit_notice_<%= @context.id%>">
+			(Change this iff you want to split the discussion thread.)
+		</span>
+	</div>
+	<% @discussion.messages.build # ensures that we have one blank new message form
+		f.fields_for :messages do |fm| %>
+		<div>
+			<%= fm.text_area :body %>
+			<%= fm.hidden_field :private, :value => true %>
+			<%= fm.hidden_field :interface, :value => 'inbox' %>
+			<%= fm.hidden_field :parent_id, :value => nil %>
+			<%= fm.hidden_field :context_id, :value => @context.id %>
+			<%= fm.hidden_field :context_type, :value => @context.class.to_s %>
+	    </div>
+	<% end %>
+	<div id="new_discussion_form_submit_<%= @context.id %>">
+		<%= f.submit "Post", :class => 'submit' %>
+		<%= link_to_function( 'Cancel', :id => "new_message_hide_link", :style =>  "display: #{displayed ? 'none' : 'inline' };") {|page| 
+			page["new_discussion_form_#{@context.id}"].hide
+			page[:new_message_link].visual_effect :appear, :duration => 0.2
+		} %>
+		<%= image_tag 'ajax-spinner.gif', :id => "new_discussion_form_indicator_#{ @context.id }", :style => 'display:none;' %>
+		
+		<span class="tooltip left" style="float: right;">
+			(use Markdown formatting)
+			<span><%= render :partial => '/messages/markdown_info' %></span>
+		</span>
+		
+		<span id="new_discussion_form_parent_<%= @context.id %>"></span>
+		<%= link_to_function 'X', nil, :id => "new_discussion_form_parent_clear_#{@context.id}", :class => 'close', :style => 'display: none;' do |page|
+				page['discussion_parent_id'].value = nil
+				page["new_discussion_form_parent_#{@context.id}"].replace_html ''
+				page["new_discussion_form_parent_clear_#{@context.id}"].hide
+				page["new_discussion_form_threadsplit_notice_#{@context.id}"].hide
+			end %>
+	</div>
+	
+	<div id="new_discussion_form_preview_<%= @context.id %>"></div>
+<% end %>
+
+<%= link_to_function( 'Compose new message', :id => "new_message_link", :style => "display: #{displayed ? 'none' : 'block' };") {|page| 
+	page[:new_message_link].hide
+	page["new_discussion_form_#{@context.id}"].visual_effect :appear, :duration => 0.2
+} %>

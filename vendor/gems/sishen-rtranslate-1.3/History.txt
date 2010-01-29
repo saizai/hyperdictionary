@@ -1,0 +1,19 @@
+V1.3 Dec 18th, 2009
+* Enable the translation for the long string which is supposed to be more than 500 characters. The lib will split the text into several groups 500 by 500 and then join the response translated text together. 
+
+V1.2 Sep 17th, 2009
+* Enable the auto-detect source features of google translate api
+
+V1.1 July 11th, 2009
+* Add Google AJAX Language Dection support
+
+v1.0 Dec 16th, 2008
+* using the Google AJAX Language API instead of scrape
+* add the batch translation support
+* refactor the whole project
+
+v0.2 Nov 16, 2007
+* add a command line tool.
+
+v0.1 Nov 15, 2007
+* initial release

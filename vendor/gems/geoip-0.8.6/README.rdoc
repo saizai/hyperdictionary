@@ -1,0 +1,58 @@
+= geoip
+
+* http://github.com/cjheath/geoip
+
+== DESCRIPTION:
+
+GeoIP searches a GeoIP database for a given host or IP address, and
+returns information about the country where the IP address is allocated,
+and the city, ISP and other information, if you have that database version.
+
+== FEATURES/PROBLEMS:
+
+This release adds support for ASN data files, thanks to Roland Matiz
+
+== SYNOPSIS:
+
+  require 'geoip'
+  GeoIP.new('GeoIP.dat').country("www.netscape.sk")
+  => ["www.netscape.sk", "217.67.16.35", 196, "SK", "SVK", "Slovakia", "EU"]
+
+  GeoIP.new('GeoIPASNum.dat').asn("www.fsb.ru")
+  => ["AS8342", "RTComm.RU Autonomous System"]
+
+== REQUIREMENTS:
+
+You need at least the free GeoIP.dat, for which the last known download
+location is <http://www.maxmind.com/download/geoip/database/GeoIP.dat.gz>,
+or the city database from <http://www.maxmind.com/app/geolitecity>.
+The ASN database location is
+<http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz>.
+
+This API requires the file to be decompressed for searching. Other versions
+of this database are available for purchase which contain more detailed
+information, but this information is not returned by this implementation.
+See www.maxmind.com for more information.
+
+== INSTALL:
+
+sudo gem install geoip
+
+== LICENSE:
+
+This version Copyright (C) 2005 Clifford Heath
+Derived from the C version, Copyright (C) 2003 MaxMind LLC
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA

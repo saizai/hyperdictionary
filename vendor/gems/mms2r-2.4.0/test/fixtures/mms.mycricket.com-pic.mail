@@ -1,0 +1,78 @@
+Delivered-To: tommy.tutone@example.com
+Received: by 10.150.230.20 with SMTP id c20cs129672ybh;
+        Wed, 6 Feb 2008 16:56:06 -0800 (PST)
+Received: by 10.114.178.1 with SMTP id a1mr5486823waf.135.1202345765583;
+        Wed, 06 Feb 2008 16:56:05 -0800 (PST)
+Return-Path: <2068675309/TYPE=PLMN@mms.mycricket.com>
+Received: from codenmta5.mycricket.com (sd-p-extip.leapwireless.com [63.214.184.6])
+        by mx.google.com with ESMTP id g3si19295665wra.7.2008.02.06.16.56.04;
+        Wed, 06 Feb 2008 16:56:05 -0800 (PST)
+Received-SPF: neutral (google.com: 63.214.184.6 is neither permitted nor denied by best guess record for domain of 2068675309/TYPE=PLMN@mms.mycricket.com) client-ip=63.214.184.6;
+Authentication-Results: mx.google.com; spf=neutral (google.com: 63.214.184.6 is neither permitted nor denied by best guess record for domain of 2068675309/TYPE=PLMN@mms.mycricket.com) smtp.mail=2068675309/TYPE=PLMN@mms.mycricket.com
+Received: from mmstul.mycricket.com (unknown [172.28.64.9])
+	by codenmta5.mycricket.com (St. Bernard Software ePrism Email Security Appliance) with SMTP id 2ECB307S6J
+	for <tommy.tutone@example.com>; Wed,  6 Feb 2008 17:56:04 -0700 (MST)
+Received: by mmstul.mycricket.com (Multimedia IP message store 6.1.999.11) id 47A7F59E0004D434 for tommy.tutone@example.com; Wed, 6 Feb 2008 18:56:04 -0600
+Date: Wed, 6 Feb 2008 10:55:39 -0600
+From: 2068675309@mms.mycricket.com
+To: tommy.tutone@example.com
+Message-ID: <17627325.5208971202345762567.JavaMail.mms@mms12.mms.mycricket.com>
+MIME-Version: 1.0
+Content-Type: multipart/related; type="text/html"; 
+	boundary="----=_Part_391583_27802600.1202345762565"
+Importance: Normal
+X-MMS-Message-Type: MM4_forward.REQ
+X-Priority: 3
+
+------=_Part_391583_27802600.1202345762565
+Content-Type: text/html
+Content-Transfer-Encoding: quoted-printable
+Content-Location:mms.smil.txt
+Content-ID: <0000>
+Content-Disposition: inline
+
+<html>
+
+<head>
+<meta http-equiv=3D"Content-Language" content=3D"en-us">
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dwindows-1=
+252">
+<meta name=3D"GENERATOR" content=3D"Microsoft FrontPage 4.0">
+<meta name=3D"ProgId" content=3D"FrontPage.Editor.Document">
+<title>New Page 1</title>
+</head>
+
+<body>
+
+<p align=3D"center"><font face=3D"Comic Sans MS" color=3D"#0000FF" size=3D"=
+4">
+</font></p>
+
+<p><BR></p>
+<p align=3D"center"<table border=3D0><tr><td colspan=3D1><hr color=3D"8181D=
+B"></td></tr><tr><tr><td colspan=3D1 align=3D"Center"><IMG align=3Dbaseline=
+ alt=3D"" border=3D0 hspace=3D0 src=3D"cid:963" title=3D"right-click and ch=
+oose Save Picture As... to save the image"></td></tr></tr><tr><td colspan=
+=3D1><hr color=3D"8181DB"></td></tr></table>>
+
+</p>
+<p><BR></p>
+
+</body>
+
+</html>
+
+------=_Part_391583_27802600.1202345762565
+Content-Type: image/jpeg; name=10-26-07_1739.jpg
+Content-Transfer-Encoding: base64
+Content-Location:media1.jpeg
+Content-ID: <963>
+
+/9j/4AAQSkZJRgABAQEASABIAAD/4QAWRXhpZgAATU0AKgAAAAgAAAAAAAD//gAXQ3JlYXRl
+ZCB3aXRoIFRoZSBHSU1Q/9sAQwAFAwQEBAMFBAQEBQUFBgcMCAcHBwcPCwsJDBEPEhIRDxER
+ExYcFxMUGhURERghGBodHR8fHxMXIiQiHiQcHh8e/9sAQwEFBQUHBgcOCAgOHhQRFB4eHh4e
+Hh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4e/8AAEQgAAQAB
+AwEiAAIRAQMRAf/EABUAAQEAAAAAAAAAAAAAAAAAAAAH/8QAFBABAAAAAAAAAAAAAAAAAAAA
+AP/EABUBAQEAAAAAAAAAAAAAAAAAAAcI/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQAC
+EQMRAD8AlgA6WW//2Q==
+------=_Part_391583_27802600.1202345762565--

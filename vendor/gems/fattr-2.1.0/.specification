@@ -1,0 +1,69 @@
+--- !ruby/object:Gem::Specification 
+name: fattr
+version: !ruby/object:Gem::Version 
+  version: 2.1.0
+platform: ruby
+authors: 
+- Ara T. Howard
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2009-10-11 00:00:00 -07:00
+default_executable: 
+dependencies: []
+
+description: fattr.rb is a "fatter attr" for ruby
+email: ara.t.howard@gmail.com
+executables: []
+
+extensions: []
+
+extra_rdoc_files: []
+
+files: 
+- a.rb
+- fattr.gemspec
+- lib/fattr.rb
+- Rakefile
+- README
+- README.erb
+- samples/a.rb
+- samples/b.rb
+- samples/c.rb
+- samples/d.rb
+- samples/e.rb
+- samples/f.rb
+- samples/g.rb
+- samples/h.rb
+- test/fattr.rb
+has_rdoc: true
+homepage: http://github.com/ahoward/fattr/tree/master
+licenses: []
+
+post_install_message: 
+rdoc_options: []
+
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      version: "0"
+  version: 
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      version: "0"
+  version: 
+requirements: []
+
+rubyforge_project: codeforpeople
+rubygems_version: 1.3.5
+signing_key: 
+specification_version: 3
+summary: fattr
+test_files: 
+- test/fattr.rb

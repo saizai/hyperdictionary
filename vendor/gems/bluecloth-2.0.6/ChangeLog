@@ -1,0 +1,369 @@
+122[tip]   0cc074237b75   2010-01-16 16:32 -0800   ged
+  Rakefile changes:
+
+121   0e3195e9fb3e   2010-01-16 16:24 -0800   ged
+  It helps if you require the right library...
+
+120   5bae8ff5846f   2010-01-15 20:06 -0800   ged
+  Add version-specific extension-loading for native gems.
+
+119   e04eccd695ee   2010-01-14 09:00 -0800   ged
+  Encoding bugfix for Ruby 1.9.1.
+
+118   7c15c9beb634   2010-01-05 05:39 -0800   ged
+  Enable native/cross-compilation, add pending Markdown-Extra table specs.
+
+117   e04270524114   2010-01-04 08:18 -0800   ged
+  Removing old files, updated build system.
+
+116   f2af577b2cc0   2010-01-03 11:17 -0800   ged
+  Updated benchmark to include kramdown.
+
+115   b715702c19f7   2010-01-02 15:08 -0800   ged
+  Adding a minimal test case for #60.
+
+114:112,113   617e767c1331   2010-01-02 14:49 -0800   ged
+  Added spec for #56 so I can close it.
+
+113:111   8be386ec10a8   2009-11-04 15:56 -0800   ged
+  Updated build files.
+
+112   5c81c9a5012f   2010-01-01 10:54 -0800   ged
+  Build with rake-compiler, fix some bugs.
+
+111   ce4fb0ebf7c0   2009-08-03 12:58 -0700   ged
+  * Updated to Discount 1.5 (+bugfixes)
+
+110   79aeab070db6   2009-08-03 05:59 -0700   ged
+  * Updated build system
+
+109   2f1e2866f511   2009-07-29 09:31 -0700   ged
+  * Adding an .hgignore
+
+108   ca59ad11e08f   2009-07-29 23:56 +0000   convert-repo
+  update tags
+
+107   c4984d0f836b   2009-07-16 07:18 +0000   ged
+  Test for bzero (used in generate.c), and if it isn't defined (e.g., Windows using VC), define it
+
+106   fc2e0f28ccab   2009-07-16 00:22 +0000   ged
+  Fixing extra release files in the Rakefile
+
+105[2.0.5]   2cc7a3180ee8   2009-07-16 00:18 +0000   ged
+  Bumping version to 2.0.5.
+
+104   6164b7b34474   2009-07-15 23:52 +0000   ged
+  * Updated the build system
+
+103   6d52ea6e383b   2009-07-06 23:57 +0000   ged
+  Adding a spec to test out the DoS reported by Ben Sandofsky (refs #57).
+
+102[2.0.4]   824e2d6eab4c   2009-06-30 01:33 +0000   ged
+  * Updated with Discount 1.4.4.
+
+101   70e807c1eead   2009-06-15 13:15 +0000   ged
+  * Updated to Discount 1.4.2.
+
+100[2.0.3]   4e24d4de383f   2009-05-26 05:08 +0000   ged
+  * Fixing tests under Ruby 1.9.1. Thanks to Diego Elio Pettenò for the fix.
+
+99[2.0.2]   68e2db2b0c94   2009-05-14 15:26 +0000   ged
+  Bumping version to 2.0.2.
+
+98   824864e57182   2009-05-14 15:21 +0000   ged
+  * Updated to Discount 1.4.0.
+
+97[2.0.1]   bbd194b2caca   2009-04-07 22:07 +0000   ged
+  * Updated build system.
+
+96[2.0.0]:93   90ca87312078   2009-03-25 14:42 +0000   ged
+  Merged build system update and README changes from the [log:branches/spec-and-19-fixes@109:110 spec-and-19-fixes branch].
+
+95   93546826fa39   2009-03-25 14:35 +0000   ged
+  Updated build system.
+
+94:91   7920ff5c7aed   2009-03-25 14:32 +0000   ged
+  README wording fix.
+
+93   2bde45351ad8   2009-03-13 23:26 +0000   ged
+  * Updated build system
+
+92:86   2d482bf2a096   2009-03-13 22:56 +0000   ged
+  Merged spec updates, new version of Discount, updated MarkdownTest and Ruby 1.9.1 fixes from [log:branches/spec-and-19-fixes@102:106 the spec-and-19-fixes branch].
+
+91   f95cdb6af413   2009-03-13 22:44 +0000   ged
+  * Fixes for 1.9.1.
+
+90   f575c3ddbe33   2009-03-13 22:39 +0000   ged
+  * Finished splitting out the old auto-generated specs into explicit ones.
+
+89   7edafd943312   2009-03-13 21:21 +0000   ged
+  * Updated build system
+
+88   529efba157cd   2009-03-13 20:42 +0000   ged
+  Checkpoint commit
+
+87   bea54f3c8ad0   2009-03-13 20:42 +0000   ged
+  Branching to split out the specs and add fixes for 1.9.
+
+86   9a5ad2923bb3   2009-02-23 14:16 +0000   ged
+  * Trying to fix whitespace differences in generated output.
+
+85   7d9d7867dcd2   2009-02-23 06:58 +0000   ged
+  Started work on fixes for 1.9.1.
+
+84   20aece07667c   2009-01-07 21:43 +0000   ged
+  Fixed the VERSION
+
+83   4e4704585c05   2009-01-02 23:46 +0000   ged
+  Made the benchmark run with no additional prep (other than installing the requisite alternative implementations).
+
+82   312e1b089c11   2009-01-02 17:56 +0000   ged
+  * Updated build system
+
+81   50d73df53a75   2008-12-30 08:16 +0000   ged
+  Updated to Discount 1.3.1.
+
+80   98738523209f   2008-12-28 06:19 +0000   ged
+  * Removed some chatty memory-allocation debugging.
+
+79   fb5abd6b80f0   2008-12-28 03:04 +0000   ged
+  * Include the ext/VERSION file in the gem, as it's required for building.
+
+78   a6a8b77ebeea   2008-12-27 02:28 +0000   ged
+  Added support for Discount Markdown extensions and Pandoc header.
+
+77   f0d9a3b66167   2008-12-25 09:53 +0000   ged
+  Handle the 'tidy' library not being installed.
+
+76   1c01a3186b0f   2008-12-25 09:41 +0000   ged
+  Forgot to change the libtidy name hack to the spec itself.
+
+75   1afe9dd6b2b1   2008-12-25 09:37 +0000   ged
+  * Cleaned up a bunch of stuff from the first version.
+
+74   d6a67116703f   2008-12-25 03:29 +0000   ged
+  First working commit of Discount-backed BlueCloth 2.0.
+
+73   f7692e282fe6   2008-09-01 22:24 +0000   ged
+  * Checkpoint commit of MarkdownTest integration
+
+72:65   10001a99c611   2008-08-20 21:46 +0000   ged
+  Adding MarkdownTest tests, new build system. [broken build]
+
+71   8fde110be755   2008-08-01 19:12 +0000   ged
+  Checkpoint commit -- build system + markdowntest + Ragel grammar stub
+
+70:65   68c7658d9537   2008-08-01 19:01 +0000   ged
+  Making a branch for the experimental Ragel parser work
+
+69   4a618585d44a   2005-11-09 01:38 +0000   ged
+  * Fixed bug #12, and cleaned up warnings from changes to StringScanner. [fixes #12]
+
+68   a7c5084bb2c6   2005-11-09 01:34 +0000   ged
+  * Adding a standalone testcase for bug #12. Current Ruby only issues a warning
+
+67   752e33cb18b9   2005-11-09 01:28 +0000   ged
+  - Updated to point to my own Trac site.
+
+66   8f3203640ccd   2005-11-09 01:24 +0000   ged
+  * Branching for bugfixes + internals rewrite.
+
+65   f4a61eededf5   2005-05-12 21:31 +0000   ged
+  - Renamed tests without goofy numbers.
+
+64   d604e9fe1a4a   2005-05-12 20:31 +0000   ged
+  - Updated license to BSD/Ruby's; included LICENSE.txt from Ruby dist.
+
+63   3e785abfc186   2005-05-12 19:48 +0000   ged
+  - Added tests to make sure I dont break lists trying to fix #15
+
+62   e008c4845aef   2005-05-12 19:26 +0000   ged
+  - Added new tests for bug #17 (two-character bold/italic bug)
+
+61   bac992099396   2004-08-31 05:19 +0000   ged
+  - Updated for 1.0.0fc3 release.
+
+60   7eb11846096d   2004-08-25 05:27 +0000   ged
+  - Fixed bug introduced by the last bugfix, fixed tests that missed the new bug.
+
+59   324685ac4010   2004-08-25 05:14 +0000   ged
+  - Tracked down and fixed another regexp engine overflow bug; added a new test,
+
+58   a33c5eac1856   2004-08-24 14:57 +0000   ged
+  - Updated to v1.0.0.
+
+57   e233c9f93105   2004-08-24 14:56 +0000   ged
+  - Updated to v1.0.0.
+
+56   c793933d4599   2004-08-24 14:53 +0000   ged
+  - Updated to 20040824.
+
+55   992586b37e73   2004-08-24 14:52 +0000   ged
+  - Added CHANGES.xml to ignore property for root directory.
+
+54   976267f8ce12   2004-08-24 14:48 +0000   ged
+  - Brought list of block-level tags up to date with Markdown 1.0's list
+
+53   0e3f0bc95714   2004-08-22 19:28 +0000   ged
+  - Fixed re-engine overflow for all tested cases (thanks to Martin Chase
+
+52   5278657f5319   2004-08-22 19:26 +0000   ged
+  - Removed skip of overflow test.
+
+51   71617cbac5be   2004-08-22 19:24 +0000   ged
+  - "Fixed" the test case so it overflows again.
+
+50   0b2eafa02561   2004-08-09 05:12 +0000   ged
+  - Updated to 20040808.
+
+49   8c26c74594e1   2004-08-09 01:16 +0000   ged
+  - Modified to work from wherever the test is run (RPA compat).
+
+48   f7c3d9f3f7a1   2004-08-09 01:15 +0000   ged
+  - Modified to work from wherever the test is run (RPA compat).
+
+47   93abf238a8a7   2004-08-09 01:15 +0000   ged
+  - Updated version attribute.
+
+46   94b0fc3111a3   2004-08-09 01:14 +0000   ged
+  - Brought markdown syntax up to date with Markdown 1.0fc1.
+
+45   687a5882b6ab   2004-08-09 01:13 +0000   ged
+  - Made the require-header work wherever the test is run from (RPA compat).
+
+44   b701148f1078   2004-06-21 15:20 +0000   ged
+  - Brought up to date with Markdown 1.0b7.
+
+43   28fbfd30ae84   2004-06-02 13:37 +0000   ged
+  - Commented out non-functional --output option for now.
+
+42   c6015bf41ec7   2004-06-02 03:30 +0000   ged
+  Initial checkin.
+
+41   d595be427a40   2004-06-02 03:29 +0000   ged
+  - Added test for bug #574.
+
+40   6caececb7a82   2004-06-02 03:21 +0000   ged
+  - Test for bug #620 - Unresolved reference-style links doubled the character
+
+39   78dfd775cec9   2004-06-02 03:19 +0000   ged
+  - Fix for bug #620 - Unresolved reference-style links doubled the character
+
+38   0fb4d975113a   2004-05-14 02:43 +0000   ged
+  - Added tests for bug #568 (Two sets of bold text on one line doesn't render
+
+37   de0cec95ba63   2004-05-14 02:41 +0000   ged
+  - Fixed bug with bolding of single characters (bug #568).
+
+36   3dd2e20acd6a   2004-05-04 14:35 +0000   ged
+  - Additional fixes and tests for bug #537.
+
+35   a63aa4091662   2004-04-30 03:40 +0000   ged
+  - Added bin/ directory.
+
+34   bf3492418bf7   2004-04-30 03:40 +0000   ged
+  - Set date.
+
+33   0fa434ed6ee6   2004-04-30 03:39 +0000   ged
+  - Added test for Bug #543 (Safe mode does not work when there are no left
+
+32   70d5a794edc9   2004-04-30 03:38 +0000   ged
+  - Added test for email address encoding (Bug #537).
+
+31   c39cd62dc023   2004-04-30 03:35 +0000   ged
+  - Fix for bug #543 (Safe mode does not work when there are no left
+
+30   89ae174bf6eb   2004-04-30 03:33 +0000   ged
+  - Fix for bug #541 (Leading line of codeblock with more than one tab
+
+29   146a20279a49   2004-04-30 03:31 +0000   ged
+  - Fix for bug #537. Fix suggested by Marek Janukowicz.
+
+28   9751c45529de   2004-04-23 04:47 +0000   ged
+  - Temporary fixes until I have time to integrate SVN stuff.
+
+27   04fa7e0e035c   2004-04-23 04:46 +0000   ged
+  - Version bump.
+
+26   8dd949521598   2004-04-23 04:46 +0000   ged
+  - Brought in line with most-recent release.
+
+25   9cd965756b2c   2004-04-23 04:40 +0000   ged
+  - Version bump.
+
+24   7e81348df6c0   2004-04-23 04:39 +0000   ged
+  - Bugfixes for bugs 524 and 525. Thanks to David Heinemeier Hansson and Javier
+
+23   ca4b54166276   2004-04-23 04:34 +0000   ged
+  - Test for bugs 524 and 525
+
+22   496d7f7a4cdc   2004-04-16 01:55 +0000   ged
+  - Corrected version
+
+21   b51c6840bc49   2004-04-16 01:53 +0000   ged
+  - Brought Version up to date.
+
+20   f2718c29f536   2004-04-16 01:52 +0000   ged
+  - Updated ignore metadata.
+
+19   f82fd20371ad   2004-04-16 01:51 +0000   ged
+  Initial checkin.
+
+18   f403c21157cc   2004-04-16 01:50 +0000   ged
+  - Changed tests/ pattern to catch all tests.
+
+17   f4112232595f   2004-04-16 01:49 +0000   ged
+  - Added missing dependency check for devel-logger.
+
+16   8690a971eb59   2004-04-16 01:49 +0000   ged
+  - Added contributors section to the header.
+
+15   492797ca9f09   2004-04-16 01:48 +0000   ged
+  - Added contributors section to the header.
+
+14   0649b1f16ee8   2004-04-12 06:02 +0000   ged
+  - Added keywords.
+
+13   9fe4c26b72e0   2004-04-12 06:01 +0000   ged
+  - Updated comments/added to-do marker.
+
+12   64b1e11c97ff   2004-04-12 05:47 +0000   ged
+  - Updated ignore list.
+
+11   6a8aed04e890   2004-04-12 05:46 +0000   ged
+  Initial checkin.
+
+10   0fc13fe6e6c7   2004-04-12 05:45 +0000   ged
+  - Added a time() function for timing bits of code.
+
+9   3abdc2f04959   2004-04-12 05:43 +0000   ged
+  - Changed keyword constants from CVS to SVN keywords.
+
+8   e5db5380cfaf   2004-04-12 05:29 +0000   ged
+  - Changed location of keyword stuff, added URL keyword.
+
+7   f3c8521ac045   2004-04-12 05:26 +0000   ged
+  - Added the rest of the content.
+
+6   8b6eb6e814ad   2004-04-12 05:21 +0000   ged
+  - Fixed license in header
+
+5   80efe23904b2   2004-04-12 05:17 +0000   ged
+  - Renamed to reflect repurposing.
+
+4   d0414fcb9d46   2004-04-12 05:17 +0000   ged
+  - Converted to bug-testing testcase.
+
+3   7cacdc1638d5   2004-04-12 05:15 +0000   ged
+  - Added some mode code span tests to catch bugs.
+
+2   50ad59f16116   2004-04-11 04:40 +0000   ged
+  - Updated dist/install utilities/libs.
+
+1   47d5847f4c84   2004-04-10 20:36 +0000   ged
+  Removed markdown reference source
+
+0   08a749d2dd7f   2004-04-10 20:35 +0000   ged
+  Initial checkin
+

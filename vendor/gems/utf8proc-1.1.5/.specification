@@ -1,0 +1,58 @@
+--- !ruby/object:Gem::Specification 
+name: utf8proc
+version: !ruby/object:Gem::Version 
+  version: 1.1.5
+platform: ruby
+authors: 
+- Public Software Group e. V., Berlin, Germany
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2009-10-14 00:00:00 -07:00
+default_executable: 
+dependencies: []
+
+description: 
+email: 
+executables: []
+
+extensions: 
+- ext/extconf.rb
+extra_rdoc_files: []
+
+files: 
+- LICENSE
+- lib/utf8proc.rb
+- ext/utf8proc_native.c
+- ext/extconf.rb
+has_rdoc: true
+homepage: http://www.public-software-group.org/utf8proc
+licenses: []
+
+post_install_message: 
+rdoc_options: []
+
+require_paths: 
+- lib/
+required_ruby_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      version: "0"
+  version: 
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      version: "0"
+  version: 
+requirements: []
+
+rubyforge_project: 
+rubygems_version: 1.3.5
+signing_key: 
+specification_version: 3
+summary: UTF-8 Unicode string processing
+test_files: []
+

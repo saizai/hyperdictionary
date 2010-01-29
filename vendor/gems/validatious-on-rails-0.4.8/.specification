@@ -1,0 +1,152 @@
+--- !ruby/object:Gem::Specification 
+name: validatious-on-rails
+version: !ruby/object:Gem::Version 
+  version: 0.4.8
+platform: ruby
+authors: 
+- Jonas Grimfelt
+- Christian Johansen
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2009-10-30 00:00:00 -07:00
+default_executable: 
+dependencies: []
+
+description: Rails plugin that maps model validations to class names on form elements to integrate with Validatious.
+email: grimen@gmail.com
+executables: []
+
+extensions: []
+
+extra_rdoc_files: 
+- Rakefile
+- app/controllers/validates_controller.rb
+- config/routes.rb
+- generators/validatious/templates/XMLHttpRequest.js
+- generators/validatious/templates/initializer.rb
+- generators/validatious/templates/v2.config.js
+- generators/validatious/templates/v2.rails.js
+- generators/validatious/templates/v2.standalone.full.min.js
+- generators/validatious/validatious_generator.rb
+- lib/validatious-on-rails.rb
+- lib/validatious-on-rails/controller.rb
+- lib/validatious-on-rails/helpers.rb
+- lib/validatious-on-rails/model_validations.rb
+- lib/validatious-on-rails/rails.rb
+- lib/validatious-on-rails/rails/action_view_helpers.rb
+- lib/validatious-on-rails/validatious.rb
+- lib/validatious-on-rails/validatious/client_side_validator.rb
+- lib/validatious-on-rails/validatious/remote_validator.rb
+- lib/validatious-on-rails/validatious/validator.rb
+- lib/validatious-on-rails/validatious/validators.rb
+- lib/validatious-on-rails/validatious/validators/acceptance_accept_validator.rb
+- lib/validatious-on-rails/validatious/validators/confirmation_of_validator.rb
+- lib/validatious-on-rails/validatious/validators/exclusion_in_validator.rb
+- lib/validatious-on-rails/validatious/validators/format_with_validator.rb
+- lib/validatious-on-rails/validatious/validators/inclusion_in_validator.rb
+- lib/validatious-on-rails/validatious/validators/length/is_validator.rb
+- lib/validatious-on-rails/validatious/validators/length/maximum_validator.rb
+- lib/validatious-on-rails/validatious/validators/length/minimum_validator.rb
+- lib/validatious-on-rails/validatious/validators/numericality/equal_to_validator.rb
+- lib/validatious-on-rails/validatious/validators/numericality/even_validator.rb
+- lib/validatious-on-rails/validatious/validators/numericality/greater_than_or_equal_to_validator.rb
+- lib/validatious-on-rails/validatious/validators/numericality/greater_than_validator.rb
+- lib/validatious-on-rails/validatious/validators/numericality/less_than_or_equal_to_validator.rb
+- lib/validatious-on-rails/validatious/validators/numericality/less_than_validator.rb
+- lib/validatious-on-rails/validatious/validators/numericality/odd_validator.rb
+- lib/validatious-on-rails/validatious/validators/numericality/only_integer_validator.rb
+- lib/validatious-on-rails/validatious/validators/presence_validator.rb
+- lib/validatious-on-rails/validatious/validators/uniqueness_validator.rb
+- rails/init.rb
+- test/test_helper.rb
+- test/validatious_on_rails/controller_test.rb
+- test/validatious_on_rails/helpers_test.rb
+- test/validatious_on_rails/model_validations_test.rb
+- test/validatious_on_rails/rails/action_view_helpers_test.rb
+- test/validatious_on_rails/validatious/validator_test.rb
+- test/validatious_on_rails_test.rb
+files: 
+- Rakefile
+- app/controllers/validates_controller.rb
+- config/routes.rb
+- generators/validatious/templates/XMLHttpRequest.js
+- generators/validatious/templates/initializer.rb
+- generators/validatious/templates/v2.config.js
+- generators/validatious/templates/v2.rails.js
+- generators/validatious/templates/v2.standalone.full.min.js
+- generators/validatious/validatious_generator.rb
+- lib/validatious-on-rails.rb
+- lib/validatious-on-rails/controller.rb
+- lib/validatious-on-rails/helpers.rb
+- lib/validatious-on-rails/model_validations.rb
+- lib/validatious-on-rails/rails.rb
+- lib/validatious-on-rails/rails/action_view_helpers.rb
+- lib/validatious-on-rails/validatious.rb
+- lib/validatious-on-rails/validatious/client_side_validator.rb
+- lib/validatious-on-rails/validatious/remote_validator.rb
+- lib/validatious-on-rails/validatious/validator.rb
+- lib/validatious-on-rails/validatious/validators.rb
+- lib/validatious-on-rails/validatious/validators/acceptance_accept_validator.rb
+- lib/validatious-on-rails/validatious/validators/confirmation_of_validator.rb
+- lib/validatious-on-rails/validatious/validators/exclusion_in_validator.rb
+- lib/validatious-on-rails/validatious/validators/format_with_validator.rb
+- lib/validatious-on-rails/validatious/validators/inclusion_in_validator.rb
+- lib/validatious-on-rails/validatious/validators/length/is_validator.rb
+- lib/validatious-on-rails/validatious/validators/length/maximum_validator.rb
+- lib/validatious-on-rails/validatious/validators/length/minimum_validator.rb
+- lib/validatious-on-rails/validatious/validators/numericality/equal_to_validator.rb
+- lib/validatious-on-rails/validatious/validators/numericality/even_validator.rb
+- lib/validatious-on-rails/validatious/validators/numericality/greater_than_or_equal_to_validator.rb
+- lib/validatious-on-rails/validatious/validators/numericality/greater_than_validator.rb
+- lib/validatious-on-rails/validatious/validators/numericality/less_than_or_equal_to_validator.rb
+- lib/validatious-on-rails/validatious/validators/numericality/less_than_validator.rb
+- lib/validatious-on-rails/validatious/validators/numericality/odd_validator.rb
+- lib/validatious-on-rails/validatious/validators/numericality/only_integer_validator.rb
+- lib/validatious-on-rails/validatious/validators/presence_validator.rb
+- lib/validatious-on-rails/validatious/validators/uniqueness_validator.rb
+- rails/init.rb
+- test/test_helper.rb
+- test/validatious_on_rails/controller_test.rb
+- test/validatious_on_rails/helpers_test.rb
+- test/validatious_on_rails/model_validations_test.rb
+- test/validatious_on_rails/rails/action_view_helpers_test.rb
+- test/validatious_on_rails/validatious/validator_test.rb
+- test/validatious_on_rails_test.rb
+has_rdoc: true
+homepage: http://github.com/grimen/validatious-on-rails
+licenses: []
+
+post_install_message: 
+rdoc_options: 
+- --charset=UTF-8
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      version: "0"
+  version: 
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      version: "0"
+  version: 
+requirements: []
+
+rubyforge_project: 
+rubygems_version: 1.3.5
+signing_key: 
+specification_version: 3
+summary: Rails plugin that maps model validations to class names on form elements to integrate with Validatious.
+test_files: 
+- test/test_helper.rb
+- test/validatious_on_rails/controller_test.rb
+- test/validatious_on_rails/helpers_test.rb
+- test/validatious_on_rails/model_validations_test.rb
+- test/validatious_on_rails/rails/action_view_helpers_test.rb
+- test/validatious_on_rails/validatious/validator_test.rb
+- test/validatious_on_rails_test.rb

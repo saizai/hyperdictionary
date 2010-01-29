@@ -1,0 +1,89 @@
+--- !ruby/object:Gem::Specification 
+name: sishen-rtranslate
+version: !ruby/object:Gem::Version 
+  version: "1.3"
+platform: ruby
+authors: 
+- Ye Dingding
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2009-12-17 00:00:00 -08:00
+default_executable: rtranslate
+dependencies: 
+- !ruby/object:Gem::Dependency 
+  name: json
+  type: :runtime
+  version_requirement: 
+  version_requirements: !ruby/object:Gem::Requirement 
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        version: 1.1.3
+    version: 
+- !ruby/object:Gem::Dependency 
+  name: hoe
+  type: :development
+  version_requirement: 
+  version_requirements: !ruby/object:Gem::Requirement 
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        version: 2.3.3
+    version: 
+description: A simple, unofficial, ruby client API for using Google Translate.
+email: yedingding@gmail.com
+executables: 
+- rtranslate
+extensions: []
+
+extra_rdoc_files: 
+- History.txt
+- Manifest.txt
+- README.txt
+files: 
+- History.txt
+- MIT-LICENSE
+- Manifest.txt
+- README.txt
+- Rakefile
+- bin/rtranslate
+- lib/rtranslate.rb
+- lib/rtranslate/language.rb
+- lib/rtranslate/rtranslate.rb
+- lib/rtranslate/detection.rb
+- rtranslate.gemspec
+- tests/ts_translate.rb
+- tests/ts_detection.rb
+has_rdoc: true
+homepage: http://github.com/sishen/rtranslate
+licenses: []
+
+post_install_message: 
+rdoc_options: 
+- --main
+- README.txt
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      version: "0"
+  version: 
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      version: "0"
+  version: 
+requirements: []
+
+rubyforge_project: sishen-rtranslate
+rubygems_version: 1.3.5
+signing_key: 
+specification_version: 3
+summary: Google translate ruby client api
+test_files: []
+

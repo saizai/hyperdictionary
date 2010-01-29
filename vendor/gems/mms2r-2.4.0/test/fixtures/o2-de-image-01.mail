@@ -1,0 +1,134 @@
+Delivered-To: tommy.tutone@example.com
+Received: by 10.82.116.2 with SMTP id o2cs26327buc;
+        Wed, 14 Nov 2007 09:34:54 -0800 (PST)
+Received: by 10.78.107.8 with SMTP id f8mr1084349huc.1195061694752;
+        Wed, 14 Nov 2007 09:34:54 -0800 (PST)
+Return-Path: <o2.5551234@mms.o2online.de>
+Received: from agw2.mms.o2online.de (agw1.mms.o2online.de [82.113.100.65])
+        by mx.google.com with ESMTP id z37si1078619ikz.2007.11.14.09.34.53;
+        Wed, 14 Nov 2007 09:34:54 -0800 (PST)
+Received-SPF: pass (google.com: domain of o2.5551234@mms.o2online.de designates 82.113.100.65 as permitted sender) client-ip=82.113.100.65;
+Authentication-Results: mx.google.com; spf=pass (google.com: domain of o2.5551234@mms.o2online.de designates 82.113.100.65 as permitted sender) smtp.mail=o2.5551234@mms.o2online.de
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+	by agw2.mms.o2online.de (8.11.7p1+Sun/8.11.7) with ESMTP id lAEHYq303164
+	for tommy.tutone@example.com; Wed, 14 Nov 2007 18:34:52 +0100 (MET)
+Message-ID: <5816510.1195061691971.JavaMail.otmr@agw2.mms.o2online.de>
+Date: Wed, 14 Nov 2007 18:34:51 +0100 (MET)
+From: o2.5551234@mms.o2online.de
+To: tommy.tutone@example.com
+Subject: this is a subject
+Mime-Version: 1.0
+Content-Type: multipart/related; 
+	boundary="----=_Part_18025_26740874.1195061691966"
+X-Mms-MMS-Version: 18
+X-Mms-Priority: 1
+X-Mms-Delivery-Report: 1
+X-Nokia-Ag-Version: 2.0
+X-Mms-Message-Class: 0
+X-Mms-Message-Type: 0
+X-Mms-Transaction-ID: E11C9A09B7C770
+X-Mms-Read-Reply: 1
+X-Nokia-Ag-Internal: ; smiltype=true; internaldate=1195061691815
+X-Send-To: tommy.tutone@example.com
+X-Send-From: o2.5551234@mms.o2online.de
+Reply-To: o2.5551234@mms.o2online.de
+
+------=_Part_18025_26740874.1195061691966
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_18024_255140.1195061691966"
+
+------=_Part_18024_255140.1195061691966
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+Diese Nachricht wurde Ihnen von einem Handy mit der Nummer 5551234 dur=
+ch o2 =FCbermittelt.=20
+
+
+
+This is text before the image. Thank you!
+
+Wenn Sie mehr =FCber das Fotoversenden bei o2 erfahren m=F6chten, gehen Sie=
+ im Internet auf "http://www.o2online.de/goto/mmsinfo". M=F6chten Sie mehr =
+=FCber o2 erfahren, sind aber kein o2 Kunde, dann finden Sie hier "http://w=
+ww.o2online.de/o2/interessenten/startseite/index.html" viele Informationen.=
+=20
+
+------=_Part_18024_255140.1195061691966
+Content-Type: text/html; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+
+<HTML><HEAD><META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+</HEAD><BODY>
+<table>
+<tr>
+<td vAlign=center><font size=-1 face="arial,helvetica">
+Diese Nachricht wurde Ihnen von einem Handy mit der Nummer +5551234 durch o2 
+&uuml;bermittelt. 
+</font>
+</td>
+<td vAlign=center>
+<img src="cid:23abc@pc27-000" width="74" height="31" align="right">
+</td>
+</tr>
+</table>
+
+<p>
+<hr SIZE=1>
+<p><p>
+<font face="arial,helvetica">This is text before the image. Thank you!<p><p><hr size=1><p><center><IMG src="cid:23abc@pc27-100" width="800" border=1></center><p>
+<p><p><p><hr size=1><p>
+<font size=-1 face="arial,helvetica">
+Wenn Sie mehr &uuml;ber das Fotoversenden bei o2 erfahren m&ouml;chten, 
+gehen Sie im Internet auf <a href="http://www.o2online.de/goto/mmsinfo"> 
+www.o2online.de/goto/mmsinfo</a>. M&ouml;chten Sie mehr &uuml;ber o2 erfahren, sind 
+aber kein o2 Kunde, dann finden Sie
+<a href="http://www.o2online.de/o2/interessenten/startseite/index.html">hier</a> viele 
+Informationen. 
+</font>
+</p>
+</html>
+</BODY></HTML>
+------=_Part_18024_255140.1195061691966--
+
+------=_Part_18025_26740874.1195061691966
+Content-Type: image/jpeg
+Content-Transfer-Encoding: base64
+Content-ID: <23abc@pc27-000>
+
+/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIf
+IiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7
+Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAAfAEoDASIA
+AhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQA
+AAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3
+ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWm
+p6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEA
+AwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSEx
+BhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElK
+U1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3
+uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDufHfj
+mDwhZIsUa3F/cZ8qInhQOrN7e3euYtLH4qa3bLqJ1aHTxIN0du4CEjtwFOPxOaxdZUal8cEt735o
+heRIEbptCggfif517bXTK1KKstWPY8z8OfEHWLDxCPDnjGBY7hmCJcgBfmP3c44IPZhXpleTfG+C
+KN9IvEwtwfMTI6lRtI/Ik/nXqGmyyTaZaSy/6ySFGb6lRmpqJOKmla4Ms0UUVgIKKKKACiiigDzb
+4leDb2e8i8UaEjvfW7K00acs23G1lHcjHIp2n/GfRTZAara3VteoMSRxx7lLe3Ix9DXo9VZtL065
+l82ewtZZP78kKsfzIrZVE4qM1ew7nkqQan8V/FkF9JaSWuh2mAC/dc5IB7s3fHQV3B17XdN8S6bp
+upWunG31J5EiW1dzJEFGQWzwRjGcdK6tVVECooVQMAAYAritH0PxTb+KZdY1SLTLuSZvL87z33W8
+GfuRrtx9eearnUvRbAbmpazeRa/aaNp1tDJNLC1xJJPIUVI1YLxgElsmsafx3LBc3ii1hnt0trme
+3liZwH8nqCWUA59VJweK6XUdF03VnhkvrRJngOYnJIZPXBHOPaqq+E9AWSVxpcAaZXR+vKv98AZ4
+B9BWacLaoCDQNfvdS1C4sr+yit5Et4rlDFKXBSTOAcgcjH0rDvfE+o3up2DxRLbacmstalkmPmy+
+Wr7gyYxtJGcZ7Cuyg06ztrlrmG3RJmiWIuOpRc7R9Bk1T/4RnRP7T/tP+zoftfmeb5uDnfjG7HTP
+v3pqUU72Ay9F8W3WoXmnrdWMMFtq0Mk1m8c29lCYJEgwAMg54J9K6msiLwroMJuTFpcC/akaOXAO
+CrfeUegPcDFa44AA6Cok4t+6I//Z
+------=_Part_18025_26740874.1195061691966
+Content-Type: image/jpeg
+Content-Transfer-Encoding: base64
+Content-ID: <23abc@pc27-100>
+
+/9j/4AAQSkZJRgABAQEASABIAAD/4QAWRXhpZgAATU0AKgAAAAgAAAAAAAD//gAXQ3JlYXRl
+ZCB3aXRoIFRoZSBHSU1Q/9sAQwAFAwQEBAMFBAQEBQUFBgcMCAcHBwcPCwsJDBEPEhIRDxER
+ExYcFxMUGhURERghGBodHR8fHxMXIiQiHiQcHh8e/9sAQwEFBQUHBgcOCAgOHhQRFB4eHh4e
+Hh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4e/8AAEQgAAQAB
+AwEiAAIRAQMRAf/EABUAAQEAAAAAAAAAAAAAAAAAAAAH/8QAFBABAAAAAAAAAAAAAAAAAAAA
+AP/EABUBAQEAAAAAAAAAAAAAAAAAAAcI/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQAC
+EQMRAD8AlgA6WW//2Q==
+------=_Part_18025_26740874.1195061691966--

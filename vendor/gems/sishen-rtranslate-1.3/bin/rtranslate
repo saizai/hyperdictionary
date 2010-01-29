@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+
+$:.unshift(File::join(File::dirname(File::dirname(__FILE__)), "lib"))
+
+require 'rtranslate'
+require 'optparse'
+
+options = {}
+opts = OptionParser.new do |opts|
+  opts.banner = <<-EOF
+  Usage:
+    rtranslate -f lang -t lang text
+    rtranslate -d text
+  EOF
+
+  opts.on("-fLANG", "--from LANG", "From Language LANG") do |x|
+    options[:from] = x
+  end
+
+  opts.on("-tLANG", "--to LANG", "To Language LANG") do |x|
+    options[:to] = x
+  end
+
+  opts.on("-d", "--detect", "Detect the text") do
+    options[:detect] = true
+  end
+
+  opts.on("-h", "--help", "Show this message") do
+    puts opts
+    exit
+  end
+end
+
+opts.parse!(ARGV)
+text = ARGV.shift
+
+unless (options[:detect] || options[:to] ) && text
+  puts opts
+  exit
+end
+
+if options[:detect]
+  STDOUT.puts(Translate.d(text))
+else
+  STDOUT.puts(Translate.t(text, options[:from], options[:to]))
+end

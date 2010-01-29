@@ -1,0 +1,9 @@
+*.swp
+*.log
+pkg
+*.iml
+*.ipr
+*.iws
+.config
+InstalledFiles
+*.gem

@@ -1,0 +1,63 @@
+Delivered-To: tommy.tutone@example.com
+Received: by 10.82.116.2 with SMTP id o2cs168702buc;
+        Tue, 13 Nov 2007 02:07:31 -0800 (PST)
+Received: by 10.86.89.4 with SMTP id m4mr5632913fgb.1194948451486;
+        Tue, 13 Nov 2007 02:07:31 -0800 (PST)
+Return-Path: <5551234@mms.netcom.no>
+Received: from agw-rele1.netcom.no (internet-agw-vs.osl200.netcom.no [212.169.66.50])
+        by mx.google.com with ESMTP id c28si3371990fka.2007.11.13.02.07.30;
+        Tue, 13 Nov 2007 02:07:31 -0800 (PST)
+Received-SPF: pass (google.com: domain of 5551234@mms.netcom.no designates 212.169.66.50 as permitted sender) client-ip=212.169.66.50;
+Authentication-Results: mx.google.com; spf=pass (google.com: domain of 5551234@mms.netcom.no designates 212.169.66.50 as permitted sender) smtp.mail=5551234@mms.netcom.no
+Received: from [212.169.66.141] (helo=agwha02.netcom.no)
+	by agw-rele1.netcom.no with esmtp (Exim 4.24)
+	id 1Irsg5-0004Ib-Pk
+	for tommy.tutone@example.com; Tue, 13 Nov 2007 11:07:29 +0100
+Message-ID: <26214981.1194948449773.JavaMail.wluser@agwha02.netcom.no>
+Date: Tue, 13 Nov 2007 11:07:29 +0100
+From: 5551234@mms.netcom.no
+To: tommy.tutone@example.com
+Subject: Morning greetings from norway. This is a
+Mime-Version: 1.0
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_10362_26801219.1194948449772"
+X-Mms-MMS-Version: 18
+X-Mms-Priority: 1
+X-Mms-Sender-Visibility: 1
+X-Mms-Delivery-Report: 1
+X-Nokia-Ag-Version: 2.0
+X-Mms-Message-Class: 0
+X-Mms-Message-Type: 0
+X-Mms-Transaction-ID: 42-db80104
+X-Mms-Read-Reply: 1
+X-Nokia-Ag-Internal: ; smiltype=true; internaldate=1194948449764
+
+------=_Part_10362_26801219.1194948449772
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: base64
+Content-Location: smil.txt
+Content-Disposition: inline
+
+TW9ybmluZyBncmVldGluZ3MgZnJvbSBub3J3YXkuIFRoaXMgaXMgYSBtbXMgZnJvbSBub3J3ZWdp
+YW4gY2FycmllciBuZXRjb20u
+------=_Part_10362_26801219.1194948449772
+Content-Type: image/jpeg
+Content-Transfer-Encoding: base64
+Content-Location: DSC00332.JPG
+Content-Disposition: inline
+
+/9j/4AAQSkZJRgABAQEASABIAAD/4QAWRXhpZgAATU0AKgAAAAgAAAAAAAD//gAXQ3JlYXRl
+ZCB3aXRoIFRoZSBHSU1Q/9sAQwAFAwQEBAMFBAQEBQUFBgcMCAcHBwcPCwsJDBEPEhIRDxER
+ExYcFxMUGhURERghGBodHR8fHxMXIiQiHiQcHh8e/9sAQwEFBQUHBgcOCAgOHhQRFB4eHh4e
+Hh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4e/8AAEQgAAQAB
+AwEiAAIRAQMRAf/EABUAAQEAAAAAAAAAAAAAAAAAAAAH/8QAFBABAAAAAAAAAAAAAAAAAAAA
+AP/EABUBAQEAAAAAAAAAAAAAAAAAAAcI/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQAC
+EQMRAD8AlgA6WW//2Q==
+------=_Part_10362_26801219.1194948449772
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Content-ID: <1194948449771.Rzl3YQoFAUIAAEQ3AAAAMAAAB2UAAAAA>
+Content-Disposition: inline
+
+Meldingen er sendt fra mobiltelefon og kan kun besvares med mobiltelefon. Nummeret finner du i e-postadressen.
+------=_Part_10362_26801219.1194948449772--

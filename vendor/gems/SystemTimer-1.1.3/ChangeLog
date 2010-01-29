@@ -1,0 +1,32 @@
+=== 1.1.3/ 2009-29-11
+
+ * Preparing GemCutter migration
+
+=== 1.1.2 + 1.1.3/ 2009-29-11
+
+ * Preparing GemCutter migration
+
+=== 1.1.1 / 2009-03-10
+
+ * Fixing set_itimerval_with_minimum_1s_interval method signature
+   which was incorrect and resulted in a segfault on 64 bits 
+   platform (int versus VALUE). Thanks to Mike Perham for 
+   investigating the problem and sending the patch!
+
+=== 1.1.0 / 2008-11-05
+
+* New implementation supporting concurrent timers, i.e. :
+
+    (1..10).each do
+      Thread.new do
+        SystemTimer.timeout_after(5) do
+          sleep 60
+          puts "hi there!" 
+        end
+      end
+    end
+
+=== 1.0.0 / 2008-02-27
+
+* Initial Release
+

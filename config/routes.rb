@@ -1,28 +1,33 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resource :session # For the unitary session, i.e. the current one
-  map.resources :users, :member => {:forgot_password => :get, :change_password => :put, :set_preference => :put, :set_user_name => :post} do |user|
+  map.resource :session # For the unitary session, i.e. the current users's current session
+  
+  map.resources :users, :member => {:forgot_password => :get, :change_password => :put, :set_preference => :put, 
+                                    :set_user_name => :post}, :collection => {:search => :get},
+                        :has_many => [:sessions, :tags, :badgings, :participations] do |user|
     user.resources :contacts, :member => {:activate => :get, :screen => :put, :verify => :put, :suspend => :put} # technically activate should be a put, but accessed via get... oh well
     user.resources :relationships, :member => {:confirm => :put} 
-    user.resources :sessions # For all the user's sessions
     user.resource :page, :member => {:change_role => :put, :subscribe => :put} do |page|
-      page.resources :messages, :member => {:moderate => :put, :screen => :put}
+      page.resources :messages, :member => {:moderate => :put, :screen => :put} # comments / forum
       page.resources :versions, :member => {:compare => :get, :revert => :put}
     end
-    user.resources :tags
     user.resources :assets, :collection => {:swfupload => :post}, :member => {:download => :get}
     user.resources :identities, :member => {:screen => :put}
-    user.resources :badgings
+    user.resources :discussions, :has_many => :messages, :has_one => :participation # inbox
   end
   
   # For global ones:
   map.resources :tags
-  map.resources :badge_sets
+  map.resources :badge_sets, :has_many => :badges
   map.resources :badges
   map.resources :pages, :member => {:change_role => :put, :subscribe => :put} do |page|
-    page.resources :messages, :member => {:moderate => :put, :screen => :put }
+    page.resources :discussions, :has_many => [:messages, :participations]
+    page.resources :messages, :member => {:moderate => :put, :screen => :put } # This is for the page's special wall discussion. For other ones, go through its discussions.
     page.resources :versions, :member => {:compare => :get, :revert => :put}
   end
-  # only used because polymorphic parent URLs are a pain in the ass (e.g. moderate_???_message_url)
+  
+  map.resources :discussions, :has_many => :participations do |discussion|
+    discussion.resources :messages, :member => {:moderate => :put, :screen => :put}
+  end
   map.resources :messages, :member => {:moderate => :put, :screen => :put}, :collection => { :render_markdown => :put }
   map.resources :events
   
@@ -39,6 +44,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.namespace :admin do |admin|
     admin.root :controller => 'main'
+    admin.admin_mode 'admin_mode', :controller => 'main', :action => 'admin_mode', :method => :put
     admin.preferences 'preferences', :controller => 'main', :action => 'preferences'
     admin.resources :four_oh_fours
     admin.resources :users, :member => {:suspend => :put, :unsuspend => :put, :purge => :delete, :activate => :put, 

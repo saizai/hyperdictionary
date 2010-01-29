@@ -36,12 +36,12 @@ class ActionController::Base
   # Note: these have to be defined as methods, not lambdas; lambdas don't have access to the logged_in_as_admin? helper
   prepend_before_filter :footnotes_before_if  
   def footnotes_before_if
-    Footnotes::Filter.before self if Rails.env.development? or (logged_in? and current_user.has_role? 'site_admin') # Helper isn't accessible here
+    Footnotes::Filter.before self if (logged_in? and current_user.has_role?('site_admin') and session[:admin_mode]) # Helper isn't accessible here
   end
   
   after_filter :footnotes_after_if  
   def footnotes_after_if
-    Footnotes::Filter.after self if Rails.env.development? or (logged_in? and current_user.has_role? 'site_admin')
+    Footnotes::Filter.after self if (logged_in? and current_user.has_role?('site_admin') and session[:admin_mode])
   end
 end
 

@@ -521,6 +521,12 @@ class ActiveRecordErrorI18nTests < ActiveSupport::TestCase
     assert_equal message, ActiveRecord::Error.new(@reply, *args).full_message
   end
 
+  test ":default is only given to message if a symbol is supplied" do
+    store_translations(:errors => { :messages => { :"foo bar" => "You fooed: {{value}}." } })
+    @reply.errors.add(:title, :inexistent, :default => "foo bar")
+    assert_equal "foo bar", @reply.errors[:title]
+  end
+
   test "#generate_message passes the model attribute value for interpolation" do
     store_translations(:errors => { :messages => { :foo => "You fooed: {{value}}." } })
     @reply.title = "da title"
@@ -649,6 +655,14 @@ class ActiveRecordErrorI18nTests < ActiveSupport::TestCase
   test "#full_message with class-level specified custom message" do
     store_translations(:errors => { :messages => { :broken => 'is kaputt' }, :full_messages => { :broken => '{{attribute}} {{message}}?!' } })
     assert_full_message 'Title is kaputt?!', :title, :kaputt, :message => :broken
+  end
+
+  test "#full_message with different scope" do
+    store_translations(:my_errors => { :messages => { :kaputt => 'is kaputt' } })
+    assert_full_message 'Title is kaputt', :title, :kaputt, :scope => [:activerecord, :my_errors]
+
+    store_translations(:my_errors => { :full_messages => { :kaputt => '{{attribute}} {{message}}!' } })
+    assert_full_message 'Title is kaputt!', :title, :kaputt, :scope => [:activerecord, :my_errors]
   end
 
   # switch locales

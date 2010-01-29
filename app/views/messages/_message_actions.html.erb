@@ -1,29 +1,29 @@
 <span class="tooltip">
 	<%= link_to_function image_tag('message_add.png'), nil, :title => 'Reply' do |page|
 			page['message_parent_id'].value = message.id
-			page["new_message_form_parent_#{message.context_id}"].replace_html "(reply to #{link_to_user message.creator})"
-			page["new_message_form_parent_clear_#{message.context_id}"].show
-			page["new_message_form_threadsplit_notice_#{message.context_id}"].show
-			page["new_message_form_body_#{message.context_id}"].value = ''
+			page["new_message_form_parent_#{message.discussion_id}"].replace_html "(reply to #{link_to_user message.creator})"
+			page["new_message_form_parent_clear_#{message.discussion_id}"].show
+			page["new_message_form_threadsplit_notice_#{message.discussion_id}"].show
+			page["new_message_form_body_#{message.discussion_id}"].value = ''
 			page["message_private"].checked = message.private
 			page << "if ($('message_moderated')) {"
 				page["message_moderated"].checked = message.moderated
 			page << "}"
-			page["new_message_form_body_#{message.context_id}"].focus
+			page["new_message_form_body_#{message.discussion_id}"].focus
 		end
 	 %>
 	 <span>
 		<%= link_to_function image_tag('quote.png'), nil, :title => 'Quote' do |page|
 				page['message_parent_id'].value = message.id
-				page["new_message_form_parent_#{message.context_id}"].replace_html "(reply to #{link_to_user message.creator})"
-				page["new_message_form_parent_clear_#{message.context_id}"].show
-				page["new_message_form_threadsplit_notice_#{message.context_id}"].show
-				page["new_message_form_body_#{message.context_id}"].value = message.body.strip.split("\n").map{|x| "> " + x}.join("\n") + "\n\n"
+				page["new_message_form_parent_#{message.discussion_id}"].replace_html "(reply to #{link_to_user message.creator})"
+				page["new_message_form_parent_clear_#{message.discussion_id}"].show
+				page["new_message_form_threadsplit_notice_#{message.discussion_id}"].show
+				page["new_message_form_body_#{message.discussion_id}"].value = message.body.strip.split("\n").map{|x| "> " + x}.join("\n") + "\n\n"
 				page["message_private"].checked = message.private
 				page << "if ($('message_moderated')) {"
 					page["message_moderated"].checked = message.moderated
 				page << "}"
-				page["new_message_form_body_#{message.context_id}"].focus
+				page["new_message_form_body_#{message.discussion_id}"].focus
 			end
 		 %>
 	 </span>
@@ -38,15 +38,15 @@
 <span class="tooltip">
 	<%= image_tag "pencil.png" %>
 	<span>
-		<% if message.context.moderated_by? current_user %>
+		<% if message.moderated_by? current_user %>
 			<%= link_to_remote image_tag("shield#{ '_gray' if message.moderated  }.png"), {:url  => moderate_message_url(message), :method => :put, :update => "message_post_container_#{message.id}"},
 					:title => "#{'un' if message.moderated}moderate message".capitalize %>
 		<% end %>
-		<% if message.context.member_by? current_user %>
+		<% if message.screened_by? current_user %>
 			<%= link_to_remote image_tag("eye#{ '_gray' if message.private }.png"), {:url  => screen_message_path(message), :method => :put, :update => "message_post_container_#{message.id}"},
 					:title => "#{'un' if message.private}screen message".capitalize %>
 		<% end %>
-		<% if message.context.owned_by? current_user %>
+		<% if message.deleted_by? current_user %>
 			<%= link_to_remote image_tag("message_delete.png"), {:url  => message_path(message), :method => :delete, :success => update_page {|page| page.remove "message_post_container_#{message.id}"}},
 					:title => "Delete message" %>
 		<% end %>

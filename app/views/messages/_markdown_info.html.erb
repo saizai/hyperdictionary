@@ -6,7 +6,9 @@
 >This text is blockquoted
 >>This text is a nested blockquote
 
-* This is an unordered list (ul) item
+* This is an standard unordered list (ul) item
+* This is another
+
 1. This is an ordered list (ol) item
 2. [This is a link](http://www.example.com/)
 3. [This is a link](http://www.example.com/ "with a title attribute")
@@ -20,9 +22,11 @@ END
 <table>
 	<tr>
 		<td width="50%">
+			<center>Type this</center>
 			<%= simple_format text %>
 		</td>
 		<td width="50%">
+			<center>To get this</center>
 			<%= markdown text %>
 		</td>
 	</tr>

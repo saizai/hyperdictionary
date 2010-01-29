@@ -24,7 +24,21 @@ class UsersController < ApplicationController
     @can_add_friend = (logged_in? and current_user != @user and !@current_user_friends.include?(@user))
     @badges = @user.badges
   end
-  
+
+  def search
+    params[:query] = params[:query].strip.downcase
+    conditions = [ "(LOWER(login) LIKE ? OR LOWER(name) LIKE ?)", 
+                    '%' + params[:query] + '%', '%' + params[:query] + '%' ]
+    if params[:exclude]
+      conditions[0] += ' AND id NOT IN (?)'
+      conditions << params[:exclude].map(&:to_i)
+    end
+    @users = User.find(:all, :conditions => conditions, 
+                            :order => "login ASC", :limit => 10) # TODO: :include => :avatar
+    
+    render :partial => '/users/auto_complete', :locals => {:users => @users, :query => params[:query] }
+  end
+    
   def edit
     @user = User.find(params[:id], :include => [:public_contacts, :identities]) # _by_login
     if permit? 'site_admin or (self of user)'

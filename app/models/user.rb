@@ -6,7 +6,12 @@ class User < ActiveRecord::Base
   include Authentication::ByCookieToken
   include Authorization::AasmRolesWithOpenId
   
-  has_many :messages, :foreign_key => 'creator_id', :dependent => :destroy
+  has_many :messages, :as => :context, :dependent => :destroy
+  has_many :sent_messages, :foreign_key => 'creator_id', :dependent => :destroy, :class_name => 'Message'
+  has_many :participations
+  has_many :discussions, :through => :participations
+  has_many :inbox_discussions, :through => :participations, :source => :discussion, :conditions => "participations.inbox = 1", :class_name => "Discussion" 
+  has_many :started_discussions, :foreign_key => 'creator_id', :class_name => 'Discussion'
   has_one :page, :autosave => true, :dependent => :destroy
   
   # This is suboptimal. See http://stackoverflow.com/questions/958676/change-a-finder-method-w-parameters-to-an-association
@@ -74,7 +79,7 @@ class User < ActiveRecord::Base
   validates_exclusion_of    :login,    :in => %w( anonymous anonuser admin )
   
   validates_format_of       :name,     :with => Authentication.name_regex,  :message => Authentication.bad_name_message, :allow_nil => true
-  validates_length_of       :name,     :maximum => 100
+  validates_length_of       :name,     :maximum => 120
   
   named_scope :active, :conditions => ['activated_at IS NOT NULL AND state = "active"']
   

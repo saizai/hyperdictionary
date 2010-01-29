@@ -280,7 +280,7 @@ module ActionView
 
         concat(form_tag(options.delete(:url) || {}, options.delete(:html) || {}))
         fields_for(object_name, *(args << options), &proc)
-        concat('</form>')
+        concat('</form>'.html_safe!)
       end
 
       def apply_form_for_options!(object_or_array, options) #:nodoc:
@@ -445,6 +445,15 @@ module ActionView
       #     <% end %>
       #   <% end %>
       #
+      # Or a collection to be used:
+      #
+      #   <% form_for @person, :url => { :action => "update" } do |person_form| %>
+      #     ...
+      #     <% person_form.fields_for :projects, @active_projects do |project_fields| %>
+      #       Name: <%= project_fields.text_field :name %>
+      #     <% end %>
+      #   <% end %>
+      #
       # When projects is already an association on Person you can use
       # +accepts_nested_attributes_for+ to define the writer method for you:
       #
@@ -491,14 +500,38 @@ module ActionView
       end
 
       # Returns a label tag tailored for labelling an input field for a specified attribute (identified by +method+) on an object
-      # assigned to the template (identified by +object+). The text of label will default to the attribute name unless you specify
-      # it explicitly. Additional options on the label tag can be passed as a hash with +options+. These options will be tagged
+      # assigned to the template (identified by +object+). The text of label will default to the attribute name unless a translation
+      # is found in the current I18n locale (through views.labels.<modelname>.<attribute>) or you specify it explicitly. 
+      # Additional options on the label tag can be passed as a hash with +options+. These options will be tagged
       # onto the HTML as an HTML element attribute as in the example shown, except for the <tt>:value</tt> option, which is designed to
       # target labels for radio_button tags (where the value is used in the ID of the input tag).
       #
       # ==== Examples
       #   label(:post, :title)
       #   # => <label for="post_title">Title</label>
+      #
+      #   You can localize your labels based on model and attribute names.
+      #   For example you can define the following in your locale (e.g. en.yml)
+      #
+      #   views:
+      #     labels:
+      #       post:
+      #         body: "Write your entire text here"
+      #
+      #   Which then will result in
+      #
+      #   label(:post, :body)
+      #   # => <label for="post_body">Write your entire text here</label>
+      #
+      #   Localization can also be based purely on the translation of the attribute-name like this:
+      #
+      #   activerecord:
+      #     attribute:
+      #       post:
+      #         cost: "Total cost"
+      #
+      #   label(:post, :cost)
+      #   # => <label for="post_cost">Total cost</label>
       #
       #   label(:post, :title, "A short title")
       #   # => <label for="post_title">A short title</label>
@@ -730,7 +763,20 @@ module ActionView
         add_default_name_and_id_for_value(tag_value, name_and_id)
         options.delete("index")
         options["for"] ||= name_and_id["id"]
-        content = (text.blank? ? nil : text.to_s) || method_name.humanize
+
+        content = if text.blank?
+          i18n_label = I18n.t("helpers.label.#{object_name}.#{method_name}", :default => "")
+          i18n_label if i18n_label.present?
+        else
+          text.to_s
+        end
+
+        content ||= if object && object.class.respond_to?(:human_attribute_name)
+          object.class.human_attribute_name(method_name)
+        end
+
+        content ||= method_name.humanize
+
         label_tag(name_and_id["id"], content, options)
       end
 
@@ -788,7 +834,7 @@ module ActionView
         add_default_name_and_id(options)
         hidden = tag("input", "name" => options["name"], "type" => "hidden", "value" => options['disabled'] && checked ? checked_value : unchecked_value)
         checkbox = tag("input", options)
-        hidden + checkbox
+        (hidden + checkbox).html_safe!
       end
 
       def to_boolean_select_tag(options = {})
@@ -930,7 +976,7 @@ module ActionView
         end
       end
 
-      (field_helpers - %w(label check_box radio_button fields_for)).each do |selector|
+      (field_helpers - %w(label check_box radio_button fields_for hidden_field)).each do |selector|
         src = <<-end_src
           def #{selector}(method, options = {})  # def text_field(method, options = {})
             @template.send(                      #   @template.send(
@@ -989,6 +1035,11 @@ module ActionView
       def radio_button(method, tag_value, options = {})
         @template.radio_button(@object_name, method, tag_value, objectify_options(options))
       end
+      
+      def hidden_field(method, options = {})
+        @emitted_hidden_id = true if method == :id
+        @template.hidden_field(@object_name, method, objectify_options(options))
+      end
 
       def error_message_on(method, *args)
         @template.error_message_on(@object, method, *args)
@@ -1002,6 +1053,10 @@ module ActionView
         @template.submit_tag(value, options.reverse_merge(:id => "#{object_name}_submit"))
       end
 
+      def emitted_hidden_id?
+        @emitted_hidden_id
+      end
+
       private
         def objectify_options(options)
           @default_options.merge(options.merge(:object => @object))
@@ -1013,18 +1068,21 @@ module ActionView
 
         def fields_for_with_nested_attributes(association_name, args, block)
           name = "#{object_name}[#{association_name}_attributes]"
-          association = @object.send(association_name)
-          explicit_object = args.first if args.first.respond_to?(:new_record?)
+          association = args.first
+
+          if association.respond_to?(:new_record?)
+            association = [association] if @object.send(association_name).is_a?(Array)
+          elsif !association.is_a?(Array)
+            association = @object.send(association_name)
+          end
 
           if association.is_a?(Array)
-            children = explicit_object ? [explicit_object] : association
             explicit_child_index = args.last[:child_index] if args.last.is_a?(Hash)
-
-            children.map do |child|
+            association.map do |child|
               fields_for_nested_model("#{name}[#{explicit_child_index || nested_child_index(name)}]", child, args, block)
             end.join
-          else
-            fields_for_nested_model(name, explicit_object || association, args, block)
+          elsif association
+            fields_for_nested_model(name, association, args, block)
           end
         end
 
@@ -1033,8 +1091,8 @@ module ActionView
             @template.fields_for(name, object, *args, &block)
           else
             @template.fields_for(name, object, *args) do |builder|
-              @template.concat builder.hidden_field(:id)
               block.call(builder)
+              @template.concat builder.hidden_field(:id) unless builder.emitted_hidden_id?
             end
           end
         end

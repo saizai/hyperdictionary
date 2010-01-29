@@ -7,7 +7,8 @@ module MysqlCompat #:nodoc:
     raise 'Mysql not loaded' unless defined?(::Mysql)
 
     target = defined?(Mysql::Result) ? Mysql::Result : MysqlRes
-    return if target.instance_methods.include?('all_hashes')
+    return if target.instance_methods.include?('all_hashes') ||
+              target.instance_methods.include?(:all_hashes)
 
     # Ruby driver has a version string and returns null values in each_hash
     # C driver >= 2.7 returns null values in each_hash
@@ -63,12 +64,15 @@ module ActiveRecord
           raise
         end
       end
+
       MysqlCompat.define_all_hashes_method!
 
       mysql = Mysql.init
       mysql.ssl_set(config[:sslkey], config[:sslcert], config[:sslca], config[:sslcapath], config[:sslcipher]) if config[:sslca] || config[:sslkey]
 
-      ConnectionAdapters::MysqlAdapter.new(mysql, logger, [host, username, password, database, port, socket], config)
+      default_flags = Mysql.const_defined?(:CLIENT_MULTI_RESULTS) ? Mysql::CLIENT_MULTI_RESULTS : 0
+      options = [host, username, password, database, port, socket, default_flags]
+      ConnectionAdapters::MysqlAdapter.new(mysql, logger, options, config)
     end
   end
 
@@ -476,6 +480,13 @@ module ActiveRecord
         execute "RENAME TABLE #{quote_table_name(table_name)} TO #{quote_table_name(new_name)}"
       end
 
+      def add_column(table_name, column_name, type, options = {})
+        add_column_sql = "ALTER TABLE #{quote_table_name(table_name)} ADD #{quote_column_name(column_name)} #{type_to_sql(type, options[:limit], options[:precision], options[:scale])}"
+        add_column_options!(add_column_sql, options)
+        add_column_position!(add_column_sql, options)
+        execute(add_column_sql)
+      end
+
       def change_column_default(table_name, column_name, default) #:nodoc:
         column = column_for(table_name, column_name)
         change_column table_name, column_name, column.sql_type, :default => default
@@ -504,6 +515,7 @@ module ActiveRecord
 
         change_column_sql = "ALTER TABLE #{quote_table_name(table_name)} CHANGE #{quote_column_name(column_name)} #{quote_column_name(column_name)} #{type_to_sql(type, options[:limit], options[:precision], options[:scale])}"
         add_column_options!(change_column_sql, options)
+        add_column_position!(change_column_sql, options)
         execute(change_column_sql)
       end
 
@@ -535,6 +547,13 @@ module ActiveRecord
         end
       end
 
+      def add_column_position!(sql, options)
+        if options[:first]
+          sql << " FIRST"
+        elsif options[:after]
+          sql << " AFTER #{quote_column_name(options[:after])}"
+        end
+      end
 
       # SHOW VARIABLES LIKE 'name'
       def show_variable(name)

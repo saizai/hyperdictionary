@@ -1,3 +1,7 @@
+img {
+	vertical-align: bottom;
+}
+
 body {
 	font-family: georgia,arial,helvetica,clean,sans-serif;
 }
@@ -8,7 +12,7 @@ table {
 
 th, td {
 	border: none;
-	padding: 0.1em;
+	padding: 0.1em 0.8em 0.1em 0;
 }
 
 tr.even {
@@ -28,7 +32,26 @@ ul li.first {
 	border-top: thin solid #d3d3d3;
 }
 
-ol {
+ul.inline {
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+
+ul.inline li {
+	list-style: none;
+	display: inline;
+}
+
+ul.inline li:after {
+	content: ", ";
+	}
+
+ul.inline li:last-child:after {
+	content: "";
+}
+
+ol li {
 	list-style: decimal;
 }
 
@@ -123,6 +146,11 @@ blockquote:first-letter {
 	text-align:		left;
 	white-space:	nowrap;
 }
+
+.tooltip.left:hover span {
+	left:			auto;
+	right:			0;
+}
 	
 .highlight {
 	background-color: #ffa;
@@ -142,6 +170,46 @@ blockquote:first-letter {
 	margin-right:	5px;
 }
 
+.avatar {
+	float: left;
+}
+
+.avatar.thumb {
+	width: 80px;
+	margin: 0 10px 10px 0;
+}
+
+.avatar.icon {
+	width: 16px;
+	margin: 0 2px 0 0;
+}
+
+table.nowrap {
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.discussion_name_with_snippet {
+	max-width: 38em;
+	overflow: hidden;
+}
+
+.discussion_name_with_snippet a {
+	text-decoration: none;	
+}
+
+.discussion_name {
+}
+
+.unread .discussion_name {
+	font-weight: bold;
+}
+
+.discussion_snippet {
+	padding-left: 0.5em;
+	color: #777;
+}
+
 .messages {
 	display: block;
 	padding-top: 10px;
@@ -158,8 +226,6 @@ blockquote:first-letter {
 	margin: 0 0 2px;
 	font-weight: bold;
 }
-
-
 
 .messages .subtitle {
 	background-color: #EEEEEE;
@@ -187,20 +253,6 @@ blockquote:first-letter {
 
 .messages .post.slim p {
 	margin-bottom: 0.4em;
-}
-
-.avatar {
-	float: left;
-}
-
-.avatar.thumb {
-	width: 80px;
-	margin: 0 10px 10px 0;
-}
-
-.avatar.icon {
-	width: 16px;
-	margin: 0 2px 0 0;
 }
 
 .messages .post.full .content {
@@ -337,29 +389,50 @@ blockquote:first-letter {
 
 .badge1 {
 	color:#CC9966;
-	font-size:120%;
 	margin-left:3px;
 }
 
 .badge2 {
 	color:#C0C0C0;
-	font-size:120%;
 	margin-left:3px;
 }
 
 .badge3 {
 	color:#FFCC00;
-	font-size:120%;
 	margin-left:3px;
 }
 
 .badge4 {
 	color:#119820;
-	font-size:120%;
 	margin-left:3px;
 }
 
 .badgecount {
 	color:#808185;
 	padding-left:1px;
+}
+
+div.auto_complete {
+  width: 350px;
+  background: #fff;
+}
+div.auto_complete ul {
+  border:1px solid #888;
+  margin:0;
+  padding:0;
+  width:100%;
+  list-style-type:none;
+}
+div.auto_complete ul li {
+  margin:0;
+  padding:3px;
+  list-style-type:none;
+}
+div.auto_complete ul li.selected {
+  background-color: #ffb;
+}
+div.auto_complete ul strong.highlight {
+  color: #800; 
+  margin:0;
+  padding:0;
 }

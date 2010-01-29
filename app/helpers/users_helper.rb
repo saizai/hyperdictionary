@@ -8,7 +8,16 @@ module UsersHelper
       end
     else
        'anonymous_avatar.png'
-    end), :class => "avatar #{size}", :title => user.try(:name)
+    end), :class => "avatar #{size}", :title => user.try(:name),
+          :alt => '' # by default alt is the gravatar hash, which looks ugly when loading
+  end
+  
+  # E.g. <%= users_autocomplete :message, :to_user %>
+  def users_autocomplete object_name, field_name, options = {}
+    options = {:multi => ',', :indicator => "#{object_name}_#{field_name}_indicator", :value => nil}.update options
+    text_field_with_auto_complete object_name, field_name, {:value => options[:value]},  
+      {:method => :get, :url => search_users_path(:exclude => options[:exclude]), :tokens => options[:multi],
+       :param_name => :query, :select => 'login', :skip_style => true, :indicator => options[:indicator] }
   end
   
   #

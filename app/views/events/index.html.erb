@@ -3,7 +3,7 @@
 	<table>
 		<% @aggregated_events.each do |ae| %>
 			<tr>
-				<td style="font-size: 9px;">
+				<td style="font-size: 9px; white-space: nowrap;">
 					<%= time_ago_in_words ae[:updated_at] %> ago
 				</td>
 				<td class="event">

@@ -20,7 +20,10 @@ class Admin::UsersController < ApplicationController
           session[:spoofing_user?] = params[:spoof_user?]
           Event.event! current_user(true), (params[:spoof_user?] ? 'started' : 'stopped') + ' spoofing', new_user
         end
-        render :partial => '/admin/users/spoof'
+        # render :partial => '/admin/users/spoof'
+        render :update do |page|
+          page.reload
+        end
       rescue ActiveRecord::RecordNotFound
         render :inline => "#{params[:id]} not found", :status => 404
       end

@@ -15,4 +15,16 @@ class Admin::MainController < ApplicationController
         i[p.name][p.value] = p.count
         i  }
   end
+  
+  # Activate admin privileges
+  def admin_mode
+    permit logged_in_as_admin?(true) do # Note that permit is acting as the spoofed user, so we need to undercut it
+      id = params[:id].try :downcase
+      session[:admin_mode] = params[:admin_mode]
+      render :update do |page|
+        page.reload
+      end
+    end
+  end
+  
 end

@@ -18,7 +18,7 @@ class Event < ActiveRecord::Base
     event_type = EventType.find_or_create_by_name(event_name)
     e = self.new :event_type => event_type
     e.event_eventables.build :eventable => agent, :event_type => event_type
-    other_roles = {:patient => other_roles} unless other_roles.is_a? Hash
+    other_roles = {:patient => other_roles} unless other_roles.nil? or other_roles.is_a? Hash
     other_roles.each {|role, target_array|
       [target_array].flatten.each {|target| # coerces it to be an array, so we can accept both single items and collections
         e.event_eventables.build :eventable => target, :role => role.to_s, :event_type => event_type

@@ -1,7 +1,7 @@
 # Be sure to restart your server when you modify this file
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-RAILS_GEM_VERSION = '2.3.4' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.3.5' unless defined? RAILS_GEM_VERSION
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
@@ -23,7 +23,7 @@ Rails::Initializer.run do |config|
   # -- all .rb files in that directory are automatically loaded.
   # Specify gems that this application depends on and have them installed with rake gems:install
   config.gem 'rake' # ruby make. Used by all scripts.
-  config.gem 'ruby-openid', :lib => 'openid' # lets us speak OpenID a bit easier
+#  config.gem 'ruby-openid', :lib => 'openid' # lets us speak OpenID a bit easier
   config.gem 'capistrano' # ye standard deployment tools
   config.gem 'mperham-memcache-client', :lib => 'memcache', :source => 'http://gems.github.com' # bugfix tweak of standard memcache client
   config.gem 'rubaidh-google_analytics', :lib => 'rubaidh/google_analytics', :source => 'http://gems.github.com' # adds google analytics' code to all pages
@@ -38,6 +38,7 @@ Rails::Initializer.run do |config|
   config.gem 'bullet', :source => 'http://gemcutter.org' # notifies dev of N+1 (aka eager loading) bugs
   config.gem 'validation_reflection', :version => '>= 0.3.5' # required by Validatious
   config.gem 'validatious-on-rails', :source => 'http://gemcutter.org' # hooks in Validatious client-side JS/AJAX validation
+  config.gem 'erubis'#, :source => "http://gems.github.com" # required by rails_xss plugin. Remove after rails 3.0 integrates it.
 #  config.gem 'tmtm-ruby-mysql', :lib => 'Mysql', :source => 'http://gems.github.com'
 #  config.gem "sqlite3-ruby", :lib => "sqlite3"
 #  config.gem 'rack'
@@ -49,7 +50,6 @@ Rails::Initializer.run do |config|
   config.gem 'mms2r'
   config.gem 'hpricot' # required by mms2r
   config.gem 'francois-piston', :lib => 'piston', :source => 'http://gems.github.com'
-  config.gem 'ruby-debug'
   config.gem 'SystemTimer', :lib => 'system_timer' # makes memcache faster
 #  config.gem 'RedCloth', :lib => 'redcloth'
   config.gem 'bluecloth' # lowercase is 2.x, camelcase is 1.x

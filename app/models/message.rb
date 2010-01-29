@@ -3,7 +3,7 @@ class Message < ActiveRecord::Base
   belongs_to :context, :polymorphic => true
   belongs_to :parent, :class_name => "Message"
   has_many :children, :class_name => "Message", :foreign_key => "parent_id"
-  belongs_to :discussion, :autosave => true
+  belongs_to :discussion, :inverse_of => :messages #, :autosave => true
   belongs_to :split_discussion, :class_name => "Discussion"
   belongs_to :message_interface
   # index
@@ -11,7 +11,7 @@ class Message < ActiveRecord::Base
   # body
   # children_count, next_child
   
-  has_many :children, :class_name => "Message", :foreign_key => 'parent_id'
+  named_scope :inbox, :conditions => {:message_interface_id => MessageInterface.find_or_create_by_name('inbox').id }
   
   acts_as_authorizable
   acts_as_paranoid
@@ -21,25 +21,48 @@ class Message < ActiveRecord::Base
   
   validates_presence_of :body, :message_interface, :context, :index
   validates_numericality_of :children_count, :next_child
-  validates_associated :creator # but not its presence
-  validates_associated :updater
-  validates_associated :deleter
-  validates_associated :context
+  validate :context_must_be_in_discussion
+#  validates_associated :creator # but not its presence
+#  validates_associated :updater
+#  validates_associated :deleter
+#  validates_associated :context
   
+  named_scope :since, lambda{|time| {:conditions => ['messages.updated_at > ?', time]}}
   named_scope :by_index, :order => 'discussions.updated_at DESC, messages.index ASC', :include => :discussion
   attr_accessor :title, :interface
   
+  def context_must_be_in_discussion
+    errors.add_to_base "Message's context must be in discussion." if context and discussion.context_ids.include?(context_id)
+  end
+  
   def visible_to? user
+    return true if context.nil? or !context.respond_to? :read_by
     user ||= AnonUser
     context.read_by?(user) and
       (!moderated or context.moderated_by? user) and
       (!private or context.member_by? user or (creator_id and user.id == creator_id)) # AnonUser cannot see their own screened posts
   end
   
+  def moderated_by? user
+    return false if context.nil? or !context.respond_to? :read_by
+    context.moderated_by? user
+  end
+  
+  def screened_by? user
+    return false if context.nil? or !context.respond_to? :read_by
+    context.member_by? user
+  end
+  
+  def deleted_by? user
+    return false if context.nil? or !context.respond_to? :read_by
+    context.owned_by? user
+  end
+  
   def after_create
     # The fancy method_missing 'has_subscribers' fails on polymorphic associations for some reason
     (context.has_roles('subscriber') - [creator]).each {|subscriber| MessageMailer.deliver_new self, subscriber }
-    Discussion.update_counters discussion_id, :messages_count => 1, :next_message => 1
+    discussion.update_attribute :last_message_id, self.id
+    Discussion.update_counters discussion_id, :messages_count => 1, :next_message => (parent ? 0 : 1 ) # next_message is used for indexing; only updated for first-level children
     Message.update_counters parent_id, :children_count => 1, :next_child => 1 if parent
   end
   
@@ -54,22 +77,22 @@ class Message < ActiveRecord::Base
   
   def before_validation_on_create
     self.body.strip!
-    self.discussion ||= if parent and (title.blank? or title == parent.title)
+    self.discussion ||= if parent and (title.blank? or (title == parent.title))
       parent.discussion
     else
       Discussion.new :context => self.context, :name => self.title
     end
-    self.message_interface ||= MessageInterface.find_or_create_by_name(self.interface)
+    self.message_interface ||= MessageInterface.find_by_name(self.interface)
     self.context ||= discussion.context
     set_index
   end
   
   def validate_on_create
-    errors.add_to_base("That was already posted.") if context.messages.last and (context.messages.last.body == self.body)
+    errors.add_to_base("That was already posted.") if context and context.messages.last and (context.messages.last.body == self.body)
   end
   
   def set_index force = false
-    return self.index if !force and !self.index.blank?
+    return self.index unless force or self.index.blank?
     self.index = if parent and (title.blank? or title == parent.title)
       parent.index + '.' + Message.munge_number(parent.next_child)
     else
@@ -125,7 +148,7 @@ class Message < ActiveRecord::Base
     if number < 100
       number.to_s
     else
-      # 65 = ASCII 'A'. Minimum is 2, so 63 + 2 = 'A', +3 = 'B', etc. 
+      # 65 = ASCII 'A'. Minimum is 2 (for 1 we don't have a prefix), so 63 + 2 = 'A', +3 = 'B', etc. 
       # Technically, only using one letter here means we're limited to 10^27 children at a given level.
       # I think we'll manage without an octillion comments...
       (63 + number.to_s.length).chr + number.to_s # .chr converts integer to the ASCII character equivalent

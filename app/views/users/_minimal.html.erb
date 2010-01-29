@@ -1,6 +1,2 @@
 <%= link_to_user user %> 
-<%- 4.downto 1 do |level| 
-	count = user.send "badge#{level}_count"
-	next if count == 0 -%>
-	<span class='badge<%= level %>'>●</span><%= count %>
-<%- end if user and user != AnonUser -%>
+<%= render :partial => '/users/badges', :locals => {:user => user} %>

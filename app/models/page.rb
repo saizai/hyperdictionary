@@ -11,6 +11,9 @@ class Page < ActiveRecord::Base
   belongs_to :owner, :class_name => 'User', :foreign_key => 'user_id' # This is for *identity* only. Use proper roles for everything else.
   belongs_to :page_type
   has_many :messages, :as => :context, :dependent => :destroy
+  has_many :contextualizations, :as => :context, :dependent => :destroy
+  has_many :discussions, :through => :contextualizations
+  belongs_to :wall_discussion, :class_name => "Discussion"
   has_many :assets, :as => :attachable
   
   # body # run through sanitization filter!

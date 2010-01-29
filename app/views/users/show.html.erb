@@ -9,6 +9,9 @@
 				<td>Username</td>
 				<td>
 					<%= render :partial => '/users/minimal', :locals => {:user => @user} %>
+					<% if current_user != @user %>
+						<%= link_to image_tag("email_gray.png"), new_user_discussion_path(@user), :title => "Send direct message" %>
+					<% end %>
 				</td>
 			</tr>
 			<tr>

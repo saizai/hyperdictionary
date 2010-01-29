@@ -14,6 +14,7 @@ class Session < ActiveRecord::SessionStore::Session
   stampable
   
   # supposedly fixes 'can't dup NilClass' error introduced in rails 2.3.3 - see https://rails.lighthouseapp.com/projects/8994/tickets/2441-activerecordsessionstore-breaks-with-custom-model
+  # also note https://rails.lighthouseapp.com/projects/8994/tickets/1339
   # unloadable
   
   named_scope :live, :conditions => ["updated_at > ?", 5.minutes.ago]

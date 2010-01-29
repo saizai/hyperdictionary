@@ -38,8 +38,10 @@
 						<li><a href="#" onclick="UserVoice.Popin.show(); return false;">Feedback</a></li>
 						<% if logged_in? %>
 							<li class='first'><%= link_to 'Home', user_path(current_user) %></li>
+							<li><%= link_to 'Inbox', user_discussions_path(current_user) %></li>
 							<li><%= link_to 'Preferences', edit_user_path(current_user) %></li>
 						<% end %>
+
 						<% if logged_in_as_admin? %>
 							<li class='first'><%= link_to 'Admin', admin_root_path %></li>
 								<ul style="margin: 0 0 0 1em;">
@@ -48,13 +50,21 @@
 									<li><%= link_to "404s", admin_four_oh_fours_path %></li>
 									<li><%= link_to "Preferences", admin_preferences_path %></li>
 								</ul>
+							</li>
 						<% end %>
-						<span id="spoof_user_container"><%= render :partial => '/admin/users/spoof' %></span>
+						<% if logged_in_as_admin?(true) %>
+							<li <%= logged_in_as_admin? ? '>' : "class='first'>Admin " %>
+								<ul style="margin: 0 0 0 1em;">
+									<li id="spoof_user_container"><%= render :partial => '/admin/users/spoof' %></li>
+									<li id="admin_mode_container"><%= render :partial => '/admin/main/admin_mode' %></li>
+								</ul>
+							</li>
+						<% end %>
 					</ul>
 				</div> 
 			</div> 
 			<div id="ft" role="contentinfo"><!--footer-->
-				<% if Rails.env.development? or logged_in_as_admin? %>
+				<% if logged_in_as_admin? # or Rails.env.development? %>
 				  <div id="footnotes_holder">
 				  </div>
 				<% end %>

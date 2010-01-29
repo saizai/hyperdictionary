@@ -1,7 +1,9 @@
-<td>
-	<%= link_to_remote image_tag("eye#{ '_gray' unless identity.public }.png"), 
-		{:url  => screen_user_identity_path(identity.user, identity), :method => :put, :update => "identity_container_#{identity.id}"},
-			:title => "#{identity.public ? 'screen' : 'unscreen'} identity".capitalize %>
-</td>
+<% if current_user == @user or logged_in_as_admin? %>
+	<td>
+		<%= link_to_remote image_tag("eye#{ '_gray' unless identity.public }.png"), 
+			{:url  => screen_user_identity_path(identity.user, identity), :method => :put, :update => "identity_container_#{identity.id}"},
+				:title => "#{identity.public ? 'screen' : 'unscreen'} identity".capitalize %>
+	</td>
+<% end %>
 <td><%= image_tag identity.provider.downcase + '.png', :title => identity.provider %></td>
 <td><%= link_to(identity.login, identity.profile_url || identity.url) %></td>

@@ -37,15 +37,19 @@
 		</tr>
 		<tr>
 			<td>Username</td>
-			<td><%= render :partial => '/users/minimal', :locals => {:user => @user} %></td>
+			<td><%= render :partial => '/users/minimal', :locals => {:user => @user} %> 		
+				<% if current_user != @user %>
+					<%= link_to image_tag("email_gray.png"), new_user_discussion_path(@user), :title => "Send direct message" %>
+				<% end %>
+			</td>
 		</tr>
 		<% if !@contacts.blank? or (current_user == @user or logged_in_as_admin?) %>
 			<tr>
 				<td>
 					<%- if current_user == @user or logged_in_as_admin? -%>
-						<span class="tooltip highlight">Contacts<span>Click the eye to make a contact public. 
-							Private contacts are only visible to <%= APP_NAME %> admins.<br/>
-							Click the trash can to have the system (un)ignore a contact.</span></span>
+						<span class="tooltip highlight">Contacts<span>Click <%= image_tag "eye_gray.png" %> to make a contact <%= image_tag "eye.png" %>public. 
+							<%= image_tag "eye_gray.png" %>Private contacts are only visible to <%= APP_NAME %> admins.<br/>
+							Click <%= image_tag "bin_closed.png" %> to have the system ignore a contact and <%= image_tag "bin.png" %> to use it again.</span></span>
 						<%= link_to_function( image_tag('add.png'), :id => "add_contact_link") {|page| 
 							page[:add_contact_link].hide
 							page[:new_contact_form].visual_effect :appear, :duration => 0.2
@@ -59,9 +63,9 @@
 		<% end %>
 		<% if !@identities.blank? or (current_user == @user or logged_in_as_admin?) %>
 			<tr>
-				<td><span class="tooltip highlight">Identities<span>Click the eye to make an identity public. 
-							Private contacts are only visible to <%= APP_NAME %> admins.<br/><br/>
-							You can also add new identities to your account by clicking the green plus.<br/>
+				<td><span class="tooltip highlight">Identities<span>Click <%= image_tag "eye_gray.png" %> to make an identity <%= image_tag "eye.png" %>public. 
+							<%= image_tag "eye_gray.png" %>Private contacts are only visible to <%= APP_NAME %> admins.<br/><br/>
+							You can also add new identities to your account by clicking <%= image_tag "add.png" %>.<br/>
 							This allows you to log in using multiple external accounts, as well as connect automatically with your friends from there.</span></span>
 					<%= link_to_function(image_tag('add.png'), :id => "add_identity_link"){|page| 
 						page[:add_identity_link].hide

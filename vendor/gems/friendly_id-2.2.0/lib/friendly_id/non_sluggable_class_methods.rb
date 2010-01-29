@@ -57,14 +57,14 @@ module FriendlyId::NonSluggableClassMethods
     end
     
     # dropping any excess items on the floor first
-    if has_scope and defined?(scoped_names)
+    if has_scope and scope
       scoped_names = scoped_names.map{|x,y| [x.downcase, y.downcase] } # ignore case for this
       results = results.select{|result| name = result.send(friendly_id_options[:column]).downcase
                                         scope = result.send(friendly_id_options[:scope]).downcase
                                         scoped_names.include?([ scope, name]) or ids.include?(result.id) }
     end
     
-    expected = expected_size(defined?(scoped_names) ? scoped_names + ids : ids_and_names, options)
+    expected = expected_size((has_scope and scope) ? scoped_names + ids : ids_and_names, options)
     if ((!scopable or has_scope) and results.size != expected) or (scopable and !has_scope and results.size < expected) # with scope unspecified there might be more
       raise ActiveRecord::RecordNotFound, "Couldn't find all #{ name.pluralize } with IDs (#{ ids_and_names * ', ' }) AND #{ sanitize_sql options[:conditions] } (found #{ results.size } results, but was looking for #{ expected })"
     end

@@ -1,15 +1,16 @@
 class MessagesController < ApplicationController
-  before_filter :get_context
+  before_filter :get_discussion
   
 #   GET /messages
 #   GET /messages.xml
   def index
-    @messages = @context.messages.by_index.paginate :page => params[:page], :include => [:context, :creator, :updater]
+    @messages = @discussion.messages.by_index.paginate :page => params[:page], :include => [:creator, :updater] # :context
+    # FIXME: filter @messages by visibility here not in view (it'd leak to xml)
     
     respond_to do |format|
       format.js   { render :layout => false }
       format.html # index.html.erb
-      format.xml  { render :xml => @messages }
+      format.xml  { render :xml => @messages }      
     end
   end
   
@@ -49,7 +50,7 @@ class MessagesController < ApplicationController
   def moderate
     @message = Message.find(params[:id])
     
-    permit @message.context.moderated_by?(current_user) do
+    permit @message.discussion.moderated_by?(current_user) do
       @message.toggle :moderated
       
       respond_to do |format|
@@ -57,13 +58,13 @@ class MessagesController < ApplicationController
           format.js   { render :partial => 'message'  }
           format.html {
             flash[:notice] = 'Message was successfully moderated.'
-            redirect_to message.context 
+            redirect_to message.discussion 
           }
           format.xml  { head :ok }
         else
           format.html { 
             flash[:notice] = 'Error moderating message.'
-            redirect_to message.context 
+            redirect_to message.discussion 
           }
           format.xml  { render :xml => @message.errors, :status => :unprocessable_entity }
         end
@@ -74,7 +75,7 @@ class MessagesController < ApplicationController
   def screen
     @message = Message.find(params[:id])
     
-    permit @message.context.member_by?(current_user) do
+    permit @message.discussion.member_by?(current_user) do
       @message.toggle :private
       
       respond_to do |format|
@@ -82,13 +83,13 @@ class MessagesController < ApplicationController
           format.js   { render :partial => 'message'  }
           format.html {
             flash[:notice] = 'Message was successfully screened.'
-            redirect_to message.context 
+            redirect_to message.discussion 
           }
           format.xml  { head :ok }
         else
           format.html { 
             flash[:notice] = 'Error screening message.'
-            redirect_to message.context 
+            redirect_to message.discussion 
           }
           format.xml  { render :xml => @message.errors, :status => :unprocessable_entity }
         end
@@ -99,14 +100,14 @@ class MessagesController < ApplicationController
   # POST /messages
   # POST /messages.xml
   def create
-    @message = @context.messages.new(params[:message])
+    @message = @discussion.messages.new(params[:message])
     
     respond_to do |format|
-      if @message.save
+      if @message.save and @discussion.mark_read_by!(current_user)
         format.js   { render :partial => 'message'  }
         format.html {
           flash[:notice] = 'Message was successfully created.'
-          redirect_to message.context 
+          redirect_to message.discussion 
         }
         format.xml  { render :xml => @message, :status => :created, :location => @message }
       else
@@ -141,7 +142,7 @@ class MessagesController < ApplicationController
   # DELETE /messages/1.xml
   def destroy
     @message = Message.find(params[:id])
-    permit @message.context.owned_by?(current_user) do
+    permit @message.discussion.owned_by?(current_user) do
       @message.destroy
       
       respond_to do |format|
@@ -153,8 +154,17 @@ class MessagesController < ApplicationController
   
   protected
   
-  def get_context
-    @context = params[:context_type].constantize.find(params[:context_id]) if params[:context_type] and params[:context_id]
-    @context ||= Page.find(params[:page_id]) if params[:page_id]
+  def get_discussion
+    # FIXME: is there a better way to find out what the parent resource is?
+#    @discussion = params[:discussion_type].constantize.find(params[:discussion_id]) if params[:discussion_type] and params[:discussion_id]
+    @discussion ||= Discussion.find(params[:discussion_id]) if params[:discussion_id]
+    if params[:page_id]
+      @context = page = Page.find(params[:page_id])
+      @discussion ||= page.wall_discussion || page.build_wall_discussion(:name => page.name + ' wall') # FIXME: this should be moved into a model hook somewhere
+      @interface = 'wall'
+    elsif params[:user_id]
+      @interface = 'inbox'
+    end
+#    @discussion ||= User.find(params[:user_id]) if params[:user_id]
   end
 end

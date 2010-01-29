@@ -1,1 +1,8 @@
-<% users.map do |user| %><%= render :partial => '/users/minimal', :locals => {:user => user} %><% end.join(', ') %>
+<% badges ||= true %>
+<ul class="inline">
+	<% users.map do |user| %>
+		<li>
+			<%= render :partial => '/users/minimal', :locals => {:user => user, :badges => badges} %>
+		</li>
+	<% end %>
+</ul>

@@ -1,10 +1,5 @@
 <div id="message_post_<%= message.id %>" class="post slim <%= ' private' if message.private %><%= ' moderated' if message.moderated %> level_<%= [4, message.level].min %>">
 	<% if message.visible_to? current_user %>
-		<% if message.index == '1' %>
-			<div class='title'>
-				<%= message.title %>
-			</div>
-		<% end %>
 		<span style="float:right;">
 			<%= avatar message.creator, :icon %>
 			<%= render :partial => '/users/minimal', :locals => {:user => message.creator} %>

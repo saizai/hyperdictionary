@@ -1,4 +1,10 @@
 module ActiveRecord
+  class InverseOfAssociationNotFoundError < ActiveRecordError #:nodoc:
+    def initialize(reflection, associated_class = nil)
+      super("Could not find the inverse association for #{reflection.name} (#{reflection.options[:inverse_of].inspect} in #{associated_class.nil? ? reflection.class_name : associated_class.name})")
+    end
+  end
+
   class HasManyThroughAssociationNotFoundError < ActiveRecordError #:nodoc:
     def initialize(owner_class_name, reflection)
       super("Could not find the association #{reflection.options[:through].inspect} in model #{owner_class_name}")
@@ -275,9 +281,10 @@ module ActiveRecord
     # You can manipulate objects and associations before they are saved to the database, but there is some special behavior you should be
     # aware of, mostly involving the saving of associated objects.
     #
-    # Unless you enable the :autosave option on a <tt>has_one</tt>, <tt>belongs_to</tt>,
-    # <tt>has_many</tt>, or <tt>has_and_belongs_to_many</tt> association,
-    # in which case the members are always saved.
+    # Unless you set the :autosave option on a <tt>has_one</tt>, <tt>belongs_to</tt>,
+    # <tt>has_many</tt>, or <tt>has_and_belongs_to_many</tt> association. Setting it
+    # to +true+ will _always_ save the members, whereas setting it to +false+ will
+    # _never_ save the members.
     #
     # === One-to-one associations
     #
@@ -874,7 +881,9 @@ module ActiveRecord
       #   if the real class name is Person, you'll have to specify it with this option.
       # [:conditions]
       #   Specify the conditions that the associated object must meet in order to be included as a +WHERE+
-      #   SQL fragment, such as <tt>rank = 5</tt>.
+      #   SQL fragment, such as <tt>rank = 5</tt>. Record creation from the association is scoped if a hash
+      #   is used. <tt>has_one :account, :conditions => {:enabled => true}</tt> will create an enabled account with <tt>@company.create_account</tt>
+      #   or <tt>@company.build_account</tt>.
       # [:order]
       #   Specify the order in which the associated objects are returned as an <tt>ORDER BY</tt> SQL fragment,
       #   such as <tt>last_name, first_name DESC</tt>.
@@ -1244,7 +1253,7 @@ module ActiveRecord
 
             if association.nil? || force_reload
               association = association_proxy_class.new(self, reflection)
-              retval = association.reload
+              retval = force_reload ? reflection.klass.uncached { association.reload } : association.reload
               if retval.nil? and association_proxy_class == BelongsToAssociation
                 association_instance_set(reflection.name, nil)
                 return nil
@@ -1298,7 +1307,7 @@ module ActiveRecord
               association_instance_set(reflection.name, association)
             end
 
-            association.reload if force_reload
+            reflection.klass.uncached { association.reload } if force_reload
 
             association
           end
@@ -1324,8 +1333,8 @@ module ActiveRecord
             end
 
             define_method("#{reflection.name.to_s.singularize}_ids=") do |new_value|
-              ids = (new_value || []).reject { |nid| nid.blank? }
-              send("#{reflection.name}=", reflection.klass.find(ids))
+              ids = (new_value || []).reject { |nid| nid.blank? }.map(&:to_i)
+              send("#{reflection.name}=", reflection.klass.find(ids).index_by(&:id).values_at(*ids))
             end
           end
         end
@@ -1408,7 +1417,7 @@ module ActiveRecord
           if reflection.options.include?(:dependent)
             # Add polymorphic type if the :as option is present
             dependent_conditions = []
-            dependent_conditions << "#{reflection.primary_key_name} = \#{record.quoted_id}"
+            dependent_conditions << "#{reflection.primary_key_name} = \#{record.#{reflection.name}.send(:owner_quoted_id)}"
             dependent_conditions << "#{reflection.options[:as]}_type = '#{base_class.name}'" if reflection.options[:as]
             dependent_conditions << sanitize_sql(reflection.options[:conditions], reflection.quoted_table_name) if reflection.options[:conditions]
             dependent_conditions << extra_conditions if extra_conditions
@@ -1523,7 +1532,7 @@ module ActiveRecord
           :finder_sql, :counter_sql,
           :before_add, :after_add, :before_remove, :after_remove,
           :extend, :readonly,
-          :validate
+          :validate, :inverse_of
         ]
 
         def create_has_many_reflection(association_id, options, &extension)
@@ -1537,7 +1546,7 @@ module ActiveRecord
         @@valid_keys_for_has_one_association = [
           :class_name, :foreign_key, :remote, :select, :conditions, :order,
           :include, :dependent, :counter_cache, :extend, :as, :readonly,
-          :validate, :primary_key
+          :validate, :primary_key, :inverse_of
         ]
 
         def create_has_one_reflection(association_id, options)
@@ -1556,7 +1565,7 @@ module ActiveRecord
         @@valid_keys_for_belongs_to_association = [
           :class_name, :primary_key, :foreign_key, :foreign_type, :remote, :select, :conditions,
           :include, :dependent, :counter_cache, :extend, :polymorphic, :readonly,
-          :validate, :touch
+          :validate, :touch, :inverse_of
         ]
 
         def create_belongs_to_reflection(association_id, options)
@@ -1774,7 +1783,7 @@ module ActiveRecord
         end
 
         def using_limitable_reflections?(reflections)
-          reflections.reject { |r| [ :belongs_to, :has_one ].include?(r.macro) }.length.zero?
+          reflections.collect(&:collection?).length.zero?
         end
 
         def column_aliases(join_dependency)
@@ -1851,7 +1860,7 @@ module ActiveRecord
             case associations
               when Symbol, String
                 reflection = base.reflections[associations]
-                if reflection && [:has_many, :has_and_belongs_to_many].include?(reflection.macro)
+                if reflection && reflection.collection?
                   records.each { |record| record.send(reflection.name).target.uniq! }
                 end
               when Array
@@ -1861,12 +1870,11 @@ module ActiveRecord
               when Hash
                 associations.keys.each do |name|
                   reflection = base.reflections[name]
-                  is_collection = [:has_many, :has_and_belongs_to_many].include?(reflection.macro)
 
                   parent_records = records.map do |record|
                     descendant = record.send(reflection.name)
                     next unless descendant
-                    descendant.target.uniq! if is_collection
+                    descendant.target.uniq! if reflection.collection?
                     descendant
                   end.flatten.compact
 
@@ -1957,19 +1965,25 @@ module ActiveRecord
                   return nil if record.id.to_s != join.parent.record_id(row).to_s or row[join.aliased_primary_key].nil?
                   association = join.instantiate(row)
                   collection.target.push(association)
+                  collection.__send__(:set_inverse_instance, association, record)
                 when :has_one
                   return if record.id.to_s != join.parent.record_id(row).to_s
                   return if record.instance_variable_defined?("@#{join.reflection.name}")
                   association = join.instantiate(row) unless row[join.aliased_primary_key].nil?
-                  record.send("set_#{join.reflection.name}_target", association)
+                  set_target_and_inverse(join, association, record)
                 when :belongs_to
                   return if record.id.to_s != join.parent.record_id(row).to_s or row[join.aliased_primary_key].nil?
                   association = join.instantiate(row)
-                  record.send("set_#{join.reflection.name}_target", association)
+                  set_target_and_inverse(join, association, record)
                 else
                   raise ConfigurationError, "unknown macro: #{join.reflection.macro}"
               end
               return association
+            end
+
+            def set_target_and_inverse(join, association, record)
+              association_proxy = record.send("set_#{join.reflection.name}_target", association)
+              association_proxy.__send__(:set_inverse_instance, association, record)
             end
 
           class JoinBase # :nodoc:

@@ -1,55 +1,65 @@
-<% remote_form_for( [context, context.messages.new],
-	:html => {:id => "new_message_form_#{context.id}", :class => 'form validate' },
-	:loading => "$('new_message_form_errors_#{context.id}').update();
-				 $('new_message_form_indicator_#{ context.id }').show(); Form.disable('new_message_form_#{ context.id }');",
-    :success => "$('new_message_form_body_#{context.id}').value = ''; $('new_message_form_errors_#{context.id}').value = '';
-				 $('new_message_form_title_#{context.id}').value = ''; $('new_message_form_indicator_#{ context.id }').hide(); 
-				 Form.enable('new_message_form_#{ context.id }'); Field.focus('new_message_form_body_#{context.id}'); ",
-	:failure  => "$('new_message_form_indicator_#{ context.id }').hide(); Form.enable('new_message_form_#{ context.id }'); 
-				Field.focus('new_message_form_body_#{context.id}');",
-	:update => {:success => "messages_#{context.id}", :failure => "new_message_form_errors_#{context.id}"}, 
-	:position => :top ) do |f| %>
+<% remote_form_for( [discussion, discussion.messages.new],
+	:html => {:id => "new_message_form_#{discussion.id}", :class => 'form validate' },
+	:loading => "$('new_message_form_errors_#{discussion.id}').update();
+				 $('new_message_form_indicator_#{ discussion.id }').show(); Form.disable('new_message_form_#{ discussion.id }');",
+    :success => "$('new_message_form_body_#{discussion.id}').value = ''; $('new_message_form_errors_#{discussion.id}').value = '';
+				 $('new_message_form_title_#{discussion.id}').value = ''; $('new_message_form_indicator_#{ discussion.id }').hide(); 
+				 Form.enable('new_message_form_#{ discussion.id }'); Field.focus('new_message_form_body_#{discussion.id}'); ",
+	:failure  => "$('new_message_form_indicator_#{ discussion.id }').hide(); Form.enable('new_message_form_#{ discussion.id }'); 
+				Field.focus('new_message_form_body_#{discussion.id}');",
+	:update => {:success => "messages_container_#{discussion.id}", :failure => "new_message_form_errors_#{discussion.id}"}, 
+	:position => :bottom ) do |f| %>
 	<%= f.error_messages %>
 	
-	<div id="new_message_form_errors_<%=context.id%>" style="color: red; margin-bottom: 5px; ">
+	<div id="new_message_form_errors_<%=discussion.id%>" style="color: red; margin-bottom: 5px; ">
 	</div>
 	
-    <div style="margin-bottom: 5px;">
-    	Subject: <%= f.text_field :title, :id => "new_message_form_title_#{context.id}" %>
-		<span style="display: none;" id="new_message_form_threadsplit_notice_<%= context.id%>">
-			(Change this iff you want to split the discussion thread.)
-		</span>
+    <div id="new_message_form_subject_<%= discussion.id%>" style="margin-bottom: 5px; display: none;">
+    	New subject: <%= f.text_field :title, :id => "new_message_form_title_#{discussion.id}" %>
 	</div>
+	
+	<%= link_to_function 'Split discussion thread', nil, :id => "new_message_form_subject_#{discussion.id}_link", :style => "margin-bottom: 5px;" do |page|
+			page["new_message_form_subject_#{discussion.id}_link"].hide
+			page["new_message_form_subject_#{discussion.id}"].show
+		end
+		 %>
+	
 	<div>
-		<%= f.text_area :body, :id => "new_message_form_body_#{context.id}" %>
+		<%= f.text_area :body, :id => "new_message_form_body_#{discussion.id}" %>
     </div>
-	<div id="new_message_form_submit_<%= context.id %>">
-		<span id="new_message_form_options_<%= context.id %>" class='options'>
+	<div id="new_message_form_submit_<%= discussion.id %>">
+		<span id="new_message_form_options_<%= discussion.id %>" class='options'>
 			<%= f.label :private %> <%= f.check_box :private %>
-			<% if context.moderated_by? current_user %>
+			<% if discussion.moderated_by? current_user %>
 				<%= f.label :moderated %> <%= f.check_box :moderated %>
 			<% end %>
 		</span>
-		<%= f.hidden_field :interface, :value => 'wall' %>
-		<%= link_to_remote "Preview", {:url => render_markdown_messages_url, :with => "'text=' + $('new_message_form_body_#{context.id}').value", 
-				:update => "new_message_form_preview_#{context.id}", :method => :put}, :class => "submit", :style => "text-decoration: none;" %>
-		<%= f.submit "Post", :class => 'submit' %>
-		<%= image_tag 'ajax-spinner.gif', :id => "new_message_form_indicator_#{ context.id }", :style => 'display:none;' %>
+		<%= f.hidden_field :interface, :value => @interface %>
+		<% if @context %>
+			<%= f.hidden_field :context_id, :value => @context.id %>
+			<%= f.hidden_field :context_type, :value => @context.class %>
+		<% end %>
 		
-		<span class="tooltip">
+		<%= f.submit "Post" %>
+		<%= link_to_remote "Preview", {:url => render_markdown_messages_url, :with => "'text=' + $('new_message_form_body_#{discussion}').value", 
+				:update => "new_message_form_preview_#{discussion.id}", :method => :put, :loading => "$('new_message_form_indicator_#{ discussion.id }').show();",
+				:success => "$('new_message_form_indicator_#{ discussion.id }').hide();"}, :style => "text-decoration: none;" %>
+		<%= image_tag 'ajax-spinner.gif', :id => "new_message_form_indicator_#{ discussion.id }", :style => 'display:none;' %>
+		
+		<span class="tooltip" style="float: right;">
 			(use Markdown formatting)
 			<span><%= render :partial => '/messages/markdown_info' %></span>
 		</span>
 		
 		<%= f.hidden_field :parent_id, :value => nil %>
-		<span id="new_message_form_parent_<%= context.id %>"></span>
-		<%= link_to_function 'X', nil, :id => "new_message_form_parent_clear_#{context.id}", :class => 'close', :style => 'display: none;' do |page|
+		<span id="new_message_form_parent_<%= discussion.id %>"></span>
+		<%= link_to_function 'X', nil, :id => "new_message_form_parent_clear_#{discussion.id}", :class => 'close', :style => 'display: none;' do |page|
 				page['message_parent_id'].value = nil
-				page["new_message_form_parent_#{context.id}"].replace_html ''
-				page["new_message_form_parent_clear_#{context.id}"].hide
-				page["new_message_form_threadsplit_notice_#{context.id}"].hide
+				page["new_message_form_parent_#{discussion.id}"].replace_html ''
+				page["new_message_form_parent_clear_#{discussion.id}"].hide
+				page["new_message_form_threadsplit_notice_#{discussion.id}"].hide
 			end %>
 	</div>
 	
-	<div id="new_message_form_preview_<%= context.id %>"></div>
+	<div id="new_message_form_preview_<%= discussion.id %>"></div>
 <% end %>

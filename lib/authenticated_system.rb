@@ -29,7 +29,7 @@ module AuthenticatedSystem
     end
     
     def logged_in_as_admin?(do_not_spoof = false)
-      logged_in?(do_not_spoof) and current_user(do_not_spoof).has_role?('site_admin')
+      logged_in?(do_not_spoof) and current_user(do_not_spoof).has_role?('site_admin') and (do_not_spoof or session[:admin_mode])
     end
     
     def spoofing_user?
@@ -126,7 +126,7 @@ module AuthenticatedSystem
     def login_from_session
       self.current_user = User.find_by_id(session[:user_id]) if session[:user_id]
     end
-
+    
     # Called from #current_user.  Now, attempt to login by basic authentication information.
     def login_from_basic_auth
       authenticate_with_http_basic do |login, password|

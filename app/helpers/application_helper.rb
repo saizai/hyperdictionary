@@ -9,6 +9,20 @@ module ApplicationHelper
     end
   end
   
+  def chunked_truncate display_array, output_array = display_array, options = {}
+    options = {:join => ',  ', :length => 30, :omission => '...'}.update options
+    ret = []
+    until display_array.empty? or (ret + [options[:omission]]).join(options[:join]).size > options[:length]
+      ret << display_array.shift 
+    end
+    
+    if ret.size == output_array.size
+      output_array
+    else
+      output_array[0..(ret.size - 2)] << (options[:join] + options[:omission])
+    end
+  end
+  
   def model_names
      ActiveRecord::Base.send(:subclasses).map(&:to_s).reject{|x| x =~ /:/ }.sort
   end
@@ -27,7 +41,9 @@ module ApplicationHelper
   end
   
   def link_to_foo foo
-    if foo.is_a? User
+    if foo.nil?
+      'Anonymous'
+    elsif foo.is_a? User
       link_to_user foo
     elsif foo.is_a? Badge
       render :partial => '/badges/badge', :locals => {:badge => foo}

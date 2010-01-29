@@ -41,7 +41,7 @@ Rails::Initializer.run do |config|
   config.gem 'erubis'#, :source => "http://gems.github.com" # required by rails_xss plugin. Remove after rails 3.0 integrates it.
 #  config.gem 'tmtm-ruby-mysql', :lib => 'Mysql', :source => 'http://gems.github.com'
 #  config.gem "sqlite3-ruby", :lib => "sqlite3"
-#  config.gem 'rack'
+  config.gem 'rack', :version => '~> 1.0.1'
 #  config.gem 'test-spec', :version => '~> 0.9.0' # required for rack-rack-contrib (note: 0.10.0 is current)
 #  config.gem 'rack-rack-contrib', :lib => 'rack/contrib',  :source => 'http://gems.github.com'
 

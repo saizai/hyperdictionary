@@ -1,8 +1,0 @@
----
-ignore:
-  text/plain: 
-  - /\AThis message (was|has been) sent using .* from Verizon Wireless!.*/m
-transform: 
-  text/plain: 
-  - - /\A(.+?)\s+This message (was|has been) sent using .* from Verizon Wireless!.*/m
-    - "\1"

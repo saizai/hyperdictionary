@@ -1,5 +1,0 @@
----
-ignore:
-  application/smil:
-  - /^pres\.smil/i
-

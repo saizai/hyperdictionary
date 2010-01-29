@@ -1,5 +1,0 @@
----
-transform: 
-  text/plain: 
-  - - /^You have a PXT from \d+$/i
-    - ""

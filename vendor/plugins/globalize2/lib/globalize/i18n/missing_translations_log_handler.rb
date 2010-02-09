@@ -6,12 +6,12 @@
 # E.g. 
 #
 #   require 'globalize/i18n/missing_translations_log_handler
-#   I18n.missing_translations_logger = RAILS_DEFAULT_LOGGER
+#   I18n.missing_translations_logger = Rails.logger
 #   I18n.exception_handler = :missing_translations_log_handler
 #
 # To set up a different log file:
 #
-#   logger = Logger.new("#{RAILS_ROOT}/log/missing_translations.log")
+#   logger = Logger.new("#{Rails.root}/log/missing_translations.log")
 #   I18n.missing_translations_logger = logger
 
 module I18n

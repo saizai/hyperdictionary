@@ -17,13 +17,13 @@ module Erubis::Helpers::RailsFormHelper
 
 if ActionPack::VERSION::MAJOR == 1   ###  Rails 1.X
   def pp_template_filename(basename)
-    return "#{RAILS_ROOT}/app/views/#{controller.controller_name}/#{basename}.rhtml"
+    return "#{Rails.root}/app/views/#{controller.controller_name}/#{basename}.rhtml"
   end
 else                                 ###  Rails 2.X
   def pp_template_filename(basename)
-    fname = "#{RAILS_ROOT}/app/views/#{controller.controller_name}/#{basename}.html.erb"
+    fname = "#{Rails.root}/app/views/#{controller.controller_name}/#{basename}.html.erb"
     return fname if test(?f, fname)
-    return  "#{RAILS_ROOT}/app/views/#{controller.controller_name}/#{basename}.rhtml"
+    return  "#{Rails.root}/app/views/#{controller.controller_name}/#{basename}.rhtml"
   end
 end
 

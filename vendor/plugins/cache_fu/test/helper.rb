@@ -32,8 +32,8 @@ end
 
 ##
 # init.rb hacks
-RAILS_ROOT = '.'    unless defined? RAILS_ROOT
-RAILS_ENV  = 'test' unless defined? RAILS_ENV
+Rails.root = '.'    unless defined? Rails.root
+Rails.env  = 'test' unless defined? Rails.env
 
 ##
 # get the default config using absolute path, so tests all play nice when run in isolation

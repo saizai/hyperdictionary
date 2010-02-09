@@ -1,4 +1,4 @@
-ENV["RAILS_ENV"] = "development"
+ENV["Rails.env"] = "development"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'test_help'
 

@@ -48,19 +48,19 @@ class ExceptionNotifier < ActionMailer::Base
     body       data.merge({ :controller => controller, :request => request,
                   :exception => exception, :host => (request.env["HTTP_X_FORWARDED_HOST"] || request.env["HTTP_HOST"]),
                   :backtrace => sanitize_backtrace(exception.backtrace),
-                  :rails_root => rails_root, :data => data,
+                  :Rails.root => Rails.root, :data => data,
                   :sections => sections })
   end
 
   private
 
     def sanitize_backtrace(trace)
-      re = Regexp.new(/^#{Regexp.escape(rails_root)}/)
-      trace.map { |line| Pathname.new(line.gsub(re, "[RAILS_ROOT]")).cleanpath.to_s }
+      re = Regexp.new(/^#{Regexp.escape(Rails.root)}/)
+      trace.map { |line| Pathname.new(line.gsub(re, "[Rails.root]")).cleanpath.to_s }
     end
 
-    def rails_root
-      @rails_root ||= Pathname.new(RAILS_ROOT).cleanpath.to_s
+    def Rails.root
+      @Rails.root ||= Pathname.new(Rails.root).cleanpath.to_s
     end
 
 end

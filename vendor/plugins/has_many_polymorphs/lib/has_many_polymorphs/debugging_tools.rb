@@ -9,7 +9,7 @@ Enable the different tools by setting the environment variable HMP_DEBUG. Settin
 
 Enabled by default when HMP_DEBUG is set.
 
-Ouputs a folder <tt>generated_models/</tt> in RAILS_ROOT containing valid Ruby files explaining all the ActiveRecord relationships set up by the plugin, as well as listing the line in the plugin that called each particular association method.
+Ouputs a folder <tt>generated_models/</tt> in Rails.root containing valid Ruby files explaining all the ActiveRecord relationships set up by the plugin, as well as listing the line in the plugin that called each particular association method.
 
 == Ruby-debug
 
@@ -41,7 +41,7 @@ class << ActiveRecord::Base
   end      
 
   unless defined? GENERATED_CODE_DIR
-    GENERATED_CODE_DIR = "#{RAILS_ROOT}/generated_models"
+    GENERATED_CODE_DIR = "#{Rails.root}/generated_models"
   
     begin
       system "rm -rf #{GENERATED_CODE_DIR}" 

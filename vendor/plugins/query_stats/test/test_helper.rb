@@ -1,5 +1,5 @@
 $:.unshift(File.dirname(__FILE__) + '/../lib')
-RAILS_ROOT = File.dirname(__FILE__)
+Rails.root = File.dirname(__FILE__)
 
 require 'test/unit'
 require 'rubygems'

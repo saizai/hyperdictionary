@@ -9,7 +9,7 @@ module Rails
   end
 end
 
-RAILS_ROOT = File.expand_path(__FILE__).split('/')[0..-3].join('/') unless defined? RAILS_ROOT
+Rails.root = File.expand_path(__FILE__).split('/')[0..-3].join('/') unless defined? Rails.root
 
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + "/../lib"))
 require 'bullet'

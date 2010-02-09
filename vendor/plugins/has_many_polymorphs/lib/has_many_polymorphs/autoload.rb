@@ -17,7 +17,7 @@ Note that you can override DEFAULT_OPTIONS via Rails::Configuration#has_many_pol
   
 =end
   
-  MODELS_ROOT = "#{RAILS_ROOT}/app/models/"
+  MODELS_ROOT = "#{Rails.root}/app/models/"
   
   DEFAULT_OPTIONS = {
     :file_pattern => "#{MODELS_ROOT}**/*.rb",

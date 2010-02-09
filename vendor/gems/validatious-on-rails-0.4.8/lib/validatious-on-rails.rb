@@ -19,7 +19,7 @@ module ValidatiousOnRails # :nodoc:
   end
   RemoteValidationInvalid = ::Class.new(::ValidatiousOnRails::ValidatiousOnRailsError)
 
-  @@verbose = ::Object.const_defined?(:RAILS_ENV) ? (::RAILS_ENV.to_sym == :development) : true
+  @@verbose = ::Object.const_defined?(:Rails.env) ? (::Rails.env.to_sym == :development) : true
   @@client_side_validations_by_default = true
 
   mattr_accessor  :verbose,

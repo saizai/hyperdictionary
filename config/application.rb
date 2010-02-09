@@ -1,3 +1,13 @@
+if ENV['Rails.env'] == 'production'  # don't bother on dev
+  ENV['GEM_PATH'] = '/home/kura2/.gem/ruby/1.8' #+ ':/usr/lib/ruby/gems/1.8'  # Need this or Passenger fails to start
+#  require '/home/kura2/.gem/ruby/1.8/gems/RedCloth-4.1.9/lib/redcloth.rb'  # Need this for EACH LOCAL gem you want to use, otherwise it uses the ones in /usr/lib
+end
+
+# Redirect logger to console if using it
+if "irb" == $0
+   Rails.logger = Logger.new(STDOUT)
+end
+
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
@@ -12,7 +22,7 @@ module Hyperdictionary
     # -- all .rb files in that directory are automatically loaded.
     
     # Add additional load paths for your own custom dirs
-    # config.load_paths += %W( #{RAILS_ROOT}/app/sweepers )
+    # config.load_paths += %W( #{Rails.root}/app/sweepers )
     
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named

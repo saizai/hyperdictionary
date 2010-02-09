@@ -359,13 +359,13 @@ namespace :deploy do
     rake executable by setting the rake variable. The defaults are:
 
       set :rake,           "rake"
-      set :rails_env,      "production"
+      set :Rails.env,      "production"
       set :migrate_env,    ""
       set :migrate_target, :latest
   DESC
   task :migrate, :roles => :db, :only => { :primary => true } do
     rake = fetch(:rake, "rake")
-    rails_env = fetch(:rails_env, "production")
+    Rails.env = fetch(:Rails.env, "production")
     migrate_env = fetch(:migrate_env, "")
     migrate_target = fetch(:migrate_target, :latest)
 
@@ -375,7 +375,7 @@ namespace :deploy do
       else raise ArgumentError, "unknown migration target #{migrate_target.inspect}"
       end
 
-    run "cd #{directory}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} db:migrate"
+    run "cd #{directory}; #{rake} Rails.env=#{Rails.env} #{migrate_env} db:migrate"
   end
 
   desc <<-DESC

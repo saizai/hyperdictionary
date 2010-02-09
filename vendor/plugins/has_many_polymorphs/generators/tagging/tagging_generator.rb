@@ -34,7 +34,7 @@ class TaggingGenerator < Rails::Generator::NamedBase
   def hacks    
     # add the extension require in environment.rb
     phrase = "require 'tagging_extensions'"
-    filename = "#{RAILS_ROOT}/config/environment.rb"
+    filename = "#{Rails.root}/config/environment.rb"
     unless (open(filename) do |file|
       file.grep(/#{Regexp.escape phrase}/).any?
     end)

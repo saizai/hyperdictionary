@@ -1,5 +1,5 @@
 APP_NAME = 'Kura2'
-if RAILS_ENV == 'development'
+if Rails.env == 'development'
   APP_HOST = 'localhost:3000'
 else
   APP_HOST = 'dictionary.conlang.org'

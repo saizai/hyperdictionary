@@ -1,7 +1,7 @@
 class Mailman < ActionMailer::Base
   
   def receive mail
-    logger = Logger.new("#{RAILS_ROOT}/log/#{RAILS_ENV}-mail.log") 
+    logger = Logger.new("#{Rails.root}/log/#{Rails.env}-mail.log") 
     logger.info "Mailman: Receiving mail from #{mail.from.join(',')} to #{mail.to.join(',')}"
 #    mail = TMail::Mail.parse raw_mail
 #    mms = MMS2R::Media.new mail
@@ -9,7 +9,7 @@ class Mailman < ActionMailer::Base
     if contact = Contact.find_by_data(mail.from, :conditions => {:state => 'active'}, :include => :user) # no need for .first, this'll get the first one
       user = contact.user
       I18n.locale = user.get_preference('locale') || 'en-US' 
-      domain = Regexp.new YAML.load_file("#{RAILS_ROOT}/config/mail.yml")[RAILS_ENV]['domain']
+      domain = Regexp.new YAML.load_file("#{Rails.root}/config/mail.yml")[Rails.env]['domain']
 p "Got mail from #{user.login} to #{((mail.to || []) + (mail.cc || []))}"      
       case addressee = ((mail.to || []) + (mail.cc || [])).select{|x| x=~domain}.map{|x| x.sub domain, ''}.map{|x| x.sub /@.*/, ''}.first
       when /^upload/ then

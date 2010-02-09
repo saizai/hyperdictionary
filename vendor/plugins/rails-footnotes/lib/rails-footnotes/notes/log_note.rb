@@ -13,10 +13,10 @@ module Footnotes
 
       protected
         def log_tail
-          filename = if RAILS_DEFAULT_LOGGER.instance_variable_get('@log')
-            RAILS_DEFAULT_LOGGER.instance_variable_get('@log').path
+          filename = if Rails.logger.instance_variable_get('@log')
+            Rails.logger.instance_variable_get('@log').path
           else 
-            RAILS_DEFAULT_LOGGER.instance_variable_get('@logdev').filename
+            Rails.logger.instance_variable_get('@logdev').filename
           end
           
           return 'in console' unless filename

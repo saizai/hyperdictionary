@@ -37,7 +37,7 @@ module Erubis
     ##
     ## if Erubis::Helper::Rails.show_src is true, Erubis prints converted Ruby code
     ## into log file ('log/development.log' or so). if false, it doesn't.
-    ## if nil, Erubis prints converted Ruby code if ENV['RAILS_ENV'] == 'development'.
+    ## if nil, Erubis prints converted Ruby code if ENV['Rails.env'] == 'development'.
     ##
     module RailsHelper
 
@@ -91,7 +91,7 @@ module Erubis
           klass      = ::Erubis::Helpers::RailsHelper.engine_class
           properties = ::Erubis::Helpers::RailsHelper.init_properties
           show_src   = ::Erubis::Helpers::RailsHelper.show_src
-          show_src = ENV['RAILS_ENV'] == 'development' if show_src.nil?
+          show_src = ENV['Rails.env'] == 'development' if show_src.nil?
           ## preprocessing
           if ::Erubis::Helpers::RailsHelper.preprocessing
             preprocessor = _create_preprocessor(template)

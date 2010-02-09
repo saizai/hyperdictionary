@@ -56,7 +56,7 @@ class CommentingGeneratorTest < ActiveSupport::TestCase
   end
 
   def run_migrate
-    `rake db:migrate RAILS_ENV=test`
+    `rake db:migrate Rails.env=test`
   end
 
   def run_generator

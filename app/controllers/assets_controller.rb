@@ -59,7 +59,7 @@ class AssetsController < ApplicationController
   
   def download
     @asset = Asset.find(params[:id])
-    send_file("#{RAILS_ROOT}/public"+@asset.public_filename, 
+    send_file("#{Rails.root}/public"+@asset.public_filename, 
       :disposition => 'attachment',
       :encoding => 'utf8', 
       :type => @asset.content_type,

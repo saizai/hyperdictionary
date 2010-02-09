@@ -11,7 +11,7 @@ class ServerTest < ActiveSupport::TestCase
 
   def setup
     @pid = Process.fork do
-       Dir.chdir RAILS_ROOT do
+       Dir.chdir Rails.root do
          # print "S"
          exec("script/server -p #{PORT} &> #{LOG}")
        end

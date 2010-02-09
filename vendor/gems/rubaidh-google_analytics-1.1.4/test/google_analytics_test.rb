@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/test_helper.rb'
 require 'test/unit'
 require 'rubygems'
 require 'mocha'
-RAILS_ENV = 'test'
+Rails.env = 'test'
 
 class TestMixin
   class MockRequest

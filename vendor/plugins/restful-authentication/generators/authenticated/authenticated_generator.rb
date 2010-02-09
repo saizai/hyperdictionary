@@ -327,7 +327,7 @@ class AuthenticatedGenerator < Rails::Generator::NamedBase
   end
 
   def has_rspec?
-    spec_dir = File.join(RAILS_ROOT, 'spec')
+    spec_dir = File.join(Rails.root, 'spec')
     options[:rspec] ||= (File.exist?(spec_dir) && File.directory?(spec_dir)) unless (options[:rspec] == false)
   end
 
@@ -393,7 +393,7 @@ protected
     opt.on("--aasm",
       "Use (gem) aasm.  Assumes --include-activation")            { |v| options[:include_activation] = options[:stateful] = options[:aasm] = true }
     opt.on("--rspec",
-      "Force rspec mode (checks for RAILS_ROOT/spec by default)") { |v| options[:rspec] = true }
+      "Force rspec mode (checks for Rails.root/spec by default)") { |v| options[:rspec] = true }
     opt.on("--no-rspec",
       "Force test (not RSpec mode")                               { |v| options[:rspec] = false }
     opt.on("--skip-routes",

@@ -25,7 +25,7 @@ module Footnotes
         def controller_filename
           controller_name=@controller.class.to_s.underscore
           controller_name='application' if controller_name=='application_controller'
-          File.join(File.expand_path(RAILS_ROOT), 'app', 'controllers', "#{controller_name}.rb").sub('/controllers/controllers/', '/controllers/')
+          File.join(File.expand_path(Rails.root), 'app', 'controllers', "#{controller_name}.rb").sub('/controllers/controllers/', '/controllers/')
         end
 
         def controller_text

@@ -5,7 +5,7 @@ context "The global cache configuration" do
   # If the first arg is a symbol, an expectation will be set.
   def setup_config(*args)
     options = args.last.is_a?(Hash) ? args.pop : {}
-    @config[RAILS_ENV].update options.stringify_keys
+    @config[Rails.env].update options.stringify_keys
     ActsAsCached::Config.expects(args.first) if args.first.is_a? Symbol
     ActsAsCached.config = @config
   end
@@ -26,7 +26,7 @@ context "The global cache configuration" do
 
   specify "should construct a namespace from the environment and a config value" do
     setup_config
-    ActsAsCached.config[:namespace].should.equal "app-#{RAILS_ENV}"
+    ActsAsCached.config[:namespace].should.equal "app-#{Rails.env}"
   end
 
   specify "should be able to set a global default ttl" do

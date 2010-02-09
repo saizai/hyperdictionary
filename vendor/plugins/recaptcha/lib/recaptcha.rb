@@ -50,7 +50,7 @@ module Ambethia
       # Your private API can be specified in the +options+ hash or preferably the environment
       # variable +RECAPTCHA_PUBLIC_KEY+.
       def verify_recaptcha(options = {})
-        return true if SKIP_VERIFY_ENV.include? ENV['RAILS_ENV']
+        return true if SKIP_VERIFY_ENV.include? ENV['Rails.env']
         model = options.is_a?(::ActiveRecord::Base)? options : options[:model]
         private_key = options[:private_key] ||= ENV['RECAPTCHA_PRIVATE_KEY']
         raise ReCaptchaError, "No private key specified." unless private_key

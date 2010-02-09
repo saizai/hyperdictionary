@@ -12,8 +12,8 @@ module ActsAsCached
     def setup(options)
       config = options['defaults']
 
-      case options[RAILS_ENV]
-      when Hash   then config.update(options[RAILS_ENV]) 
+      case options[Rails.env]
+      when Hash   then config.update(options[Rails.env]) 
       when String then config[:disabled] = true 
       end
 
@@ -41,7 +41,7 @@ module ActsAsCached
     end
 
     def setup_memcache(config)
-      config[:namespace] << "-#{RAILS_ENV}"
+      config[:namespace] << "-#{Rails.env}"
 
       # if someone (e.g., interlock) already set up memcached, then
       # we need to stop here

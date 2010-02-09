@@ -42,7 +42,7 @@ module Footnotes
         end
         
         def parse_method(method = '')
-          escape(method.inspect.gsub(RAILS_ROOT, ''))
+          escape(method.inspect.gsub(Rails.root, ''))
         end
     end
   end

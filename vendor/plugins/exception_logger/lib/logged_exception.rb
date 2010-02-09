@@ -44,7 +44,7 @@ class LoggedException < ActiveRecord::Base
         "* URL:#{" #{request.method.to_s.upcase}" unless request.get?} #{request.protocol}#{request.env["HTTP_HOST"]}#{request.request_uri}",
         "* Format: #{request.format.to_s}",
         "* Parameters: #{request.parameters.inspect}",
-        "* Rails Root: #{rails_root}"
+        "* Rails Root: #{Rails.root}"
       ] * "\n")
     end
   end
@@ -54,14 +54,14 @@ class LoggedException < ActiveRecord::Base
   end
 
   private
-    @@rails_root      = Pathname.new(RAILS_ROOT).cleanpath.to_s
-    @@backtrace_regex = /^#{Regexp.escape(@@rails_root)}/
+    @@Rails.root      = Pathname.new(Rails.root).cleanpath.to_s
+    @@backtrace_regex = /^#{Regexp.escape(@@Rails.root)}/
 
     def sanitize_backtrace(trace)
-      trace.collect { |line| Pathname.new(line.gsub(@@backtrace_regex, "[RAILS_ROOT]")).cleanpath.to_s }
+      trace.collect { |line| Pathname.new(line.gsub(@@backtrace_regex, "[Rails.root]")).cleanpath.to_s }
     end
 
-    def rails_root
-      @@rails_root
+    def Rails.root
+      @@Rails.root
     end
 end

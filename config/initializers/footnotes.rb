@@ -20,7 +20,7 @@
 # I want it to be active in dev mode OR if I'm logged in as an admin.
 
 # First ('cause this supercedes them and they'd cause a conflict if they still exist):
-footnotes_dir = File.join(RAILS_ROOT, 'vendor', 'plugins', 'rails-footnotes')
+footnotes_dir = File.join(Rails.root, 'vendor', 'plugins', 'rails-footnotes')
 [File.join(footnotes_dir, 'init.rb'), 
  File.join(footnotes_dir, 'lib', 'rails-footnotes.rb')].each do |init_file|
   File.delete init_file if File.exists? init_file

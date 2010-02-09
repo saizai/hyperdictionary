@@ -13,11 +13,11 @@ class FileListTest < Test::Unit::TestCase
     filename = "/javascripts/js_1.js"
     filelist = BundleFu::FileList.new([filename])
     
-    assert_equal(File.mtime(File.join(RAILS_ROOT, "public", filename)).to_i,filelist.filelist[0][1])
+    assert_equal(File.mtime(File.join(Rails.root, "public", filename)).to_i,filelist.filelist[0][1])
   end
   
   def test__serialization
-    filelist_filename = File.join(RAILS_ROOT, "public", "temp")
+    filelist_filename = File.join(Rails.root, "public", "temp")
     filelist = BundleFu::FileList.new("/javascripts/js_1.js")
     
     filelist.save_as(filelist_filename)

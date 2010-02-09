@@ -5,10 +5,10 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <%= javascript_include_tag 'prototype','effects' %>
   <script type="text/javascript">
-<%= IO.read(File.join(RAILS_ROOT, 'vendor/plugins/exception_logger/assets/exception_logger.js')) %>
+<%= IO.read(File.join(Rails.root, 'vendor/plugins/exception_logger/assets/exception_logger.js')) %>
   </script>
   <style type="text/css">
-<%= IO.read(File.join(RAILS_ROOT, 'vendor/plugins/exception_logger/assets/style.css')) %>
+<%= IO.read(File.join(Rails.root, 'vendor/plugins/exception_logger/assets/style.css')) %>
   </style>
 </head>
 <body>

@@ -1,6 +1,6 @@
 # encoding: utf-8
-ENV['RAILS_ENV'] = 'test'
-RAILS_ROOT = File.join(File.dirname(__FILE__))
+ENV['Rails.env'] = 'test'
+Rails.root = File.join(File.dirname(__FILE__))
 
 require 'rubygems'
 

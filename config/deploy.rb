@@ -47,12 +47,12 @@ namespace (:deploy) do
   after "deploy:restart", "deploy:restart_mail_fetcher"
   
   task :restart_mail_fetcher, :roles => :app do
-    run "cd #{release_path} && RAILS_ENV=#{fetch(:rails_env, "production")} script/mail_fetcher restart"
+    run "cd #{release_path} && Rails.env=#{fetch(:Rails.env, "production")} script/mail_fetcher restart"
   end
   
 #  after "deploy:update_code", "deploy:install_gems"
   task :install_gems, :roles => :app do
-    cmd = "cd #{release_path} && RAILS_ENV=#{fetch(:rails_env, "production")} rake gems:install"
+    cmd = "cd #{release_path} && Rails.env=#{fetch(:Rails.env, "production")} rake gems:install"
     use_sudo ? sudo(cmd) : run(cmd)
   end
   

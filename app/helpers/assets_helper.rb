@@ -7,7 +7,7 @@ module AssetsHelper
     else
       # use something based on mime type
       mime_type_icon = "mime_types/#{asset.content_type}.png"
-      if File.exist? File.join(RAILS_ROOT, 'public', 'images', mime_type_icon)
+      if File.exist? File.join(Rails.root, 'public', 'images', mime_type_icon)
         content_tag(:span, image_tag(mime_type_icon), :class => 'icon')
       else
         content_tag(:span, image_tag("mime_types/unknown.png"), :class => 'icon')

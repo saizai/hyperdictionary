@@ -1,7 +1,7 @@
 
 require 'active_record'
 
-RAILS_DEFAULT_LOGGER = nil unless defined? RAILS_DEFAULT_LOGGER
+Rails.logger = nil unless defined? Rails.logger
 
 require 'has_many_polymorphs/reflection'
 require 'has_many_polymorphs/association'
@@ -14,11 +14,11 @@ class ActiveRecord::Base
   extend ActiveRecord::Associations::PolymorphicClassMethods 
 end
 
-if ENV['HMP_DEBUG'] || ENV['RAILS_ENV'] =~ /development|test/ && ENV['USER'] == 'eweaver'
+if ENV['HMP_DEBUG'] || ENV['Rails.env'] =~ /development|test/ && ENV['USER'] == 'eweaver'
   require 'has_many_polymorphs/debugging_tools' 
 end
 
-if defined? Rails and RAILS_ENV and RAILS_ROOT
+if defined? Rails and Rails.env and Rails.root
   _logger_warn "rails environment detected"
   require 'has_many_polymorphs/configuration'
   require 'has_many_polymorphs/autoload'

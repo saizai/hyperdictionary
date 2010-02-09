@@ -1,7 +1,7 @@
 class MockView
-  # set RAILS_ROOT to fixtures dir so we use those files
+  # set Rails.root to fixtures dir so we use those files
   include BundleFu::InstanceMethods
-  ::RAILS_ROOT = File.join(File.dirname(__FILE__), 'fixtures')
+  ::Rails.root = File.join(File.dirname(__FILE__), 'fixtures')
   
   attr_accessor :output
   attr_accessor :session
@@ -21,11 +21,11 @@ class MockView
   end
   
   def stylesheet_link_tag(*args)
-    args.collect{|arg| "<link href=\"#{arg}?#{File.mtime(File.join(RAILS_ROOT, 'public', arg)).to_i}\" media=\"screen\" rel=\"Stylesheet\" type=\"text/css\" />" } * "\n"
+    args.collect{|arg| "<link href=\"#{arg}?#{File.mtime(File.join(Rails.root, 'public', arg)).to_i}\" media=\"screen\" rel=\"Stylesheet\" type=\"text/css\" />" } * "\n"
   end
   
   def javascript_include_tag(*args)
-    args.collect{|arg| "<script src=\"#{arg}?#{File.mtime(File.join(RAILS_ROOT, 'public', arg)).to_i}\" type=\"text/javascript\"></script>" } * "\n"
+    args.collect{|arg| "<script src=\"#{arg}?#{File.mtime(File.join(Rails.root, 'public', arg)).to_i}\" type=\"text/javascript\"></script>" } * "\n"
   end
   
 end

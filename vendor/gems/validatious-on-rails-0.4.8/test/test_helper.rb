@@ -87,10 +87,10 @@ build_model :bogus_items do
 end
 
 #
-# ValidationReflection seems to expect RAILS_ROOT to be defined, but it's not
+# ValidationReflection seems to expect Rails.root to be defined, but it's not
 # if it's tested outside of a Rails project. So, just set it to something random.
 #
-RAILS_ROOT = File.join(File.dirname(__FILE__)) unless defined?(RAILS_ROOT)
+Rails.root = File.join(File.dirname(__FILE__)) unless defined?(Rails.root)
 
 # To show debug messages in test output, set this to true.
 #

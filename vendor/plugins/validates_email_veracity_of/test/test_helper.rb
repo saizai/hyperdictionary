@@ -1,12 +1,12 @@
-ENV['RAILS_ENV'] ||= 'sqlite3'
-require File.dirname(__FILE__) + '/rails_root/config/environment.rb'
+ENV['Rails.env'] ||= 'sqlite3'
+require File.dirname(__FILE__) + '/Rails.root/config/environment.rb'
  
 # Load the testing framework
 require 'test_help'
-silence_warnings { RAILS_ENV = ENV['RAILS_ENV'] }
+silence_warnings { Rails.env = ENV['Rails.env'] }
  
 # Run the migrations
-ActiveRecord::Migrator.migrate("#{RAILS_ROOT}/db/migrate")
+ActiveRecord::Migrator.migrate("#{Rails.root}/db/migrate")
  
 # Setup the fixtures path
 Test::Unit::TestCase.fixture_path = File.dirname(__FILE__) + "/fixtures/"

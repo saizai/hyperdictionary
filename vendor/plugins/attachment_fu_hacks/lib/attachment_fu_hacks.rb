@@ -60,6 +60,6 @@ Technoweenie::AttachmentFu::Backends::FileSystemBackend.module_eval do
 
   # Use this to override the default directory when in test mode
   def env_dir
-    RAILS_ENV == "test" ? Dir::tmpdir() : RAILS_ROOT
+    Rails.env == "test" ? Dir::tmpdir() : Rails.root
   end
 end

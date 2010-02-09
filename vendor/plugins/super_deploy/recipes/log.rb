@@ -1,8 +1,8 @@
   namespace :log do
-    desc 'Tail logs. Optionally pass name of log you want to check - e.g. cap util:logs mongrel. Defaults to #{rails_env}.log'
+    desc 'Tail logs. Optionally pass name of log you want to check - e.g. cap util:logs mongrel. Defaults to #{Rails.env}.log'
     task :default, :roles => :app do
       # NOTE: This is ARGV[2] not ARGV[1] because we use  cap *staging* util:logs instead of just cap *util:logs*. Put it back if needed, or better, do a smart regex
-      log_file = ARGV[2] ? ARGV[2] : fetch(:rails_env, "production")
+      log_file = ARGV[2] ? ARGV[2] : fetch(:Rails.env, "production")
       run "tail -f #{shared_path}/log/#{log_file}.log" do |channel, stream, data|
         puts  # for an extra line break before the host name
         puts "#{channel[:host]}: #{data}" 
@@ -10,9 +10,9 @@
       end
     end
     
-    desc 'Tail just the hits and errors; pass name of log if not #{rails_env}.log'
+    desc 'Tail just the hits and errors; pass name of log if not #{Rails.env}.log'
     task :short, :roles => :app do
-      log_file = ARGV[2] ? ARGV[2] : fetch(:rails_env, "production")
+      log_file = ARGV[2] ? ARGV[2] : fetch(:Rails.env, "production")
       run "tail -f #{shared_path}/log/#{log_file}.log | egrep -i 'Processing|Error|:in'" do |channel, stream, data|
         puts  # for an extra line break before the host name
         puts "#{channel[:host]}: #{data}" 
@@ -31,7 +31,7 @@
       Written by Sai Emrys - http://saizai.com
     DESC
     task :smart, :roles => :app do
-      log_file = ARGV[2] ? ARGV[2] : fetch(:rails_env, "production")
+      log_file = ARGV[2] ? ARGV[2] : fetch(:Rails.env, "production")
       aggregate = []
       agg_errors = []
       recent_agg = []
@@ -246,7 +246,7 @@
       Written by Sai Emrys - http://saizai.com
     DESC
     task :google, :roles => :app do
-      log_file = ARGV[2] ? ARGV[2] : fetch(:rails_env, "production")
+      log_file = ARGV[2] ? ARGV[2] : fetch(:Rails.env, "production")
       agg_google = []
       recent_google = []
       size = {:campaign => 8, :medium => 6, :source => 6, :content => 7, :hits => 4}
@@ -343,7 +343,7 @@
       Written by Sai Emrys - http://saizai.com
     DESC
     task :google_subtotals, :roles => :app do
-      log_file = ARGV[2] ? ARGV[2] : fetch(:rails_env, "production")
+      log_file = ARGV[2] ? ARGV[2] : fetch(:Rails.env, "production")
       agg_google = []
       size = {:campaign => 8, :medium => 6, :source => 6, :content => 7, :campaign_hits => 6, :medium_hits => 6, :source_hits => 6, :content_hits => 6}
       subtotals = {:campaign => [], :medium => [], :source => [], :content => []}

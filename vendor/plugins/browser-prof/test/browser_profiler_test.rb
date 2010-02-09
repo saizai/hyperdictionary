@@ -1,5 +1,5 @@
 require 'test/unit'
-ENV["RAILS_ENV"] = "test"
+ENV["Rails.env"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../../../../config/environment")
 require 'test_help'
 require 'pp'
@@ -67,7 +67,7 @@ class BrowserProfilerTest <  Test::Unit::TestCase
 	end
 
 	def profile_out_file
-		"#{RAILS_ROOT}/log/profile_out.html"
+		"#{Rails.root}/log/profile_out.html"
 	end
 
 end

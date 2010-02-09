@@ -1,9 +1,9 @@
-f = if File.exists?  File.join(RAILS_ROOT, 'db', 'GeoLiteCity.dat') # prefer the more contentful database if present
+f = if File.exists?  File.join(Rails.root, 'db', 'GeoLiteCity.dat') # prefer the more contentful database if present
   GEOIP_CITY = true
-  File.join(RAILS_ROOT, 'db', 'GeoLiteCity.dat')
-elsif File.exists?  File.join(RAILS_ROOT, 'db', 'GeoIP.dat')
+  File.join(Rails.root, 'db', 'GeoLiteCity.dat')
+elsif File.exists?  File.join(Rails.root, 'db', 'GeoIP.dat')
   GEOIP_CITY = false
-  File.join(RAILS_ROOT, 'db', 'GeoIP.dat')
+  File.join(Rails.root, 'db', 'GeoIP.dat')
 else
   raise "Couldn't find main GeoIP database in db/. Download it from:
     http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz # gives city and country data
@@ -29,9 +29,9 @@ def GEO_COUNTRY ip
   end
 end
 
-if File.exists?  File.join(RAILS_ROOT, 'db', 'GeoIPASNum.dat')
+if File.exists?  File.join(Rails.root, 'db', 'GeoIPASNum.dat')
   # note that the GeoIP ASN database kinda sucks. Not as good as whois or Team Cymru's database :-/
-#  GEOIP_ASN = GeoIP.new(File.join(RAILS_ROOT, 'db', 'GeoIPASNum.dat'))
+#  GEOIP_ASN = GeoIP.new(File.join(Rails.root, 'db', 'GeoIPASNum.dat'))
 else
 #  p "Couldn't find GeoIP ASN database in db/. Download it from http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz if you care."  
 end

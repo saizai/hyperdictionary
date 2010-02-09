@@ -18,7 +18,7 @@ module ActionController
 
         #determine output location
         if file_output
-          printer.print(File.new("#{RAILS_ROOT}/log/profile_out.html","w"))
+          printer.print(File.new("#{Rails.root}/log/profile_out.html","w"))
         else
           response.body << printer.print("",0)
         end 

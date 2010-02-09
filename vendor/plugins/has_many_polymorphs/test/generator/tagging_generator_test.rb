@@ -4,7 +4,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 class TaggingGeneratorTest < ActiveSupport::TestCase
   
   def setup
-    Dir.chdir RAILS_ROOT do
+    Dir.chdir Rails.root do
       truncate
 
       # Revert environment lib requires
@@ -29,7 +29,7 @@ class TaggingGeneratorTest < ActiveSupport::TestCase
   alias :teardown :setup
 
   def test_generator
-    Dir.chdir RAILS_ROOT do
+    Dir.chdir Rails.root do
       Echoe.silence do
         assert system("script/generate tagging Stick Stone -q -f")
         assert system("rake db:migrate")

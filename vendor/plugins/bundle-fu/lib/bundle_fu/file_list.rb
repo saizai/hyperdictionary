@@ -59,6 +59,6 @@ class BundleFu::FileList
   end
 protected
   def abs_location(filename)
-    File.join(RAILS_ROOT, "public", filename)
+    File.join(Rails.root, "public", filename)
   end
 end

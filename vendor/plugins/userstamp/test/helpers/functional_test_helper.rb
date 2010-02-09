@@ -1,7 +1,7 @@
 $:.unshift(File.dirname(__FILE__) + '/../..')
 $:.unshift(File.dirname(__FILE__) + '/../../lib')
 schema_file = File.join(File.dirname(__FILE__), '..', 'schema.rb')
-ENV["RAILS_ENV"] = "test"
+ENV["Rails.env"] = "test"
 require 'rubygems'
 require 'test/unit'
 require 'active_support'

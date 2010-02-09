@@ -1,0 +1,5 @@
+<table id="discussions_<%= @context.id %>" class="nowrap">
+	<% discussions.each do |discussion| %>
+		<%= render :partial => '/discussions/discussion_slim', :locals => {:discussion => discussion} %>
+	<% end %>
+</table>

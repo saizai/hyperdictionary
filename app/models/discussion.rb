@@ -1,6 +1,6 @@
 class Discussion < ActiveRecord::Base
   has_many :contextualizations
-  has_many_polymorphs :contexts, :through => :contextualizations, :from => [:pages, :users]
+  has_many_polymorphs :contexts, :through => :contextualizations, :from => [:fora, :pages, :users]
   has_many :messages, :dependent => :destroy, :inverse_of => :discussion
   has_many :split_messages, :class_name => "Message", :conditions => "split_discussion_id IS NOT NULL"
   has_many :split_discussions, :through => :split_messages, :source => :split_discussion
@@ -36,6 +36,13 @@ class Discussion < ActiveRecord::Base
       self.mark_read_by! creator.is_participant_of(self), true
     end
   end
+  
+#  def set_forum
+#    if fora.blank?
+#      # TODO: find the correct forum/a to attach to automatically
+#      fora.create(:name => pages.first.name + ' forum')
+#    end
+#  end
   
   def set_context_from_to_user
     self.context = User.find(to_user) if to_user

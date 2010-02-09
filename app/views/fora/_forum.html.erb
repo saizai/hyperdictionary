@@ -1,0 +1,13 @@
+<tr>
+	<td><%= link_to forum.name, forum %></td>
+	<td><%= forum.discussions_count %></td>
+	<td><%= forum.messages_count %></td>
+	<td>
+		<%= forum.updated_at.to_s(:short) %>
+	</td>
+</tr>
+<tr style="margin-left: 1em;">
+	<td colspan="4" style="padding-left: 1em;">
+		<%= render :partial => '/discussions/discussions', :locals => {:discussions => forum.discussions } %>
+	</td>
+</tr>

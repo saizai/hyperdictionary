@@ -1,0 +1,7 @@
+<h3>some fora</h3>
+
+<table id="fora_<%= @context.id %>" class="nowrap">
+	<% @fora.each do |forum| %>
+		<%= render :partial => '/fora/forum', :locals => {:forum => forum} %>
+	<% end %>
+</table>

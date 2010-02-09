@@ -6,7 +6,7 @@ ActionController::Routing::Routes.draw do |map|
                         :has_many => [:sessions, :tags, :badgings, :participations] do |user|
     user.resources :contacts, :member => {:activate => :get, :screen => :put, :verify => :put, :suspend => :put} # technically activate should be a put, but accessed via get... oh well
     user.resources :relationships, :member => {:confirm => :put} 
-    user.resource :page, :member => {:change_role => :put, :subscribe => :put} do |page|
+    user.resource :page, :has_many => :fora, :member => {:change_role => :put, :subscribe => :put} do |page|
       page.resources :messages, :member => {:moderate => :put, :screen => :put} # comments / forum
       page.resources :versions, :member => {:compare => :get, :revert => :put}
     end
@@ -19,11 +19,12 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :tags
   map.resources :badge_sets, :has_many => :badges
   map.resources :badges
-  map.resources :pages, :member => {:change_role => :put, :subscribe => :put} do |page|
+  map.resources :pages, :has_many => :fora, :member => {:change_role => :put, :subscribe => :put} do |page|
     page.resources :discussions, :has_many => [:messages, :participations]
     page.resources :messages, :member => {:moderate => :put, :screen => :put } # This is for the page's special wall discussion. For other ones, go through its discussions.
     page.resources :versions, :member => {:compare => :get, :revert => :put}
   end
+  map.resources :fora, :has_many => :fora
   
   map.resources :discussions, :has_many => :participations do |discussion|
     discussion.resources :messages, :member => {:moderate => :put, :screen => :put}

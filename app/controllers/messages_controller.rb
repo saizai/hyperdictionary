@@ -155,16 +155,16 @@ class MessagesController < ApplicationController
   protected
   
   def get_discussion
-    # FIXME: is there a better way to find out what the parent resource is?
-#    @discussion = params[:discussion_type].constantize.find(params[:discussion_id]) if params[:discussion_type] and params[:discussion_id]
     @discussion ||= Discussion.find(params[:discussion_id]) if params[:discussion_id]
+    # FIXME: is there a better way to find out what the parent resource is?
     if params[:page_id]
       @context = page = Page.find(params[:page_id])
       @discussion ||= page.wall_discussion || page.build_wall_discussion(:name => page.name + ' wall') # FIXME: this should be moved into a model hook somewhere
       @interface = 'wall'
+    elsif params[:forum_id]
+      @interface = 'forum'
     elsif params[:user_id]
       @interface = 'inbox'
     end
-#    @discussion ||= User.find(params[:user_id]) if params[:user_id]
   end
 end

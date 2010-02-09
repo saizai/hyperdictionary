@@ -44,7 +44,8 @@ Rails::Initializer.run do |config|
   config.gem 'rack', :version => '~> 1.0.1'
 #  config.gem 'test-spec', :version => '~> 0.9.0' # required for rack-rack-contrib (note: 0.10.0 is current)
 #  config.gem 'rack-rack-contrib', :lib => 'rack/contrib',  :source => 'http://gems.github.com'
-
+  config.gem 'geoip'
+  
   # Not frozen because they cause conflicts and/or require native extensions
   config.gem 'rmagick', :lib => 'RMagick' # NOTE: installation for this is nontrivial. See its website (+ the DreamHost wiki, if on DH)
   config.gem 'mms2r'
@@ -54,7 +55,6 @@ Rails::Initializer.run do |config|
 #  config.gem 'RedCloth', :lib => 'redcloth'
   config.gem 'bluecloth' # lowercase is 2.x, camelcase is 1.x
   config.gem 'utf8proc'
-  config.gem 'geoip'
   # config.gem 'fiveruns_tuneup', :version => '>= 0.8.20'
   
   # Add additional load paths for your own custom dirs

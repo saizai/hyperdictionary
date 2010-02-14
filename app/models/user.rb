@@ -81,7 +81,7 @@ class User < ActiveRecord::Base
   validates_format_of       :name,     :with => Authentication.name_regex,  :message => Authentication.bad_name_message, :allow_nil => true
   validates_length_of       :name,     :maximum => 120
   
-  named_scope :active, :conditions => ['activated_at IS NOT NULL AND state = "active"']
+  scope :active, :conditions => ['activated_at IS NOT NULL AND state = "active"']
   
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.

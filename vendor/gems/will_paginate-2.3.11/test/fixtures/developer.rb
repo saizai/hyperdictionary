@@ -7,8 +7,8 @@ class Developer < User
     end
   end
 
-  named_scope :distinct, :select => 'DISTINCT `users`.*'
-  named_scope :poor, :conditions => ['salary <= ?', 80000], :order => 'salary'
+  scope :distinct, :select => 'DISTINCT `users`.*'
+  scope :poor, :conditions => ['salary <= ?', 80000], :order => 'salary'
 
   def self.per_page() 10 end
 end

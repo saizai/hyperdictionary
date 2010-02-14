@@ -11,7 +11,7 @@ class Message < ActiveRecord::Base
   # body
   # children_count, next_child
   
-  named_scope :inbox, :conditions => {:message_interface_id => MessageInterface.find_or_create_by_name('inbox').id }
+  scope :inbox, :conditions => {:message_interface_id => MessageInterface.find_or_create_by_name('inbox').id }
   
   acts_as_authorizable
   acts_as_paranoid
@@ -27,8 +27,8 @@ class Message < ActiveRecord::Base
 #  validates_associated :deleter
 #  validates_associated :context
   
-  named_scope :since, lambda{|time| {:conditions => ['messages.updated_at > ?', time]}}
-  named_scope :by_index, :order => 'discussions.updated_at DESC, messages.index ASC', :include => :discussion
+  scope :since, lambda{|time| {:conditions => ['messages.updated_at > ?', time]}}
+  scope :by_index, :order => 'discussions.updated_at DESC, messages.index ASC', :include => :discussion
   attr_accessor :title, :interface
   
   def context_must_be_in_discussion

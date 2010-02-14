@@ -59,7 +59,7 @@ describe 'Commenter use case (a1: p1>c1, a2: p2>c1, p3>c2, a3: p4>c3)' do
       @u1.commented_posts.find_inflamatory(:all).should be_empty
     end
     
-    if ActiveRecord::Base.respond_to?(:named_scope)
+    if ActiveRecord::Base.respond_to?(:scope)
       it "u1.commented_posts.inflamatory should be empty" do
         @u1.commented_posts.inflamatory.should be_empty
       end
@@ -95,7 +95,7 @@ describe 'Commenter use case (a1: p1>c1, a2: p2>c1, p3>c2, a3: p4>c3)' do
         @u1.posts_of_interest.find_inflamatory(:all).collect(&:id).uniq.should == [@p2.id]
       end
       
-      if ActiveRecord::Base.respond_to?(:named_scope)
+      if ActiveRecord::Base.respond_to?(:scope)
         it "u1.commented_posts.inflamatory should == [p2]" do
           @u1.commented_posts.inflamatory.should == [@p2]
         end

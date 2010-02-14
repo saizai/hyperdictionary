@@ -55,8 +55,8 @@ describe Bullet::Association, 'has_many' do
     belongs_to :writer
 
 
-    named_scope :preload_posts, lambda { {:include => :comments} }
-    named_scope :in_category_name, lambda { |name|
+    scope :preload_posts, lambda { {:include => :comments} }
+    scope :in_category_name, lambda { |name|
       { :conditions => ['categories.name = ?', name], :include => :category }
     }
   end
@@ -378,7 +378,7 @@ describe Bullet::Association, 'has_many' do
     end
   end
 
-  context "named_scope for_category_name" do
+  context "scope for_category_name" do
     it "should detect preload with post => category" do
       Post.in_category_name('first').all.each do |post|
         post.category.name
@@ -394,15 +394,15 @@ describe Bullet::Association, 'has_many' do
     end
   end
 
-  context "named_scope preload_posts" do
-    it "should no preload post => comments with named_scope" do
+  context "scope preload_posts" do
+    it "should no preload post => comments with scope" do
       Post.preload_posts.each do |post|
         post.comments.collect(&:name)
       end
       Bullet::Association.should_not be_has_unpreload_associations
     end
 
-    it "should unused preload with named_scope" do
+    it "should unused preload with scope" do
       Post.preload_posts.collect(&:name)
       Bullet::Association.should_not be_has_unpreload_associations
       Bullet::Association.check_unused_preload_associations

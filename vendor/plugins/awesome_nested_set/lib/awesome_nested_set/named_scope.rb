@@ -1,7 +1,7 @@
 # Taken from Rails 2.1
 module CollectiveIdea #:nodoc:
   module NamedScope #:nodoc:
-    # All subclasses of ActiveRecord::Base have two named_scopes:
+    # All subclasses of ActiveRecord::Base have two scopes:
     # * <tt>all</tt>, which is similar to a <tt>find(:all)</tt> query, and
     # * <tt>scoped</tt>, which allows for the creation of anonymous scopes, on the fly:
     #
@@ -12,7 +12,7 @@ module CollectiveIdea #:nodoc:
     def self.included(base)
       base.class_eval do
         extend ClassMethods
-        named_scope :scoped, lambda { |scope| scope }
+        scope :scoped, lambda { |scope| scope }
       end
     end
 
@@ -25,11 +25,11 @@ module CollectiveIdea #:nodoc:
       # such as <tt>:conditions => {:color => :red}, :select => 'shirts.*', :include => :washing_instructions</tt>.
       #
       #   class Shirt < ActiveRecord::Base
-      #     named_scope :red, :conditions => {:color => 'red'}
-      #     named_scope :dry_clean_only, :joins => :washing_instructions, :conditions => ['washing_instructions.dry_clean_only = ?', true]
+      #     scope :red, :conditions => {:color => 'red'}
+      #     scope :dry_clean_only, :joins => :washing_instructions, :conditions => ['washing_instructions.dry_clean_only = ?', true]
       #   end
       # 
-      # The above calls to <tt>named_scope</tt> define class methods <tt>Shirt.red</tt> and <tt>Shirt.dry_clean_only</tt>. <tt>Shirt.red</tt>, 
+      # The above calls to <tt>scope</tt> define class methods <tt>Shirt.red</tt> and <tt>Shirt.dry_clean_only</tt>. <tt>Shirt.red</tt>, 
       # in effect, represents the query <tt>Shirt.find(:all, :conditions => {:color => 'red'})</tt>.
       #
       # Unlike Shirt.find(...), however, the object returned by <tt>Shirt.red</tt> is not an Array; it resembles the association object
@@ -55,7 +55,7 @@ module CollectiveIdea #:nodoc:
       # Named scopes can also be procedural.
       #
       #   class Shirt < ActiveRecord::Base
-      #     named_scope :colored, lambda { |color|
+      #     scope :colored, lambda { |color|
       #       { :conditions => { :color => color } }
       #     }
       #   end
@@ -65,7 +65,7 @@ module CollectiveIdea #:nodoc:
       # Named scopes can also have extensions, just as with <tt>has_many</tt> declarations:
       #
       #   class Shirt < ActiveRecord::Base
-      #     named_scope :red, :conditions => {:color => 'red'} do
+      #     scope :red, :conditions => {:color => 'red'} do
       #       def dom_id
       #         'red_shirts'
       #       end
@@ -77,14 +77,14 @@ module CollectiveIdea #:nodoc:
       # <tt>proxy_options</tt> method on the proxy itself.
       #
       #   class Shirt < ActiveRecord::Base
-      #     named_scope :colored, lambda { |color|
+      #     scope :colored, lambda { |color|
       #       { :conditions => { :color => color } }
       #     }
       #   end
       #
       #   expected_options = { :conditions => { :colored => 'red' } }
       #   assert_equal expected_options, Shirt.colored('red').proxy_options
-      def named_scope(name, options = {}, &block)
+      def scope(name, options = {}, &block)
         scopes[name] = lambda do |parent_scope, *args|
           Scope.new(parent_scope, case options
             when Hash

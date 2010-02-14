@@ -18,7 +18,7 @@ class Discussion < ActiveRecord::Base
   stampable
   acts_as_versioned :version_column => 'lock_version'
   
-  validates_presence_of :messages_count, :next_message #, :context, :sticky, :locked, :screened
+  validates :messages_count, :next_message, :presence => true #, :context, :sticky, :locked, :screened
   # name can be blank; creator/updater should be taken care of by model_stamper
   validate :must_have_messages
   
@@ -33,7 +33,7 @@ class Discussion < ActiveRecord::Base
   def set_participants
     if to_user # i.e., if this was created from inbox view
       self.mark_read_by! User.find(to_user), true
-      self.mark_read_by! creator.is_participant_of(self), true
+      self.mark_read_by! creator, true
     end
   end
   
@@ -49,7 +49,7 @@ class Discussion < ActiveRecord::Base
   end
   
   def mark_read_by! user, subscribe = false
-    if p = participations.find(:first, :conditions => {:user_id => user.id})
+    if p = participations.where(:user_id => user.id).first
       p.mark_read! subscribe
     else
       Participation.create :user_id => user.id, :discussion_id => self.id, :last_read => Time.now, :inbox => subscribe

@@ -89,8 +89,8 @@ module CollectiveIdea #:nodoc:
             end_eval
           end
           
-          named_scope :roots, :conditions => {parent_column_name.to_sym => nil}, :order => quoted_left_column_name
-          named_scope :leaves, :conditions => "#{quoted_right_column_name} - #{quoted_left_column_name} = 1", :order => quoted_left_column_name
+          scope :roots, :conditions => {parent_column_name.to_sym => nil}, :order => quoted_left_column_name
+          scope :leaves, :conditions => "#{quoted_right_column_name} - #{quoted_left_column_name} = 1", :order => quoted_left_column_name
           if self.respond_to?(:define_callbacks)
             define_callbacks("before_move", "after_move")              
           end
@@ -229,7 +229,7 @@ module CollectiveIdea #:nodoc:
         end
       end
 
-      # Any instance method that returns a collection makes use of Rails 2.1's named_scope (which is bundled for Rails 2.0), so it can be treated as a finder.
+      # Any instance method that returns a collection makes use of Rails 2.1's scope (which is bundled for Rails 2.0), so it can be treated as a finder.
       #
       #   category.self_and_descendants.count
       #   category.ancestors.find(:all, :conditions => "name like '%foo%'")

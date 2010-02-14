@@ -18,7 +18,7 @@ class Relationship < ActiveRecord::Base
   validates_uniqueness_of :to_user_id, :scope => :from_user_id, :allow_nil => true
   validates_uniqueness_of :to_identity_id, :scope => :from_identity_id, :allow_nil => true
   
-  named_scope :multis, :conditions => {:multi => true}
+  scope :multis, :conditions => {:multi => true}
   
   def validate
     (to_user_id != from_user_id or !to_user_id or !from_user_id) and                   # can't friend yourself

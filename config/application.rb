@@ -49,5 +49,7 @@ module Hyperdictionary
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password, :password_confirmation, :old_password, :uploaded_data]
+    
+    config.colorize_logging = true
   end
 end

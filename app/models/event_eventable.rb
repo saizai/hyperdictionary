@@ -3,9 +3,9 @@ class EventEventable < ActiveRecord::Base
   belongs_to :event_type
   belongs_to :eventable, :polymorphic => true
   
-  named_scope :recent, lambda {|limit, page| {:limit => limit, :offset => (page - 1) * limit}}
-  named_scope :with_eventables, lambda {|eventables| {:conditions =>  [(['(event_eventables.eventable_id = ? and event_eventables.eventable_type = ?)'] * eventables.size).join(' OR '),
-                                                                       *eventables.inject([]){|m,v| m << v.id; m << v.class.name; m }] }} 
+  scope :recent, lambda {|limit, page| limit(limit).offset((page - 1) * limit)}
+  scope :with_eventables, lambda {|eventables| where((['(event_eventables.eventable_id = ? and event_eventables.eventable_type = ?)'] * eventables.size).join(' OR '),
+                                                                       *eventables.inject([]){|m,v| m << v.id; m << v.class.name; m }) } 
   
   # this is called multiple times if saving when associated with a new record
   # therefore we do ||= so that it's only really used the first time

@@ -11,7 +11,7 @@ class Identity < ActiveRecord::Base
   validates_presence_of :url
   validates_uniqueness_of :url
   
-  named_scope :public, :conditions => {:public => true}
+  scope :public, :conditions => {:public => true}
   
   attr_accessor :new_friends, :ex_friends
   

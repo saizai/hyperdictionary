@@ -12,11 +12,10 @@ class Asset < ActiveRecord::Base
   validates_as_attachment
   belongs_to :attachable, :polymorphic => true
   
-  validates_presence_of :creator_id
-  validates_presence_of :updater_id
+  validates :creator_id, :updater_id, :presence => true
   
-  named_scope :original, :conditions => {:parent_id => nil }
-  named_scope :size, lambda { |size| { :conditions => [ "thumbnail = ?", size.to_s ] }  } # and filename LIKE "_#{size}.%"
+  scope :original, where(:parent_id => nil)
+  scope :size, lambda { |size| where("thumbnail = ?", size.to_s) } # and filename LIKE "_#{size}.%"
   
   def before_validation
     self.updater_id ||= self.creator_id

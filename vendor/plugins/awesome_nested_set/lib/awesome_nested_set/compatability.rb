@@ -15,7 +15,7 @@ end
 
 # NamedScope is new to Rails 2.1
 unless defined? ActiveRecord::NamedScope
-  require 'awesome_nested_set/named_scope'
+  require 'awesome_nested_set/scope'
   ActiveRecord::Base.class_eval do
     include CollectiveIdea::NamedScope
   end

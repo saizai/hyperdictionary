@@ -38,13 +38,13 @@ module Rails
           )
         end
 
-        lines = grep_for("named_scope", "app/models/")
+        lines = grep_for("scope", "app/models/")
         files = extract_filenames(lines)
         
         if files
           alert(
-            "named_scope is now just scope", 
-            "The named_scope method has been renamed to just scope.",
+            "scope is now just scope", 
+            "The scope method has been renamed to just scope.",
             "http://github.com/rails/rails/commit/d60bb0a9e4be2ac0a9de9a69041a4ddc2e0cc914",
             files
           )

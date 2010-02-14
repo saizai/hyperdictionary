@@ -3,7 +3,7 @@ class Event < ActiveRecord::Base
   has_many :event_eventables
   has_many_polymorphs :eventables, :through => :event_eventables, :from => [:pages, :users, :identities, :discussions, :messages]
   
-  named_scope :recent, lambda {|limit, page| {:limit => limit, :offset => (page - 1) * limit}}
+  scope :recent, lambda {|limit, page| {:limit => limit, :offset => (page - 1) * limit}}
   
   validates_presence_of :released_at, :event_type_id
   

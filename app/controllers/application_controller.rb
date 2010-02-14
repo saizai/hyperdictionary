@@ -10,9 +10,6 @@ class ApplicationController < ActionController::Base
   include ExceptionLoggable
   include Userstamp
   
-  # Scrub sensitive or excessively large parameters from your log
-  filter_parameter_logging :password, :password_confirmation, :old_password, :uploaded_data
-  
   before_filter :local_cache_for_request # using cache_fu
   before_filter :set_cache_override # Be very careful using this on a high traffic page; all hits within the time of your hit will be uncached
   def set_cache_override

@@ -3,13 +3,11 @@ class Badging < ActiveRecord::Base
   belongs_to :badge, :counter_cache => true
   belongs_to :badge_set
   belongs_to :badgeable, :polymorphic => true
-
-  validates_uniqueness_of :badge_set_id, :scope => [:user_id, :badgeable_id]
-  validates_presence_of :badge_set_id, :badge_id, :user_id  
-
-  named_scope :with_badge_set, lambda {|badge_set|
-    {:conditions => {:badge_set_id => badge_set} }
-  }
+  
+  validates :badge_set_id, :uniqueness => {:scope => [:user_id, :badgeable_id]}, :presence => true
+  validates :badge_id, :user_id, :presence => true
+  
+  scope :with_badge_set, lambda {|badge_set| where(:badge_set_id => badge_set) }
   
   def before_destroy
     User.decrement_counter("badge#{badge.level}_count", user_id)

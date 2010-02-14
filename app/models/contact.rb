@@ -6,17 +6,15 @@ class Contact < ActiveRecord::Base
   # public
   # preverified
   
-  validates_uniqueness_of :data, :scope => :contact_type_id
-  validates_presence_of :user
+  validates :data, :uniqueness => {:scope => :contact_type_id}, :length => {:minimum => 1}
+  validates :user, :contact_type, :presence => true
 #  validates_associated :user
-  validates_presence_of :contact_type
 #  validates_associated :contact_type
-  validates_length_of :data, :minimum => 1
   
-  validates_email_veracity_of :data, :if => Proc.new {|c| c.contact_type_id == ContactType.find_by_name('email').id}
+  validates_email_veracity_of :data, :if => lambda {|c| c.contact_type_id == ContactType.find_by_name('email').id}
   
-  named_scope :emails, :conditions => {:contact_type_id => ContactType.find_by_name('email').id }
-  named_scope :public, :conditions => {:public => true}
+  scope :emails, where(:contact_type_id => ContactType.find_by_name('email').id)
+  scope :public, where(:public => true)
   
   def before_validation
     unless self.contact_type_id == ContactType.find_by_name('address').id

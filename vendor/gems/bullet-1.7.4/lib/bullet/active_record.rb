@@ -40,7 +40,7 @@ module Bullet
       end
 
       ::ActiveRecord::Associations::ClassMethods.class_eval do      
-        # add include in named_scope
+        # add include in scope
         alias_method :origin_find_with_associations, :find_with_associations
         def find_with_associations(options)
           records = origin_find_with_associations(options)

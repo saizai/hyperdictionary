@@ -1,5 +1,5 @@
 class MessageMailer < ActionMailer::Base
-  def new message, user
+  def new_message message, user
     setup_email user, message
     @subject        += "New message posted"
     @body[:context_name] = context_name = message.context.try(:name)

@@ -2,14 +2,14 @@ class ParticipationsController < ApplicationController
   before_filter :get_context
   
   def create
-    current_participation = @discussion.participations.find(:first, :conditions => {:user_id => current_user.id})
+    current_participation = @discussion.participations.where(:user_id => current_user.id).first
     
     permit !current_participation.nil? do
       participants = User.find(params[:participation][:users].split(',').map(&:strip)) 
       @participations = participants.map{|p| @discussion.participations.new :user_id => p.id}
       
       respond_to do |format|
-        if @participations.map(&:save)
+        if @participations.map(&:save) # TODO: use import here
           format.js   { render :partial => '/users/list', :locals => {:users => @discussion.participants, :badges => false}  }
           format.html {
             flash[:notice] = "#{partiicpation.user.login} was successfully added to this discussion."

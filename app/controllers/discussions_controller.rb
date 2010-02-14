@@ -8,7 +8,7 @@ class DiscussionsController < ApplicationController
     
     if logged_in? # fetch current user's participation object on each discussion
       # TODO: put this into an :include-able has_one ? would require user injection into model and some sort of lambda, though
-      participations = current_user.participations.find(:all, :conditions => ["participations.discussion_id IN (?)", discussion_ids]).inject({}){|m,x| m[x.discussion_id] = x; m }
+      participations = current_user.participations.where("participations.discussion_id IN (?)", discussion_ids).inject({}){|m,x| m[x.discussion_id] = x; m }
       @discussions.map!{|d| d.participation = participations[d.id]; d}
     end
     

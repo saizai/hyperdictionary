@@ -1,44 +1,6 @@
 class AssetsController < ApplicationController
   before_filter :login_required
   
-  # GET /assets
-  # GET /assets.xml
-#  def index
-#    @assets = Asset.find(:all, :conditions => {:parent_id => nil})
-#    
-#    respond_to do |format|
-#      format.html # index.html.erb
-#      format.xml  { render :xml => @assets }
-#    end
-#  end
-
-  # GET /assets/1
-  # GET /assets/1.xml
-#  def show
-#    @asset = Asset.find(params[:id])
-#
-#    respond_to do |format|
-#      format.html # show.html.erb
-#      format.xml  { render :xml => @asset }
-#    end
-#  end
-
-  # GET /assets/new
-  # GET /assets/new.xml
-#  def new
-#    @asset = Asset.new
-#
-#    respond_to do |format|
-#      format.html # new.html.erb
-#      format.xml  { render :xml => @asset }
-#    end
-#  end
-
-  # GET /assets/1/edit
-#  def edit
-#    @asset = Asset.find(params[:id])
-#  end
-
   # POST /assets
   # POST /assets.xml
   def create

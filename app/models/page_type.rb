@@ -6,7 +6,7 @@ class PageType < ActiveRecord::Base
   
   has_many :pages
   
-  default_scope :order => 'name'
+  default_scope order('name')
   
   acts_as_dropdown :text => "name"  
   

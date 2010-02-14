@@ -11,7 +11,7 @@ class Identity < ActiveRecord::Base
   validates_presence_of :url
   validates_uniqueness_of :url
   
-  scope :public, :conditions => {:public => true}
+  scope :public, where(:public => true)
   
   attr_accessor :new_friends, :ex_friends
   
@@ -39,7 +39,7 @@ class Identity < ActiveRecord::Base
     ex_friends, new_friends = nil, nil
     
     if self.email # TODO: first check if email is changed
-      contact = user.contacts.find(:first, :conditions => {:contact_type_id => ContactType.find_by_name('email').id, :data => self.email}) ||
+      contact = user.contacts.where(:contact_type_id => ContactType.find_by_name('email').id, :data => self.email).first ||
         user.contacts.build(:contact_type_id => ContactType.find_by_name('email').id, :data => self.email, :preverified => self.email_verified)
       contact.update_attribute :preverified, self.email_verified if !contact.preverified and self.email_verified
       contact.register! unless contact.active?
@@ -79,8 +79,8 @@ class Identity < ActiveRecord::Base
         # TODO: figure out a way to only look at the diff
         old_friend_ids = identity.data['friends'].map{|x| x[/\d+/].to_i } rescue []
         friend_ids = rpx_data['friends'].map{|x| x[/\d+/].to_i } rescue []
-        identity.new_friends = Identity.find_all_by_vendor_id(friend_ids - old_friend_ids, :conditions => 'provider = "Facebook"', :include => :user)
-        identity.ex_friends = Identity.find_all_by_vendor_id(old_friend_ids - friend_ids, :conditions => 'provider = "Facebook"', :include => :user)
+        identity.new_friends = Identity.where(:vendor_id => friend_ids - old_friend_ids, :provider => "Facebook").includes(:user)
+        identity.ex_friends = Identity.where(:vendor_id => old_friend_ids - friend_ids, :provider => "Facebook").includes(:user)
     end
     
     identity.data_blob = Base64.encode64(ActiveSupport::Gzip.compress(rpx_data.to_yaml))

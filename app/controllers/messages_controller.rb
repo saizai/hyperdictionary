@@ -1,8 +1,6 @@
 class MessagesController < ApplicationController
   before_filter :get_discussion
   
-#   GET /messages
-#   GET /messages.xml
   def index
     @messages = @discussion.messages.by_index.paginate :page => params[:page], :include => [:creator, :updater] # :context
     # FIXME: filter @messages by visibility here not in view (it'd leak to xml)
@@ -13,36 +11,7 @@ class MessagesController < ApplicationController
       format.xml  { render :xml => @messages }      
     end
   end
-  
-  # GET /messages/1
-  # GET /messages/1.xml
-#  def show
-#    @message = Message.find(params[:id])
-#
-#    respond_to do |format|
-#      format.html # show.html.erb
-#      format.xml  { render :xml => @message }
-#    end
-#  end
-
-  # GET /messages/new
-  # GET /messages/new.xml
-#  def new
-#    @message = Message.new
-#
-#    respond_to do |format|
-#      format.html # new.html.erb
-#      format.xml  { render :xml => @message }
-#    end
-#  end
-
-  # GET /messages/1/edit
-#  def edit
-#    @message = Message.find(params[:id])
-#    @messager = @message.creator
-#    permit 'admin or (self of messager)'
-#  end
-  
+    
   def render_markdown
     render :inline => "<%= markdown(params[:text]) %>"
   end
@@ -117,27 +86,7 @@ class MessagesController < ApplicationController
       end
     end
   end
-
-  # PUT /messages/1
-  # PUT /messages/1.xml
-#  def update
-#    @message = Message.find(params[:id])
-#    @messager = @message.creator
-#    permit 'site_admin or (self of messager)' do
-#
-#      respond_to do |format|
-#        if @message.update_attributes(params[:message])
-#          flash[:notice] = 'Message was successfully updated.'
-#          format.html { redirect_to(@message) }
-#          format.xml  { head :ok }
-#        else
-#          format.html { render :action => "edit" }
-#          format.xml  { render :xml => @message.errors, :status => :unprocessable_entity }
-#        end
-#      end
-#    end
-#  end
-
+  
   # DELETE /messages/1
   # DELETE /messages/1.xml
   def destroy

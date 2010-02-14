@@ -11,7 +11,7 @@ class Message < ActiveRecord::Base
   # body
   # children_count, next_child
   
-  scope :inbox, :conditions => {:message_interface_id => MessageInterface.find_or_create_by_name('inbox').id }
+  scope :inbox, where(:message_interface_id => MessageInterface.find_or_create_by_name('inbox').id)
   
   acts_as_authorizable
   acts_as_paranoid
@@ -27,8 +27,8 @@ class Message < ActiveRecord::Base
 #  validates_associated :deleter
 #  validates_associated :context
   
-  scope :since, lambda{|time| {:conditions => ['messages.updated_at > ?', time]}}
-  scope :by_index, :order => 'discussions.updated_at DESC, messages.index ASC', :include => :discussion
+  scope :since, lambda{|time| where('messages.updated_at > ?', time)}
+  scope :by_index, order('discussions.updated_at DESC, messages.index ASC').includes(:discussion)
   attr_accessor :title, :interface
   
   def context_must_be_in_discussion
@@ -60,7 +60,7 @@ class Message < ActiveRecord::Base
   
   def after_create
     # The fancy method_missing 'has_subscribers' fails on polymorphic associations for some reason
-    (context.has_roles('subscriber') - [creator]).each {|subscriber| MessageMailer.deliver_new self, subscriber }
+    (context.has_roles('subscriber') - [creator]).each {|subscriber| MessageMailer.new_message(self, subscriber).deliver }
     discussion.update_attribute :last_message_id, self.id
     Discussion.update_counters discussion_id, :messages_count => 1, :next_message => (parent ? 0 : 1 ) # next_message is used for indexing; only updated for first-level children
     Message.update_counters parent_id, :children_count => 1, :next_child => 1 if parent

@@ -3,9 +3,8 @@ class EventEventable < ActiveRecord::Base
   belongs_to :event_type
   belongs_to :eventable, :polymorphic => true
   
-  scope :recent, lambda {|limit, page| limit(limit).offset((page - 1) * limit)}
-  scope :with_eventables, lambda {|eventables| where((['(event_eventables.eventable_id = ? and event_eventables.eventable_type = ?)'] * eventables.size).join(' OR '),
-                                                                       *eventables.inject([]){|m,v| m << v.id; m << v.class.name; m }) } 
+  scope :recent, lambda {|limit, page| limit(limit).offset((page - 1) * limit) }
+  scope :with_eventables, lambda {|eventables| where((['(event_eventables.eventable_id = ? and event_eventables.eventable_type = ?)'] * eventables.size).join(' OR '), *eventables.inject([]){|m,v| m << v.id; m << v.class.name; m }) } 
   
   # this is called multiple times if saving when associated with a new record
   # therefore we do ||= so that it's only really used the first time
@@ -25,10 +24,8 @@ class EventEventable < ActiveRecord::Base
   # e.g. Page.first.event_eventables.recent(20,1).aggregated_events
   # Also, this is currently non-cacheable and moderately expensive. Only call when needed.
   def self.aggregated_events
-    grouped_event_ids = self.find(:all, :select => "GROUP_CONCAT(event_id) as event_ids",
-      :group => 'event_type_id, role, event_eventables.index', :order => 'MAX(updated_at) DESC').map{|x| x.event_ids.split(',').map(&:to_i).uniq}.uniq
-    events = Event.find(:all, :conditions => ["id IN (?)", grouped_event_ids.flatten],
-      :include => [:event_type, {:event_eventables => :eventable}]).inject({}){|m,x| m[x.id] = x; m} # this part is just a hack to let us only call id once, in prep for:
+    grouped_event_ids = self.select("GROUP_CONCAT(event_id) as event_ids").group('event_type_id, role, event_eventables.index').order('MAX(updated_at) DESC').map{|x| x.event_ids.split(',').map(&:to_i).uniq}.uniq
+    events = Event.where("id IN (?)", grouped_event_ids.flatten).include(:event_type, {:event_eventables => :eventable}).inject({}){|m,x| m[x.id] = x; m} # this part is just a hack to let us only call id once, in prep for:
     grouped_event_ids.map!{|group| 
       group.map!{|id| events.delete(id) } # moves those events in cheaply
       group.delete(nil) # in case of duplicates
@@ -43,10 +40,9 @@ class EventEventable < ActiveRecord::Base
   end
   
   def previous
-    args = {:conditions => {:event_type_id => self.event_type_id, :eventable_type => self.eventable_type,
-                            :eventable_id => self.eventable_id, :role => self.role},
-            :order => 'event_eventables.index'}
-    args[:offset] = 1 if !self.new_record? 
-    EventEventable.find :last, args
+    prev = Eventable.where(:event_type_id => self.event_type_id, :eventable_type => self.eventable_type,
+                            :eventable_id => self.eventable_id, :role => self.role).order('event_eventables.index')
+    prev = prev.offset(1) if !self.new_record? 
+    prev.last
   end
 end

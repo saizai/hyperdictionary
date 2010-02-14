@@ -6,10 +6,10 @@ class Mailman < ActionMailer::Base
 #    mail = TMail::Mail.parse raw_mail
 #    mms = MMS2R::Media.new mail
     
-    if contact = Contact.find_by_data(mail.from, :conditions => {:state => 'active'}, :include => :user) # no need for .first, this'll get the first one
+    if contact = Contact.includes(:user).where(:state => 'active').find_by_data(mail.from)
       user = contact.user
       I18n.locale = user.get_preference('locale') || 'en-US' 
-      domain = Regexp.new YAML.load_file("#{Rails.root}/config/mail.yml")[Rails.env]['domain']
+      domain = Regexp.new YAML.load_file(Rails.root.join('config', 'mail.yml'))[Rails.env]['domain']
 p "Got mail from #{user.login} to #{((mail.to || []) + (mail.cc || []))}"      
       case addressee = ((mail.to || []) + (mail.cc || [])).select{|x| x=~domain}.map{|x| x.sub domain, ''}.map{|x| x.sub /@.*/, ''}.first
       when /^upload/ then
@@ -19,7 +19,7 @@ p "Got mail from #{user.login} to #{((mail.to || []) + (mail.cc || []))}"
         else
         return Mailman.deliver_unknown(mail, contact)
       end # case
-    elsif contact = Contact.find_by_data(mail.from, :include => :user) # not active
+    elsif contact = Contact.includes(:user).find_by_data(mail.from) # not active
       return Mailman.deliver_verification(mail, contact)
     else
       return Mailman.deliver_bounce(mail)

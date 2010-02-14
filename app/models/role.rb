@@ -10,7 +10,7 @@ class Role < ActiveRecord::Base
   belongs_to :authorizable, :polymorphic => true
 #  acts_as_paranoid
   
-  scope :named, lambda{|name| {:conditions => {:name => name}}}
+  scope :named, lambda{|name| where(:name => name)}
   
   def to_s
     "#{self.name} #{self.authorizable_type} #{self.authorizable_id}".strip

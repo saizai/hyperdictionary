@@ -1,7 +1,7 @@
 class ContactsController < ApplicationController
   before_filter :login_required, :only => [:create, :update]
   before_filter :find_user
-    
+  
   def index
     @contacts = @user.contacts.paginate :all, :per_page => 50, :page => params[:page]
   end

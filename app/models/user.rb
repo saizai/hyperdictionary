@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
   # This is suboptimal. See http://stackoverflow.com/questions/958676/change-a-finder-method-w-parameters-to-an-association
   has_many :assets, :foreign_key => 'creator_id', :dependent => :destroy do
     def avatar size = :thumb
-      find :first, :conditions => ["thumbnail = ? and filename LIKE ?", size.to_s, proxy_owner.login + "_#{size}.%"]
+      where("thumbnail = ? and filename LIKE ?", size.to_s, proxy_owner.login + "_#{size}.%").first
     end
   end
   
@@ -81,7 +81,7 @@ class User < ActiveRecord::Base
   validates_format_of       :name,     :with => Authentication.name_regex,  :message => Authentication.bad_name_message, :allow_nil => true
   validates_length_of       :name,     :maximum => 120
   
-  scope :active, :conditions => ['activated_at IS NOT NULL AND state = "active"']
+  scope :active, where('activated_at IS NOT NULL AND state = "active"')
   
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
@@ -117,7 +117,7 @@ class User < ActiveRecord::Base
   end
   
   def ips
-    sessions.find(:all, :select => 'DISTINCT ip').map(&:ip) - [nil]
+    sessions.select('DISTINCT ip').map(&:ip) - [nil]
   end
   
   def ips_with_names
@@ -125,8 +125,7 @@ class User < ActiveRecord::Base
   end
   
   def self.users_on_ip ips
-    user_ids = Session.find(:all, :conditions => ["sessions.ip IN (?)", ips],
-                                  :select => 'DISTINCT updater_id, creator_id').inject([]){
+    user_ids = Session.where("sessions.ip IN (?)", ips).select('DISTINCT updater_id, creator_id').inject([]){
                                     |memo, sess| memo << sess.updater_id; memo << sess.creator_id }.uniq - [nil]
     User.find(user_ids)
   end
@@ -204,7 +203,7 @@ class User < ActiveRecord::Base
   #
   def self.authenticate(login, password)
     return nil if login.blank? || password.blank?
-    u = find :first, :conditions => {:login => login.downcase} # need to get the salt
+    u = where(:login => login.downcase).first # need to get the salt
     u && u.authenticated?(password) ? u : nil
   end
   

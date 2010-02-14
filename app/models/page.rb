@@ -57,7 +57,7 @@ class Page < ActiveRecord::Base
   
   def after_save
 #    expire_cache
-    (self.has_subscribers - [updater]).each {|subscriber| PageMailer.deliver_update self, subscriber }
+    (self.has_subscribers - [updater]).each {|subscriber| PageMailer.update(self, subscriber).deliver }
     Event.event! updater, 'edit', self if updater  
   end
   

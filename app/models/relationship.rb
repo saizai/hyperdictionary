@@ -18,7 +18,7 @@ class Relationship < ActiveRecord::Base
   validates_uniqueness_of :to_user_id, :scope => :from_user_id, :allow_nil => true
   validates_uniqueness_of :to_identity_id, :scope => :from_identity_id, :allow_nil => true
   
-  scope :multis, :conditions => {:multi => true}
+  scope :multis, where(:multi => true)
   
   def validate
     (to_user_id != from_user_id or !to_user_id or !from_user_id) and                   # can't friend yourself
@@ -51,7 +51,7 @@ class Relationship < ActiveRecord::Base
   def send_confirmation_request
     self.confirmation_requested_at = Time.now.utc
     Event.event! user, 'friend', to_user
-    RelationshipMailer.deliver_confirmation_request(self)
+    RelationshipMailer.confirmation_request(self).deliver
   end
   
   def send_reciprocation_notice
@@ -61,7 +61,7 @@ class Relationship < ActiveRecord::Base
     r.activated_at = Time.now.utc
     r.save
     Event.event! to_user, 'friend', user
-    RelationshipMailer.deliver_reciprocation_notice(self)
+    RelationshipMailer.reciprocation_notice(self).deliver
   end
   
   def reciprocal

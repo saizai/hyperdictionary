@@ -1,8 +1,0 @@
---- 
-format: 1
-handler: 
-  commit: a22b9b9c8a1bfa3dbc5139a6a8dc1bfb37edc526
-  branch: master
-repository_url: git://github.com/geemus/acts_as_taggable_redux.git
-lock: false
-repository_class: Piston::Git::Repository

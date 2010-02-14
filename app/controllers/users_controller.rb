@@ -8,7 +8,7 @@ class UsersController < ApplicationController
   end
   
   def show
-    @user = User.find(params[:id], :include => [:public_contacts, :identities]) # _by_login
+    @user = User.includes(:public_contacts, :identities).find(params[:id]) # implicitly _by_login since it's friendly_id
     if permit? 'site_admin'
       @multis = @user.multis
       @ips = @user.ips_with_names
@@ -33,14 +33,13 @@ class UsersController < ApplicationController
       conditions[0] += ' AND id NOT IN (?)'
       conditions << params[:exclude].map(&:to_i)
     end
-    @users = User.find(:all, :conditions => conditions, 
-                            :order => "login ASC", :limit => 10) # TODO: :include => :avatar
+    @users = User.order('login ASC').limit(10).where(conditions) # TODO: :include => :avatar
     
     render :partial => '/users/auto_complete', :locals => {:users => @users, :query => params[:query] }
   end
-    
+  
   def edit
-    @user = User.find(params[:id], :include => [:public_contacts, :identities]) # _by_login
+    @user = User.includes(:public_contacts, :identities).find(params[:id]) # _by_login
     if permit? 'site_admin or (self of user)'
       if permit? 'site_admin'
         @multis = @user.multis

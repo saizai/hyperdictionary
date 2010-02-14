@@ -3,7 +3,7 @@ class Event < ActiveRecord::Base
   has_many :event_eventables
   has_many_polymorphs :eventables, :through => :event_eventables, :from => [:pages, :users, :identities, :discussions, :messages]
   
-  scope :recent, lambda {|limit, page| {:limit => limit, :offset => (page - 1) * limit}}
+  scope :recent, lambda {|limit, page| limit(limit).offset((page - 1) * limit) }
   
   validates_presence_of :released_at, :event_type_id
   
@@ -35,7 +35,7 @@ class Event < ActiveRecord::Base
 #    # This is a total hack. Surely there's a better way to find who called us?
 #    # Returns something like ["User", "4"]
 #    caller = self.scope(:find)[:conditions].scan(/eventable_type = '(\w*)'.*eventable_id = (\d*)/)[0]
-#    events = self.find(:all, :include => [:event_type, :event_eventables], :group => 'event_eventables.index')
+#    events = self.includes(:event_type, :event_eventables).group('event_eventables.index')
 #    
 #    events.group_by{|e| "#{e.event_type} #{e.eventables.detect{|ee| ee.eventable_type == caller[0] and ee.eventable_id == caller[1] }.role}"}
 #  end

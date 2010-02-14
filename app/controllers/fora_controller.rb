@@ -2,7 +2,7 @@ class ForaController < ApplicationController
   before_filter :get_context
   
   def index
-    @fora = @context.fora :page => params[:page], :order => "updated_at DESC", :include => [:last_discussion, :last_message]
+    @fora = @context.fora.order("name").includes(:last_discussion, :last_message)
     
     respond_to do |format|
       format.js   { render :layout => false }

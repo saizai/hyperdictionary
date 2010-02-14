@@ -1,8 +1,0 @@
---- 
-format: 1
-handler: 
-  commit: 20988cac158bcf7f7535a3c5dd193165797d719a
-  branch: master
-repository_url: git://github.com/rails/acts_as_tree.git
-lock: false
-repository_class: Piston::Git::Repository

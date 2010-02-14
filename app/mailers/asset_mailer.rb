@@ -1,4 +1,5 @@
 class AssetMailer < ActionMailer::Base
+  default :from => ADMIN_EMAIL, :sent_on => Time.now
   
   def self.upload mail, contact
     mail.attachments.each do |attachment|
@@ -33,7 +34,5 @@ class AssetMailer < ActionMailer::Base
     def setup_email mail
       subject     "Re: #{mail.subject}"
       recipients  mail.from
-      from        ADMIN_EMAIL
-      sent_on     Time.now
     end
 end

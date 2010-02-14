@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  permit 'site_admin', :only => :destroy
+  permit 'site_admin', :only => [:destroy, :index]
   before_filter :login_required, :only => [:new, :create, :edit, :update]
   
   # GET /pages
@@ -21,7 +21,7 @@ class PagesController < ApplicationController
 #      @page = Page.find(params[:id]).versions.find_by_lock_version(params[:version])
 #     ...
     
-    @page = Page.find(params[:id], :include => :assets)
+    @page = Page.include(:assets).find(params[:id])
     
     if @page.namespace == 'User' and !request.xhr? # only load user pages within users
       redirect_to user_path(@page.owner)

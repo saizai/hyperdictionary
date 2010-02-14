@@ -1,4 +1,6 @@
 class UserMailer < ActionMailer::Base
+  default :from => ADMIN_EMAIL, :sent_on => Time.now, :subject => "#{APP_NAME} "
+  
   def signup_notification(user)
     setup_email(user)
     @subject    += 'Welcome!'
@@ -19,9 +21,6 @@ class UserMailer < ActionMailer::Base
   protected
     def setup_email(user)
       @recipients  = "#{user.email}"
-      @from        = "#{ADMIN_EMAIL}"
-      @subject     = "#{APP_NAME} "
-      @sent_on     = Time.now
       @body[:user] = user
     end
 end

@@ -17,8 +17,8 @@ class Session < ActiveRecord::SessionStore::Session
   # also note https://rails.lighthouseapp.com/projects/8994/tickets/1339
   # unloadable
   
-  scope :live, :conditions => ["updated_at > ?", 5.minutes.ago]
-  scope :stale, :conditions => ["updated_at < ?", 1.week.ago]
+  scope :live, where("updated_at > ?", 5.minutes.ago)
+  scope :stale, where("updated_at < ?", 1.week.ago)
   
   def before_destroy
     user = (updater || creator)

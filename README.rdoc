@@ -16,7 +16,7 @@ It will support, in rough order of priority:
 * automatic conversion between different phonetic encodings (eg IPA, SAMPA, X-SAMPA)
 * automatic conversion to & from plain text interlinears
 * import and export with ELAN, Toolbox, Shoebox, Kura, WordNet, & plain CSV
-* rich word search and relationships - eg synonym, hypernym, rhyme, written similarity, derivation, diachorny, etc
+* rich word search and relationships - eg synonym, hypernym, rhyme, written similarity, derivation, diachrony, etc
 * full integration of extant wordnets/synsets/lexica (as licenses permit)
 * semiautomatic application of language-wide changes or reinterpretations (e.g. phonetic drift, morpheme reparsing, etc)
 * automatic derivation of phonotactic and morphosyntactic rules from corpora
